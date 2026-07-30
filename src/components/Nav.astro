@@ -1,0 +1,88 @@
+---
+import { site } from "../data/site";
+
+const navLinks = [
+  { href: "#about", label: "About" },
+  { href: "#work", label: "Work" },
+  { href: "#consulting", label: "Consulting" },
+  { href: "#contact", label: "Contact" },
+];
+---
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo">{site.name}</a>
+    <nav aria-label="Main">
+      <ul>
+        {navLinks.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <a href={site.linkedin} class="btn btn-primary nav-cta" target="_blank" rel="noopener noreferrer">
+      {site.cta}
+    </a>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11, 15, 23, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.875rem 0;
+  }
+
+  .logo {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .logo:hover {
+    color: var(--accent);
+  }
+
+  nav ul {
+    display: flex;
+    gap: 1.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav a {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  nav a:hover {
+    color: var(--text);
+  }
+
+  .nav-cta {
+    padding: 0.5rem 1.125rem;
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 768px) {
+    nav {
+      display: none;
+    }
+  }
+</style>

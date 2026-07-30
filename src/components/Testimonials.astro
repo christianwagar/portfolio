@@ -1,0 +1,57 @@
+---
+import { testimonials } from "../data/site";
+---
+
+<section class="section testimonials-section">
+  <div class="container">
+    <span class="section-label">Testimonials</span>
+    <h2 class="section-title">What colleagues say</h2>
+    <div class="grid-3">
+      {testimonials.map((t) => (
+        <blockquote class="card testimonial-card">
+          <p>"{t.quote}"</p>
+          <footer>
+            <strong>{t.name}</strong>
+            <span>{t.title}</span>
+          </footer>
+        </blockquote>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials-section {
+    background: var(--bg-elevated);
+    border-block: 1px solid var(--border);
+  }
+
+  .testimonial-card {
+    padding: 1.5rem;
+    margin: 0;
+  }
+
+  .testimonial-card p {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    font-style: italic;
+    margin: 0 0 1.25rem;
+    line-height: 1.65;
+  }
+
+  .testimonial-card footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .testimonial-card strong {
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .testimonial-card span {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+</style>

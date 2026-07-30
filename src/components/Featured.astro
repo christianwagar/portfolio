@@ -1,0 +1,88 @@
+---
+import { featured } from "../data/site";
+---
+
+<section class="section featured-section">
+  <div class="container">
+    <span class="section-label">Highlights</span>
+    <h2 class="section-title">Featured moments</h2>
+    <p class="section-intro">
+      Speaking, hosting, and being recognized for pushing Customer Success forward with AI.
+    </p>
+    <div class="grid-2">
+      {featured.map((item) => {
+        const Tag = item.link ? "a" : "article";
+        const linkProps = item.link
+          ? { href: item.link, target: "_blank", rel: "noopener noreferrer" }
+          : {};
+        return (
+          <Tag class="card featured-card" {...linkProps}>
+            <div class="featured-image">
+              <img src={item.image} alt={item.title} loading="lazy" />
+            </div>
+            <div class="featured-body">
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              {item.link && <span class="featured-link">View →</span>}
+            </div>
+          </Tag>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured-section {
+    background: var(--bg-elevated);
+    border-block: 1px solid var(--border);
+  }
+
+  .featured-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .featured-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  .featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .featured-card:hover .featured-image img {
+    transform: scale(1.03);
+  }
+
+  .featured-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+
+  .featured-body h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .featured-body p {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    margin: 0;
+  }
+
+  .featured-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+</style>

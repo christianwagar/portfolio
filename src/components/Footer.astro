@@ -1,0 +1,79 @@
+---
+import { site } from "../data/site";
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <strong>{site.name}</strong>
+      <p>{site.tagline}</p>
+    </div>
+    <div class="footer-links">
+      <a href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#consulting">Consulting</a>
+    </div>
+    <div class="footer-education">
+      {site.education.map((item) => (
+        <p>{item}</p>
+      ))}
+    </div>
+    <p class="footer-copy">&copy; {year} {site.name}. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 0;
+    background: var(--bg-elevated);
+  }
+
+  .footer-inner {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .footer-brand strong {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .footer-brand p {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .footer-links a {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .footer-links a:hover {
+    color: var(--accent);
+  }
+
+  .footer-education p {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .footer-copy {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    margin: 0.5rem 0 0;
+    opacity: 0.7;
+  }
+</style>
