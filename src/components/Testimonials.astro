@@ -1,10 +1,11 @@
 ---
 import { testimonials } from "../data/site";
+import GoldCylinder from "./GoldCylinder.astro";
 ---
 
 <section class="section testimonials-section">
   <div class="container">
-    <span class="section-label">Testimonials</span>
+    <span class="section-label"><GoldCylinder size="sm" /> Testimonials</span>
     <h2 class="section-title">What colleagues say</h2>
     <div class="grid-3">
       {testimonials.map((t) => (
@@ -22,7 +23,7 @@ import { testimonials } from "../data/site";
 
 <style>
   .testimonials-section {
-    background: var(--bg-elevated);
+    background: rgba(0, 0, 0, 0.5);
     border-block: 1px solid var(--border);
   }
 
@@ -48,6 +49,7 @@ import { testimonials } from "../data/site";
   .testimonial-card strong {
     font-size: 0.9375rem;
     font-weight: 600;
+    color: var(--gold-letter);
   }
 
   .testimonial-card span {

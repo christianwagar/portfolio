@@ -1,10 +1,11 @@
 ---
 import { featured } from "../data/site";
+import GoldCylinder from "./GoldCylinder.astro";
 ---
 
 <section class="section featured-section">
   <div class="container">
-    <span class="section-label">Highlights</span>
+    <span class="section-label"><GoldCylinder size="sm" /> Highlights</span>
     <h2 class="section-title">Featured moments</h2>
     <p class="section-intro">
       Speaking, hosting, and being recognized for pushing Customer Success forward with AI.
@@ -34,7 +35,7 @@ import { featured } from "../data/site";
 
 <style>
   .featured-section {
-    background: var(--bg-elevated);
+    background: rgba(0, 0, 0, 0.5);
     border-block: 1px solid var(--border);
   }
 
@@ -83,6 +84,10 @@ import { featured } from "../data/site";
     margin-top: 0.75rem;
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--accent);
+    color: var(--gold-letter);
+  }
+
+  .featured-link:hover {
+    color: var(--gold-letter-light);
   }
 </style>

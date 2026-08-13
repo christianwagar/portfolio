@@ -1,10 +1,11 @@
 ---
 import { site } from "../data/site";
+import GoldCylinder from "./GoldCylinder.astro";
 ---
 
 <section id="contact" class="section contact-section">
   <div class="container contact-inner">
-    <span class="section-label">Contact</span>
+    <span class="section-label"><GoldCylinder size="sm" /> Contact</span>
     <h2 class="section-title">Let's connect</h2>
     <p class="contact-intro">
       Open to conversations about the future of Customer Success, leadership, AI-augmented teams, and consulting engagements.
@@ -28,6 +29,10 @@ import { site } from "../data/site";
 
   .contact-inner {
     max-width: 560px;
+  }
+
+  .contact-inner .section-label {
+    justify-content: center;
   }
 
   .contact-intro {

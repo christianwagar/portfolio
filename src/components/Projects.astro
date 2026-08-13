@@ -1,10 +1,11 @@
 ---
 import { projects } from "../data/site";
+import GoldCylinder from "./GoldCylinder.astro";
 ---
 
-<section id="work" class="section">
+<section id="work" class="section work-section">
   <div class="container">
-    <span class="section-label">Selected work</span>
+    <span class="section-label"><GoldCylinder size="sm" /> Selected work</span>
     <h2 class="section-title">Projects & outcomes</h2>
     <p class="section-intro">
       A track record of building scaled CS programs, AI-driven operations, and teams that deliver.
@@ -16,12 +17,12 @@ import { projects } from "../data/site";
             <img src={project.image} alt={project.title} loading="lazy" />
           </div>
           <div class="project-body">
-            <p class="project-role">{project.role}</p>
+            <p class="project-role"><GoldCylinder size="sm" alt /> {project.role}</p>
             <h3>{project.title}</h3>
             <p class="project-summary">{project.summary}</p>
             <ul class="project-outcomes">
               {project.outcomes.map((outcome) => (
-                <li>{outcome}</li>
+                <li><GoldCylinder size="sm" /> {outcome}</li>
               ))}
             </ul>
             <div class="project-tags">
@@ -42,6 +43,12 @@ import { projects } from "../data/site";
 </section>
 
 <style>
+  .work-section {
+    background: #000000;
+    position: relative;
+    z-index: 1;
+  }
+
   .projects-grid {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   }
@@ -63,11 +70,14 @@ import { projects } from "../data/site";
   }
 
   .project-role {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--accent);
+    color: var(--gold-letter);
     margin: 0 0 0.375rem;
   }
 
@@ -86,13 +96,17 @@ import { projects } from "../data/site";
 
   .project-outcomes {
     margin: 0 0 1rem;
-    padding-left: 1.125rem;
+    padding: 0;
+    list-style: none;
     font-size: 0.875rem;
     color: var(--text-muted);
   }
 
   .project-outcomes li {
-    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.375rem;
   }
 
   .project-tags {

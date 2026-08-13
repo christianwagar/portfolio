@@ -1,15 +1,37 @@
-/* Christian Wagar Portfolio — global styles */
+/* Christian Wagar Portfolio — Black & Gold theme
+   Black bg: matte black reference (#000)
+   Gold text: gold-lettering-ref screenshot (~#C4AF73)
+   Gold cylinders: dripping gold texture references
+*/
 
 :root {
-  --bg: #0b0f17;
-  --bg-elevated: #121826;
-  --bg-card: #161f2e;
-  --border: rgba(255, 255, 255, 0.08);
-  --text: #e8ecf4;
-  --text-muted: #94a3b8;
-  --accent: #f97316;
-  --accent-soft: rgba(249, 115, 22, 0.12);
-  --accent-hover: #fb923c;
+  /* Pure matte black — from brand reference */
+  --bg: #000000;
+  --bg-elevated: #050505;
+  --bg-card: #0a0a0a;
+
+  /* Matte gold lettering — sampled from gold screenshot */
+  --gold-letter: #c4af73;
+  --gold-letter-light: #d4bc82;
+  --gold-letter-dark: #a89255;
+
+  /* Dripping gold — for cylinders, buttons, accents */
+  --gold-drip: url("/images/gold-drip-2.png");
+  --gold-drip-alt: url("/images/gold-drip-1.png");
+
+  --accent: var(--gold-letter);
+  --accent-soft: rgba(196, 175, 115, 0.1);
+  --accent-hover: var(--gold-letter-light);
+
+  --border: rgba(196, 175, 115, 0.12);
+  --border-gold: rgba(196, 175, 115, 0.28);
+  --text: #ece8df;
+  --text-muted: #8a8278;
+  --text-gold: var(--gold-letter);
+
+  --shadow-gold: 0 6px 28px rgba(196, 175, 115, 0.15);
+  --shadow-gold-strong: 0 10px 36px rgba(196, 175, 115, 0.22);
+
   --max-width: 1120px;
   --radius: 12px;
   --font: "Inter", system-ui, -apple-system, sans-serif;
@@ -28,10 +50,33 @@ html {
 body {
   margin: 0;
   font-family: var(--font);
-  background: var(--bg);
+  background-color: var(--bg);
   color: var(--text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Matte black background with subtle grain from reference */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    url("/images/bg-black.png") center / cover no-repeat,
+    var(--bg);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: -1;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 45% at 50% -15%, rgba(196, 175, 115, 0.04), transparent 55%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 img {
@@ -41,13 +86,13 @@ img {
 }
 
 a {
-  color: var(--accent);
+  color: var(--gold-letter);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 a:hover {
-  color: var(--accent-hover);
+  color: var(--gold-letter-light);
 }
 
 .container {
@@ -59,13 +104,20 @@ a:hover {
   padding: 5rem 0;
 }
 
+/* Matte gold lettering — solid, no gradient */
+.gold-text {
+  color: var(--gold-letter);
+}
+
 .section-label {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--gold-letter);
   margin-bottom: 0.75rem;
 }
 
@@ -75,6 +127,7 @@ a:hover {
   line-height: 1.2;
   margin: 0 0 1rem;
   letter-spacing: -0.02em;
+  color: var(--text);
 }
 
 .section-intro {
@@ -82,6 +135,28 @@ a:hover {
   font-size: 1.0625rem;
   max-width: 56ch;
   margin: 0 0 2.5rem;
+}
+
+/* Dripping gold cylinder icon — from reference textures */
+.gold-cylinder {
+  display: inline-block;
+  width: 8px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--gold-drip) center / cover no-repeat;
+  box-shadow:
+    0 0 10px rgba(196, 175, 115, 0.35),
+    inset 0 1px 0 rgba(255, 248, 220, 0.25);
+  flex-shrink: 0;
+}
+
+.gold-cylinder--sm {
+  width: 6px;
+  height: 18px;
+}
+
+.gold-cylinder--alt {
+  background-image: var(--gold-drip-alt);
 }
 
 .btn {
@@ -94,31 +169,34 @@ a:hover {
   font-size: 0.9375rem;
   border: none;
   cursor: pointer;
-  transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+  transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
   text-decoration: none;
 }
 
 .btn-primary {
-  background: var(--accent);
-  color: #0b0f17;
+  background: #ffffff;
+  color: var(--gold-letter-dark);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(196, 175, 115, 0.35);
 }
 
 .btn-primary:hover {
-  background: var(--accent-hover);
-  color: #0b0f17;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.25);
+  color: var(--gold-letter);
+  background: #fafafa;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
 }
 
 .btn-outline {
   background: transparent;
-  color: var(--text);
-  border: 1px solid var(--border);
+  color: var(--gold-letter);
+  border: 1px solid var(--border-gold);
 }
 
 .btn-outline:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--gold-letter);
+  color: var(--gold-letter-light);
+  background: rgba(196, 175, 115, 0.06);
 }
 
 .tag {
@@ -127,22 +205,23 @@ a:hover {
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 500;
-  background: var(--accent-soft);
-  color: var(--accent);
-  border: 1px solid rgba(249, 115, 22, 0.2);
+  background: rgba(196, 175, 115, 0.07);
+  color: var(--gold-letter);
+  border: 1px solid rgba(196, 175, 115, 0.2);
 }
 
 .card {
-  background: var(--bg-card);
+  background: linear-gradient(160deg, rgba(8, 8, 8, 0.97), rgba(0, 0, 0, 0.99));
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
 }
 
 .card:hover {
-  border-color: rgba(249, 115, 22, 0.3);
-  transform: translateY(-2px);
+  border-color: var(--border-gold);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(196, 175, 115, 0.06);
 }
 
 .grid-2 {

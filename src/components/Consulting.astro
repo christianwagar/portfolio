@@ -1,15 +1,19 @@
 ---
 import { site } from "../data/site";
+import GoldCylinder from "./GoldCylinder.astro";
 ---
 
 <section id="consulting" class="section consulting-section">
   <div class="container consulting-inner">
     <div class="consulting-content">
-      <span class="section-label">Consulting</span>
+      <span class="section-label"><GoldCylinder size="sm" /> Consulting</span>
       <h2 class="section-title">{site.consulting.headline}</h2>
       <ul class="consulting-list">
-        {site.consulting.bullets.map((bullet) => (
-          <li>{bullet}</li>
+        {site.consulting.bullets.map((bullet, i) => (
+          <li>
+            <GoldCylinder alt={i % 2 === 1} />
+            {bullet}
+          </li>
         ))}
       </ul>
       <a href={site.linkedin} class="btn btn-primary" target="_blank" rel="noopener noreferrer">
@@ -18,11 +22,11 @@ import { site } from "../data/site";
     </div>
     <div class="consulting-aside">
       <div class="consulting-card">
-        <h3>Who I help</h3>
+        <h3><GoldCylinder size="sm" /> Who I help</h3>
         <p>CS leaders, VPs of Customer Experience, and GTM executives building or scaling Customer Success organizations — especially teams navigating AI adoption.</p>
       </div>
       <div class="consulting-card">
-        <h3>How I work</h3>
+        <h3><GoldCylinder size="sm" alt /> How I work</h3>
         <p>Intro conversation → scoped engagement → hands-on advisory. Formats include strategic reviews, team coaching, and operational build-outs.</p>
       </div>
     </div>
@@ -32,8 +36,8 @@ import { site } from "../data/site";
 <style>
   .consulting-section {
     background:
-      radial-gradient(ellipse 60% 50% at 0% 50%, rgba(249, 115, 22, 0.06), transparent),
-      var(--bg);
+      radial-gradient(ellipse 60% 50% at 0% 50%, rgba(196, 175, 115, 0.04), transparent),
+      transparent;
   }
 
   .consulting-inner {
@@ -50,22 +54,12 @@ import { site } from "../data/site";
   }
 
   .consulting-list li {
-    position: relative;
-    padding-left: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
     margin-bottom: 0.875rem;
     color: var(--text-muted);
     font-size: 1rem;
-  }
-
-  .consulting-list li::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0.55em;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
   }
 
   .consulting-aside {
@@ -76,15 +70,19 @@ import { site } from "../data/site";
 
   .consulting-card {
     padding: 1.25rem 1.5rem;
-    background: var(--bg-card);
+    background: linear-gradient(160deg, rgba(8, 8, 8, 0.97), rgba(0, 0, 0, 0.99));
     border: 1px solid var(--border);
     border-radius: var(--radius);
   }
 
   .consulting-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
     font-size: 0.9375rem;
     font-weight: 600;
     margin: 0 0 0.5rem;
+    color: var(--gold-letter);
   }
 
   .consulting-card p {
