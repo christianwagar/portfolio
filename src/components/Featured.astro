@@ -1,93 +1,250 @@
 ---
 import { featured } from "../data/site";
-import GoldCylinder from "./GoldCylinder.astro";
+
+const lead =
+  featured.find((item) => item.title.includes("Google")) ?? featured[0];
+const rest = featured.filter((item) => item.title !== lead.title);
 ---
 
 <section class="section featured-section">
   <div class="container">
-    <span class="section-label"><GoldCylinder size="sm" /> Highlights</span>
+    <span class="section-label">Highlights</span>
     <h2 class="section-title">Featured moments</h2>
-    <p class="section-intro">
-      Speaking, hosting, and being recognized for pushing Customer Success forward with AI.
-    </p>
-    <div class="grid-2">
-      {featured.map((item) => {
-        const Tag = item.link ? "a" : "article";
-        const linkProps = item.link
-          ? { href: item.link, target: "_blank", rel: "noopener noreferrer" }
-          : {};
-        return (
-          <Tag class="card featured-card" {...linkProps}>
-            <div class="featured-image">
+
+    <article class="featured-lead">
+      <div class="featured-lead-copy">
+        <h3>{lead.title}</h3>
+        <p>{lead.description}</p>
+        {
+          lead.link && (
+            <a
+              href={lead.link}
+              class="cta"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read More
+            </a>
+          )
+        }
+      </div>
+      <div class:list={["featured-lead-image", { "is-video": Boolean(lead.embed) }]}>
+        {
+          lead.embed ? (
+            <iframe
+              src={lead.embed}
+              title={lead.title}
+              loading="lazy"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+              allowfullscreen
+            />
+          ) : (
+            <img src={lead.image} alt={lead.title} loading="lazy" />
+          )
+        }
+      </div>
+    </article>
+
+    <div class="grid-3 featured-grid">
+      {
+        rest.map((item) => {
+          const imageHref =
+            "imageLink" in item && item.imageLink ? item.imageLink : item.link;
+          const image = (
+            <div
+              class:list={[
+                "featured-image",
+                {
+                  "is-contain":
+                    "imageFit" in item && item.imageFit === "contain",
+                },
+              ]}
+            >
               <img src={item.image} alt={item.title} loading="lazy" />
             </div>
-            <div class="featured-body">
+          );
+          return (
+            <article class="featured-item">
+              {imageHref ? (
+                <a
+                  href={imageHref}
+                  class="featured-image-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {image}
+                </a>
+              ) : (
+                image
+              )}
               <h3>{item.title}</h3>
               <p>{item.description}</p>
-              {item.link && <span class="featured-link">View →</span>}
-            </div>
-          </Tag>
-        );
-      })}
+              {item.link && (
+                <a
+                  href={item.link}
+                  class="cta featured-cta"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {"cta" in item ? item.cta : "View Recording"}
+                </a>
+              )}
+            </article>
+          );
+        })
+      }
     </div>
   </div>
 </section>
 
 <style>
   .featured-section {
-    background: rgba(0, 0, 0, 0.5);
-    border-block: 1px solid var(--border);
+    background: var(--bg);
   }
 
-  .featured-card {
+  .featured-lead {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 4rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .featured-lead-copy h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.15;
+    margin: 0 0 1rem;
+  }
+
+  .featured-lead-copy p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0 0 1.5rem;
+    max-width: 36ch;
+  }
+
+  .featured-lead-image {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--bg-soft);
+  }
+
+  .featured-lead-image.is-video {
+    position: relative;
+    aspect-ratio: 504 / 399;
+    background: transparent;
+  }
+
+  .featured-lead-image img,
+  .featured-lead-image iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .featured-lead-image img {
+    object-fit: cover;
+  }
+
+  .featured-lead-image iframe {
+    position: absolute;
+    inset: 0;
     display: block;
-    text-decoration: none;
+  }
+
+  .featured-item {
+    display: block;
     color: inherit;
+    text-decoration: none;
+  }
+
+  .featured-image-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .featured-item:hover {
+    opacity: 1;
+  }
+
+  .featured-image:hover img {
+    transform: scale(1.03);
   }
 
   .featured-image {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
-    background: var(--bg);
+    background: var(--bg-soft);
+    margin-bottom: 1rem;
   }
 
   .featured-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s;
+    transition: transform 0.5s ease;
   }
 
-  .featured-card:hover .featured-image img {
-    transform: scale(1.03);
+  .featured-image.is-contain {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .featured-body {
-    padding: 1.25rem 1.5rem 1.5rem;
+  .featured-image.is-contain img {
+    object-fit: contain;
+    object-position: center;
   }
 
-  .featured-body h3 {
+  .featured-image.is-contain:hover img {
+    transform: none;
+  }
+
+  .featured-item h3 {
+    font-family: var(--font-display);
     font-size: 1.0625rem;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     margin: 0 0 0.5rem;
-    letter-spacing: -0.01em;
+    line-height: 1.25;
   }
 
-  .featured-body p {
+  .featured-item p {
     color: var(--text-muted);
     font-size: 0.9375rem;
     margin: 0;
+    line-height: 1.6;
   }
 
-  .featured-link {
-    display: inline-block;
-    margin-top: 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--gold-letter);
+  .featured-cta {
+    margin-top: 0.875rem;
   }
 
-  .featured-link:hover {
-    color: var(--gold-letter-light);
+  @media (max-width: 800px) {
+    .featured-lead {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    .featured-lead-image {
+      order: -1;
+      aspect-ratio: 3 / 4;
+      max-height: 480px;
+    }
+
+    .featured-lead-image.is-video {
+      aspect-ratio: 504 / 399;
+      max-height: none;
+    }
   }
 </style>

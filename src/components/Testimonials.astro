@@ -1,59 +1,72 @@
 ---
 import { testimonials } from "../data/site";
-import GoldCylinder from "./GoldCylinder.astro";
 ---
 
 <section class="section testimonials-section">
   <div class="container">
-    <span class="section-label"><GoldCylinder size="sm" /> Testimonials</span>
+    <span class="section-label">Testimonials</span>
     <h2 class="section-title">What colleagues say</h2>
-    <div class="grid-3">
-      {testimonials.map((t) => (
-        <blockquote class="card testimonial-card">
-          <p>"{t.quote}"</p>
-          <footer>
-            <strong>{t.name}</strong>
-            <span>{t.title}</span>
-          </footer>
-        </blockquote>
-      ))}
+    <div class="testimonials-list">
+      {
+        testimonials.map((t) => (
+          <blockquote class="testimonial">
+            <p>“{t.quote}”</p>
+            <footer>
+              <strong>{t.name}</strong>
+              <span>{t.title}</span>
+            </footer>
+          </blockquote>
+        ))
+      }
     </div>
   </div>
 </section>
 
 <style>
   .testimonials-section {
-    background: rgba(0, 0, 0, 0.5);
-    border-block: 1px solid var(--border);
+    background: var(--bg);
   }
 
-  .testimonial-card {
-    padding: 1.5rem;
-    margin: 0;
-  }
-
-  .testimonial-card p {
-    color: var(--text-muted);
-    font-size: 0.9375rem;
-    font-style: italic;
-    margin: 0 0 1.25rem;
-    line-height: 1.65;
-  }
-
-  .testimonial-card footer {
+  .testimonials-list {
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
   }
 
-  .testimonial-card strong {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--gold-letter);
+  .testimonial {
+    margin: 0;
+    padding: 2.25rem 0;
+    border-top: 1px solid var(--border);
   }
 
-  .testimonial-card span {
-    font-size: 0.8125rem;
+  .testimonial:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .testimonial p {
+    color: var(--text);
+    font-size: clamp(1.0625rem, 2vw, 1.25rem);
+    font-style: normal;
+    margin: 0 0 1.25rem;
+    line-height: 1.7;
+    max-width: 58ch;
+  }
+
+  .testimonial footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .testimonial strong {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .testimonial span {
+    font-size: 0.875rem;
     color: var(--text-muted);
   }
 </style>

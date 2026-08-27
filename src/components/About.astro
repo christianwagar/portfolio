@@ -1,33 +1,60 @@
 ---
-import { site, awards } from "../data/site";
-import GoldCylinder from "./GoldCylinder.astro";
+import { path } from "../data/site";
 ---
 
 <section id="about" class="section about-section">
-  <div class="container about-grid">
-    <div class="about-images">
-      <img
-        src="/images/personal-dog-1.jpg"
-        alt="Christian Wagar with his dog"
-        width="480"
-        height="360"
-        loading="lazy"
-        class="about-dog"
-      />
+  <div class="container">
+    <div class="about-header">
+      <span class="section-label">About Me</span>
+      <h2 class="section-title">My Path</h2>
     </div>
-    <div class="about-content">
-      <span class="section-label"><GoldCylinder size="sm" /> About</span>
-      <h2 class="section-title">People, systems, and growth that lasts</h2>
-      {site.about.map((paragraph) => (
-        <p>{paragraph}</p>
-      ))}
-      <div class="awards">
-        <h3><GoldCylinder size="sm" alt /> Recognition</h3>
-        <ul>
-          {awards.map((award) => (
-            <li><GoldCylinder size="sm" /> {award}</li>
-          ))}
-        </ul>
+
+    <div class="path-timeline">
+      <div class="path-rail">
+        <div class="path-line"></div>
+        <div class="path-tick"></div>
+      </div>
+
+      <div class="path-stops" role="tablist" aria-label="Career path">
+        {
+          path.map((stop, i) => (
+            <button
+              type="button"
+              class:list={["path-stop", { "is-active": i === 0 }]}
+              role="tab"
+              id={`path-tab-${i}`}
+              aria-selected={i === 0 ? "true" : "false"}
+              aria-controls={`path-panel-${i}`}
+              tabindex={i === 0 ? 0 : -1}
+              data-index={i}
+            >
+              {stop.label}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="path-panels">
+        {
+          path.map((stop, i) => (
+            <div
+              class="path-panel"
+              id={`path-panel-${i}`}
+              role="tabpanel"
+              aria-labelledby={`path-tab-${i}`}
+              hidden={i !== 0}
+            >
+              <p class="path-blurb">{stop.blurb}</p>
+              <div class="path-photo">
+                {stop.image ? (
+                  <img src={stop.image} alt={stop.alt} width="800" height="500" loading="lazy" />
+                ) : (
+                  <div class="path-photo-placeholder" aria-hidden="true"></div>
+                )}
+              </div>
+            </div>
+          ))
+        }
       </div>
     </div>
   </div>
@@ -35,71 +62,200 @@ import GoldCylinder from "./GoldCylinder.astro";
 
 <style>
   .about-section {
-    background: #000000;
-    position: relative;
-    z-index: 1;
+    background: var(--bg);
   }
 
-  .about-grid {
+  .about-header {
+    max-width: 40rem;
+    margin-bottom: 3rem;
+  }
+
+  .path-rail {
+    position: relative;
+    height: 1.25rem;
+  }
+
+  .path-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .path-tick {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    background: var(--text);
+    transform: translateX(-50%);
+    transition: left 0.25s ease;
+  }
+
+  .path-stops {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    margin-top: 0.35rem;
+  }
+
+  .path-stop {
+    font-family: var(--font-display);
+    font-size: clamp(0.9375rem, 2.2vw, 1.375rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    padding: 0.2rem 0;
+    cursor: pointer;
+    line-height: 1;
+    transition:
+      font-size 0.25s ease,
+      color 0.25s ease,
+      font-weight 0.25s ease;
+  }
+
+  .path-stop.is-active {
+    color: var(--text);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 700;
+  }
+
+  .path-stop:focus-visible {
+    outline: 1px solid var(--text);
+    outline-offset: 4px;
+  }
+
+  .path-panel {
     display: grid;
-    grid-template-columns: 1fr 1.4fr;
+    grid-template-columns: 1fr 1fr;
     gap: 3rem;
     align-items: start;
+    margin-top: 2.75rem;
   }
 
-  .about-dog {
-    border-radius: var(--radius);
-    border: 1px solid var(--border-gold);
-    box-shadow: var(--shadow-gold);
+  .path-panel[hidden] {
+    display: none;
+  }
+
+  .path-blurb {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 1.03125rem;
+    line-height: 1.75;
+    max-width: 38ch;
+  }
+
+  .path-photo {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--bg-soft);
+  }
+
+  .path-photo img {
     width: 100%;
-    aspect-ratio: 4 / 3;
+    height: 100%;
     object-fit: cover;
   }
 
-  .about-content p {
-    color: var(--text-muted);
-    margin: 0 0 1.125rem;
-    font-size: 1.03125rem;
-  }
-
-  .awards {
-    margin-top: 2rem;
-    padding: 1.25rem 1.5rem;
-    background: linear-gradient(160deg, rgba(8, 8, 8, 0.97), rgba(0, 0, 0, 0.99));
-    border: 1px solid var(--border-gold);
-    border-radius: var(--radius);
-  }
-
-  .awards h3 {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--gold-letter);
-    margin: 0 0 0.75rem;
-  }
-
-  .awards ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    color: var(--text-muted);
-    font-size: 0.9375rem;
-  }
-
-  .awards li {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.625rem;
-    margin-bottom: 0.5rem;
+  .path-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-soft);
   }
 
   @media (max-width: 768px) {
-    .about-grid {
+    .path-stops {
+      gap: 0.4rem;
+      min-height: 2.25rem;
+    }
+
+    .path-stop {
+      font-size: 0.7rem;
+      letter-spacing: 0.02em;
+    }
+
+    .path-stop.is-active {
+      font-size: 1.05rem;
+    }
+
+    .path-panel {
       grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .path-blurb {
+      max-width: none;
     }
   }
 </style>
+
+<script>
+  const timeline = document.querySelector(".path-timeline");
+  if (timeline) {
+    const rail = timeline.querySelector(".path-rail");
+    const tick = timeline.querySelector<HTMLElement>(".path-tick");
+    const stops = [...timeline.querySelectorAll<HTMLButtonElement>(".path-stop")];
+    const panels = [...timeline.querySelectorAll<HTMLElement>(".path-panel")];
+
+    const positionTick = (index: number) => {
+      const btn = stops[index];
+      if (!btn || !tick || !rail) return;
+      const railRect = rail.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
+      tick.style.left = `${btnRect.left + btnRect.width / 2 - railRect.left}px`;
+    };
+
+    const setActive = (index: number) => {
+      stops.forEach((btn, i) => {
+        const on = i === index;
+        btn.classList.toggle("is-active", on);
+        btn.setAttribute("aria-selected", String(on));
+        btn.tabIndex = on ? 0 : -1;
+      });
+      panels.forEach((panel, i) => {
+        panel.hidden = i !== index;
+      });
+      positionTick(index);
+    };
+
+    stops.forEach((btn, i) => {
+      btn.addEventListener("mouseenter", () => setActive(i));
+      btn.addEventListener("focus", () => setActive(i));
+      btn.addEventListener("click", () => setActive(i));
+      btn.addEventListener("transitionend", (event) => {
+        if (event.propertyName === "font-size" && btn.classList.contains("is-active")) {
+          positionTick(i);
+        }
+      });
+    });
+
+    timeline.querySelector(".path-stops")?.addEventListener("keydown", (event) => {
+      if (!(event instanceof KeyboardEvent)) return;
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+      event.preventDefault();
+      const current = stops.findIndex((btn) => btn.classList.contains("is-active"));
+      const next =
+        event.key === "ArrowRight"
+          ? Math.min(current + 1, stops.length - 1)
+          : Math.max(current - 1, 0);
+      stops[next]?.focus();
+      setActive(next);
+    });
+
+    window.addEventListener("resize", () => {
+      const current = stops.findIndex((btn) => btn.classList.contains("is-active"));
+      setActive(current === -1 ? 0 : current);
+    });
+
+    setActive(0);
+  }
+</script>

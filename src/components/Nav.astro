@@ -1,89 +1,250 @@
 ---
 import { site } from "../data/site";
-import GoldCylinder from "./GoldCylinder.astro";
 
 const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#work", label: "Work" },
-  { href: "#consulting", label: "Consulting" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#about", label: "About" },
+  { href: "/#notes", label: "Notes" },
+  { href: "/#influences", label: "Influences" },
+  { href: "/#contact", label: "Contact" },
 ];
 ---
 
 <header class="nav">
   <div class="container nav-inner">
-    <a href="#" class="logo">{site.name}</a>
-    <nav aria-label="Main">
-      <ul>
-        {navLinks.map((link) => (
-          <li>
-            <a href={link.href}>{link.label}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-    <a href={site.linkedin} class="btn btn-primary nav-cta" target="_blank" rel="noopener noreferrer">
-      {site.cta}
+    <button
+      type="button"
+      class="nav-toggle"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="nav-drawer"
+      id="nav-open"
+    >
+      <span class="nav-toggle-lines" aria-hidden="true"></span>
+    </button>
+
+    <a href="/" class="logo">{site.name}</a>
+
+    <a
+      href={site.linkedin}
+      class="nav-linkedin"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="LinkedIn"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
     </a>
   </div>
 </header>
+
+<div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+
+<aside class="drawer" id="nav-drawer" aria-hidden="true" inert aria-label="Site menu">
+  <div class="drawer-header">
+    <a href="/" class="logo drawer-logo">{site.name}</a>
+    <button type="button" class="drawer-close" aria-label="Close menu" id="nav-close">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+  <nav aria-label="Main">
+    <ul>
+      {
+        navLinks.map((link) => (
+          <li>
+            <a href={link.href} class="drawer-link">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <a href={site.linkedin} class="cta drawer-cta" target="_blank" rel="noopener noreferrer">
+    Let's Connect
+  </a>
+</aside>
+
+<script>
+  const openBtn = document.getElementById("nav-open");
+  const closeBtn = document.getElementById("nav-close");
+  const drawer = document.getElementById("nav-drawer");
+  const backdrop = document.getElementById("drawer-backdrop");
+
+  function setOpen(open: boolean) {
+    if (!drawer || !backdrop || !openBtn) return;
+    drawer.classList.toggle("is-open", open);
+    drawer.setAttribute("aria-hidden", open ? "false" : "true");
+    if (open) drawer.removeAttribute("inert");
+    else drawer.setAttribute("inert", "");
+    openBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    backdrop.hidden = !open;
+    document.body.style.overflow = open ? "hidden" : "";
+  }
+
+  openBtn?.addEventListener("click", () => setOpen(true));
+  closeBtn?.addEventListener("click", () => setOpen(false));
+  backdrop?.addEventListener("click", () => setOpen(false));
+
+  drawer?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+</script>
 
 <style>
   .nav {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.96);
     border-bottom: 1px solid var(--border);
   }
 
   .nav-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    min-height: 3.75rem;
+    padding: 0.75rem 0;
+  }
+
+  .nav-toggle {
+    justify-self: start;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.875rem 0;
+    justify-content: center;
+  }
+
+  .nav-toggle-lines {
+    display: block;
+    width: 1.25rem;
+    height: 1px;
+    background: var(--text);
+    box-shadow: 0 -6px 0 var(--text), 0 6px 0 var(--text);
   }
 
   .logo {
+    font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.125rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--text);
-    letter-spacing: -0.02em;
     white-space: nowrap;
+    justify-self: center;
   }
 
   .logo:hover {
-    color: var(--gold-letter);
+    opacity: 1;
   }
 
-  nav ul {
+  .nav-linkedin {
+    justify-self: end;
     display: flex;
-    gap: 1.75rem;
+    align-items: center;
+    color: var(--text);
+    padding: 0.35rem;
+  }
+
+  .nav-linkedin:hover {
+    opacity: 0.55;
+  }
+
+  .drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  .drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 210;
+    width: min(100%, 420px);
+    height: 100vh;
+    height: 100dvh;
+    background: var(--bg);
+    padding: 1.25rem 1.75rem 2.5rem;
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+  }
+
+  .drawer.is-open {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    min-height: 2.5rem;
+  }
+
+  .drawer-logo {
+    justify-self: start;
+  }
+
+  .drawer-close {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0.35rem;
+    color: var(--text);
+    display: flex;
+  }
+
+  .drawer nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
-  nav a {
-    color: var(--text-muted);
-    font-size: 0.875rem;
-    font-weight: 500;
+  .drawer-link {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: var(--text);
+    display: block;
+    padding: 0.35rem 0;
   }
 
-  nav a:hover {
-    color: var(--gold-letter);
+  .drawer-link:hover {
+    opacity: 0.45;
   }
 
-  .nav-cta {
-    padding: 0.5rem 1.125rem;
-    font-size: 0.875rem;
-  }
-
-  @media (max-width: 768px) {
-    nav {
-      display: none;
-    }
+  .drawer-cta {
+    margin-top: auto;
+    padding-top: 2rem;
   }
 </style>

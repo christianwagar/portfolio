@@ -1,40 +1,16 @@
-/* Christian Wagar Portfolio — Black & Gold theme
-   Black bg: matte black reference (#000)
-   Gold text: gold-lettering-ref screenshot (~#C4AF73)
-   Gold cylinders: dripping gold texture references
-*/
+/* Christian Wagar Portfolio — Buck Mason–inspired editorial theme */
 
 :root {
-  /* Pure matte black — from brand reference */
-  --bg: #000000;
-  --bg-elevated: #050505;
-  --bg-card: #0a0a0a;
+  --bg: #ffffff;
+  --bg-soft: #f7f7f7;
+  --text: #000000;
+  --text-muted: #666666;
+  --border: #e5e5e5;
+  --border-strong: #000000;
 
-  /* Matte gold lettering — sampled from gold screenshot */
-  --gold-letter: #c4af73;
-  --gold-letter-light: #d4bc82;
-  --gold-letter-dark: #a89255;
-
-  /* Dripping gold — for cylinders, buttons, accents */
-  --gold-drip: url("/images/gold-drip-2.png");
-  --gold-drip-alt: url("/images/gold-drip-1.png");
-
-  --accent: var(--gold-letter);
-  --accent-soft: rgba(196, 175, 115, 0.1);
-  --accent-hover: var(--gold-letter-light);
-
-  --border: rgba(196, 175, 115, 0.12);
-  --border-gold: rgba(196, 175, 115, 0.28);
-  --text: #ece8df;
-  --text-muted: #8a8278;
-  --text-gold: var(--gold-letter);
-
-  --shadow-gold: 0 6px 28px rgba(196, 175, 115, 0.15);
-  --shadow-gold-strong: 0 10px 36px rgba(196, 175, 115, 0.22);
-
-  --max-width: 1120px;
-  --radius: 12px;
-  --font: "Inter", system-ui, -apple-system, sans-serif;
+  --max-width: 1200px;
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
 }
 
 *,
@@ -49,34 +25,11 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--font);
+  font-family: var(--font-body);
   background-color: var(--bg);
   color: var(--text);
-  line-height: 1.6;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  position: relative;
-}
-
-/* Matte black background with subtle grain from reference */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    url("/images/bg-black.png") center / cover no-repeat,
-    var(--bg);
-  opacity: 0.45;
-  pointer-events: none;
-  z-index: -1;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(ellipse 70% 45% at 50% -15%, rgba(196, 175, 115, 0.04), transparent 55%);
-  pointer-events: none;
-  z-index: -1;
 }
 
 img {
@@ -86,158 +39,143 @@ img {
 }
 
 a {
-  color: var(--gold-letter);
+  color: var(--text);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: opacity 0.2s;
 }
 
 a:hover {
-  color: var(--gold-letter-light);
+  opacity: 0.55;
 }
 
 .container {
-  width: min(100% - 2rem, var(--max-width));
+  width: min(100% - 2.5rem, var(--max-width));
   margin-inline: auto;
 }
 
 .section {
-  padding: 5rem 0;
-}
-
-/* Matte gold lettering — solid, no gradient */
-.gold-text {
-  color: var(--gold-letter);
+  padding: 5.5rem 0;
+  border-top: 1px solid var(--border);
 }
 
 .section-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.625rem;
-  font-size: 0.75rem;
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--gold-letter);
+  color: var(--text);
   margin-bottom: 0.75rem;
 }
 
 .section-title {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.1;
   margin: 0 0 1rem;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--text);
 }
 
 .section-intro {
   color: var(--text-muted);
-  font-size: 1.0625rem;
-  max-width: 56ch;
-  margin: 0 0 2.5rem;
+  font-size: 1rem;
+  max-width: 48ch;
+  margin: 0 0 2.75rem;
+  line-height: 1.7;
 }
 
-/* Dripping gold cylinder icon — from reference textures */
-.gold-cylinder {
+/* Bracket-style CTAs — Buck Mason [READ MORE] pattern */
+.cta {
   display: inline-block;
-  width: 8px;
-  height: 24px;
-  border-radius: 999px;
-  background: var(--gold-drip) center / cover no-repeat;
-  box-shadow:
-    0 0 10px rgba(196, 175, 115, 0.35),
-    inset 0 1px 0 rgba(255, 248, 220, 0.25);
-  flex-shrink: 0;
-}
-
-.gold-cylinder--sm {
-  width: 6px;
-  height: 18px;
-}
-
-.gold-cylinder--alt {
-  background-image: var(--gold-drip-alt);
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
   font-weight: 600;
-  font-size: 0.9375rem;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
   text-decoration: none;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, opacity 0.2s;
 }
 
-.btn-primary {
-  background: #ffffff;
-  color: var(--gold-letter-dark);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(196, 175, 115, 0.35);
+.cta:hover {
+  opacity: 1;
+  border-bottom-color: var(--text);
 }
 
-.btn-primary:hover {
-  color: var(--gold-letter);
-  background: #fafafa;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+.cta::before {
+  content: "[";
+  margin-right: 0.35em;
 }
 
-.btn-outline {
-  background: transparent;
-  color: var(--gold-letter);
-  border: 1px solid var(--border-gold);
-}
-
-.btn-outline:hover {
-  border-color: var(--gold-letter);
-  color: var(--gold-letter-light);
-  background: rgba(196, 175, 115, 0.06);
+.cta::after {
+  content: "]";
+  margin-left: 0.35em;
 }
 
 .tag {
   display: inline-block;
-  padding: 0.25rem 0.625rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  background: rgba(196, 175, 115, 0.07);
-  color: var(--gold-letter);
-  border: 1px solid rgba(196, 175, 115, 0.2);
-}
-
-.card {
-  background: linear-gradient(160deg, rgba(8, 8, 8, 0.97), rgba(0, 0, 0, 0.99));
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
-}
-
-.card:hover {
-  border-color: var(--border-gold);
-  transform: translateY(-3px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(196, 175, 115, 0.06);
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0;
+  background: none;
+  border: none;
 }
 
 .grid-2 {
   display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem 2rem;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .grid-3 {
   display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem 2rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Soft image reveal on scroll */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: fade-up 0.7s ease-out both;
+}
+
+@media (max-width: 900px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 640px) {
   .section {
-    padding: 3.5rem 0;
+    padding: 3.75rem 0;
+  }
+
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    width: min(100% - 1.75rem, var(--max-width));
   }
 }

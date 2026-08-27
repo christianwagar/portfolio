@@ -1,0 +1,164 @@
+---
+import { getCollection } from "astro:content";
+import { influences } from "../data/site";
+
+const reviews = await getCollection("books");
+const reviewIds = new Set(reviews.map((review) => review.id));
+---
+
+<section id="influences" class="section influences-section">
+  <div class="container">
+    <span class="section-label">Influences</span>
+    <h2 class="section-title">A shelf of information</h2>
+    <p class="influences-intro">
+      Books, podcasts, and people I'm learning from.
+    </p>
+
+    <div class="influence-shelf">
+      <h3 class="shelf-label">Books</h3>
+      <div class="grid-3">
+        {
+          influences.books.map((book) => (
+            <article class="influence-item">
+              <p class="influence-status">{book.status}</p>
+              <h4>{book.title}</h4>
+              <p class="influence-credit">{book.author}</p>
+              <p class="influence-note">{book.note}</p>
+              {(book.link || (book.slug && reviewIds.has(book.slug))) && (
+                <div class="influence-ctas">
+                  {book.link && (
+                    <a
+                      href={book.link}
+                      class="cta"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Amazon
+                    </a>
+                  )}
+                  {book.slug && reviewIds.has(book.slug) && (
+                    <a href={`/books/${book.slug}`} class="cta">
+                      Full review
+                    </a>
+                  )}
+                </div>
+              )}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="influence-shelf">
+      <h3 class="shelf-label">Podcasts</h3>
+      <div class="grid-3">
+        {
+          influences.podcasts.map((show) => (
+            <article class="influence-item">
+              <p class="influence-status">{show.status}</p>
+              <h4>{show.title}</h4>
+              <p class="influence-credit">{show.host}</p>
+              <p class="influence-note">{show.note}</p>
+              {show.link && (
+                <a
+                  href={show.link}
+                  class="cta influence-cta"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Listen
+                </a>
+              )}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .influences-section {
+    background: var(--bg);
+  }
+
+  .influences-intro {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 42ch;
+    margin: 0 0 2.75rem;
+  }
+
+  .influence-shelf {
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+  }
+
+  .influence-shelf + .influence-shelf {
+    margin-top: 3rem;
+  }
+
+  .shelf-label {
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin: 0 0 1.5rem;
+  }
+
+  .influence-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .influence-status {
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 0.375rem;
+  }
+
+  .influence-item h4 {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0 0 0.375rem;
+    line-height: 1.2;
+  }
+
+  .influence-credit {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin: 0 0 0.625rem;
+  }
+
+  .influence-note {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .influence-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin-top: 0.875rem;
+  }
+
+  .influence-cta {
+    margin-top: 0.875rem;
+    align-self: flex-start;
+  }
+</style>

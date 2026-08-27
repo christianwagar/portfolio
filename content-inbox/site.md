@@ -1,12 +1,18 @@
 # Site content — Christian Wagar
 
-Drop your real photos into `public/images/` with these filenames to replace placeholders:
+## Photos (editorial crops)
 
-- `headshot.jpg` — Hero & About
+Drop high-resolution photos into `public/images/` with these filenames. Prefer crisp, well-lit images sized for large editorial slots (roughly 1600px+ on the long edge):
+
+- `headshot.jpg` — Hero (full-bleed vertical crop, 4:5)
 - `personal-dog-1.jpg` — About section
-- `cloudflare-fireside.jpg` — Fireside chat highlight
-- `google-ai-essentials.jpg` — Google feature
-- `gainsight-pulse-1.jpg` — Gainsight conference
-- `alteryx-gp-1.jpg`, `alteryx-gp-2.jpg` — Alteryx Grand Prix
+- `cloudflare-fireside.jpg` — Featured / work grid
+- `google-ai-essentials.jpg` — Featured lead story
+- `gainsight-pulse-1.jpg` — Featured / work grid
+- `alteryx-gp-1.jpg`, `alteryx-gp-2.jpg` — Work grid
 
-Edit copy in `src/data/site.ts`.
+Current files are small placeholders (~7–11KB). Replace them in place; paths in `src/data/site.ts` stay the same.
+
+## Copy
+
+Edit all site copy in `src/data/site.ts` (bio, featured, field notes, influences, testimonials, consulting, awards).

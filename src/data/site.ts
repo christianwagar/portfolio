@@ -32,115 +32,168 @@ export const site = {
   },
 } as const;
 
+export const path = [
+  {
+    label: "University",
+    blurb:
+      "Monmouth University — B.A. International Business. Four years as a D1 student-athlete, where the habits around competition, accountability, and showing up for a team first started to take shape.",
+    image: "gallery_image.jpg",
+    alt: "Monmouth University football",
+  },
+  {
+    label: "UBS",
+    blurb:
+      "Started in financial services at UBS, learning how high-stakes client relationships actually work — precision, trust, and the discipline of following through. The foundation for everything that came after in Customer Success.",
+    image: "UBS.jpg",
+    alt: "UBS",
+  },
+  {
+    label: "Alteryx",
+    blurb:
+      "Built and led Customer Success at Alteryx — scaled journeys, coached CSMs into their commercial voice, and took the work on stage: Gainsight Pulse on AI-augmented success plans, and the Grand Prix at Inspire in front of 350+ customers.",
+    image: "AYX Bus.png",
+    alt: "Alteryx Grand Prix at Inspire",
+  },
+  {
+    label: "Cloudflare",
+    blurb:
+      "Customer Success leader at Cloudflare. I build scaled CS teams, AI-augmented workflows, and customer journeys that drive retention and growth — and hosted a fireside with Cloudflare's CTO on the future of the platform and AI agents.",
+    image: "Cloudflare_Leadership.JPG",
+    alt: "Fireside chat with Cloudflare CTO",
+  },
+] as const;
+
 export const featured = [
   {
     title: "Fireside Chat with Cloudflare CTO",
-    description: "Hosted Dane Knecht for an in-depth conversation on infrastructure and customer success.",
-    image: "/images/cloudflare-fireside.jpg",
+    description: "Hosted Dane Knecht for a conversation on the future of Cloudflare, AI agents, and the legendary Dane's Gold Musings channel.",
+    image: "Fireside Chat Cropped.jpeg",
     link: null,
+    embed: null,
   },
   {
     title: "Google AI Essentials — Featured Graduate",
     description: "Featured by Google for applying Prompting Essentials to team workflows and CS leadership.",
     image: "/images/google-ai-essentials.jpg",
     link: "https://publicpolicy.google/stories/ai-essentials-christian-tennessee/",
+    embed:
+      "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7310709807248781313?compact=1",
   },
   {
-    title: "Gainsight Pulse 2024",
+    title: "Gainsight Pulse Featured Speaker",
     description: "Presented on evolving success plans from human-led to AI-augmented Customer Success.",
-    image: "/images/gainsight-pulse-1.jpg",
+    image: "/images/gainsight-pulse-1.png",
+    imageFit: "contain",
     link: "https://pulselibrary.gainsight.com/video/the-evolution-of-success-plans-at-alteryx-from-human-to-machine-to-cyborg/",
+    embed: null,
   },
   {
     title: "Alteryx Grand Prix at Inspire",
     description: "Co-hosted and live demoed to 350+ customers at the Alteryx Inspire conference.",
-    image: "/images/alteryx-gp-1.jpg",
-    link: null,
+    image: "/Grand Prix1.jpeg",
+    imageLink: "https://www.instagram.com/p/DJt5RDdv3t4/?utm_source=ig_web_button_share_sheet",
+    link: "https://community.alteryx.com/discussion/1380927/announcing-the-inspire-2025-grand-prix-are-you-ready-to-race?utm_source=community-share",
+    cta: "Read More",
+    embed: null,
   },
 ] as const;
 
-export const projects = [
+export const fieldNotes = [
   {
-    title: "Scaled CS at Cloudflare",
-    role: "Manager, Customer Success",
-    summary:
-      "Leading 9 CSMs/CSEs across 4,200+ accounts and $260M+ ARR (AMER, CAN, LATAM).",
-    outcomes: [
-      "103.2% NRR; 101% quota avg over 3 consecutive quarters",
-      "194 CSQLs → $3.7M+ in new pipeline over three quarters",
-      "CS Bootcamps at 92% positive sentiment",
-      "AI propensity tiers for 6,000+ accounts in Salesforce",
-    ],
-    tags: ["Scaled CS", "AI", "Expansion", "Leadership"],
-    image: "/images/cloudflare-fireside.jpg",
-    link: null,
+    title: "Account growth propensity",
+    teaser:
+      "How I score, prioritize, and align CS + GTM around where growth actually lives.",
+    status: "Tinkering",
   },
   {
-    title: "AI Propensity Tiers & Account Prioritization",
-    role: "CS Manager, Cloudflare",
-    summary:
-      "Built AI-refined propensity tiers providing global Salesforce visibility for growth and retention.",
-    outcomes: [
-      "6,000+ accounts tiered for CS prioritization at scale",
-      "Global visibility driving customer growth & retention",
-    ],
-    tags: ["AI", "Operations", "Salesforce"],
-    image: "/images/headshot.jpg",
-    link: null,
+    title: "Growth and promotion framework",
+    teaser:
+      "A coaching-first way to talk about leveling, performance, and what “ready” means.",
+    status: "Tinkering",
   },
   {
-    title: "Gainsight Pulse — Human to Machine to Cyborg",
-    role: "Presenter (Alteryx)",
-    summary:
-      "Conference talk on evolving success plans from human-led to AI-augmented Customer Success.",
-    outcomes: [
-      "Featured session at Gainsight Pulse 2024",
-      "Framework for AI-augmented success planning",
-    ],
-    tags: ["AI", "Thought leadership", "Success plans"],
-    image: "/images/gainsight-pulse-1.jpg",
-    link: "https://pulselibrary.gainsight.com/video/the-evolution-of-success-plans-at-alteryx-from-human-to-machine-to-cyborg/",
+    title: "Burnout",
+    teaser:
+      "What it looks like on a CS team, what managers miss, and the habits that prevent it.",
+    status: "Tinkering",
   },
   {
-    title: "Lift-Off Experience & CSM Dispatch Center",
-    role: "Team Lead → Manager, Scaled CS (Alteryx)",
-    summary:
-      "Revamped account kickoff into human-led onboarding; built CSM Dispatch Center for Sales-to-CS collaboration.",
-    outcomes: [
-      "83% average activation rate on revamped kickoff",
-      "Streamlined handoffs across 2,500+ accounts / 18 CSMs",
-    ],
-    tags: ["Onboarding", "Operations", "Scaled CS"],
-    image: "/images/alteryx-gp-1.jpg",
-    link: null,
+    title: "Demo booth crash course",
+    teaser:
+      "A practical playbook for live demos, energy, and not winging it on the show floor.",
+    status: "Tinkering",
   },
   {
-    title: "Digital CS Automation at Scale",
-    role: "Team Lead, Digital CSM (Alteryx)",
-    summary:
-      "Led 5 Digital CSMs on 850+ accounts ($219M ARR); delivered 60+ advanced automation use cases.",
-    outcomes: [
-      "$7.5M+ ROI quantified; 35K+ hours saved",
-      "12% license activation improvement via Lift-Off Experience",
-    ],
-    tags: ["Automation", "Digital CS", "ROI"],
-    image: "/images/alteryx-gp-2.jpg",
-    link: null,
+    title: "Hiring",
+    teaser:
+      "Signal I look for, interview design, and building a squad that can coach each other.",
+    status: "Tinkering",
   },
   {
-    title: "Google AI Essentials — Featured Graduate",
-    role: "CS Leader & AI Adopter",
-    summary:
-      "Featured by Google for applying Prompting Essentials to team workflows and CS leadership.",
-    outcomes: [
-      "Featured graduate of Google Prompting Essentials",
-      "Championed AI adoption across CS organization",
-    ],
-    tags: ["AI", "Prompt engineering", "Thought leadership"],
-    image: "/images/google-ai-essentials.jpg",
-    link: "https://grow.google/ai-essentials/",
+    title: "Coaching the squad",
+    teaser:
+      "1:1s, commercial voice, and the rituals I use when the metrics follow the people.",
+    status: "Tinkering",
+  },
+  {
+    title: "The first 100 days",
+    teaser:
+      "Diagnosis, relationships, and what not to boil the ocean on in a new seat.",
+    status: "Tinkering",
   },
 ] as const;
+
+export const influences = {
+  books: [
+    {
+      title: "Book title — replace me",
+      author: "Author name",
+      status: "Read",
+      note: "One sentence on why this mattered — edit in site.ts.",
+      link: null,
+      slug: "example-book",
+    },
+    {
+      title: "Book you’re in the middle of",
+      author: "Author name",
+      status: "Reading",
+      note: "One sentence on why you’re reading it — edit in site.ts.",
+      link: null,
+      slug: null,
+    },
+    {
+      title: "Book on the nightstand",
+      author: "Author name",
+      status: "Up next",
+      note: "One sentence on why it’s queued — edit in site.ts.",
+      link: null,
+      slug: null,
+    },
+  ],
+  podcasts: [
+    {
+      title: "Hard Fork — The New York Times",
+      host: "Kevin Roose and Casey Newton ",
+      status: "Listening",
+      note: "Highly recommend this podcast to gather the general TLDR of the lastest in all things AI over the last week. Admittedly, I listen to this when I do my laundry on Sundays.",
+      link: "https://podcasts.apple.com/us/podcast/hard-fork/id1528594034",
+    },
+    {
+      title: "Grit — Kleiner Perkins",
+      host: "Joubin Mirzadegan",
+      status: "Listening",
+      note: "Really helpful in getting visibility + learning how Founders and C-level executives think, operate and run their businesses.",
+      link: "https://podcasts.apple.com/us/podcast/grit/id1510985491",
+    },
+    {
+      title: "Last Week in AI — Independent",
+      host: "Andrey Kurenkov and Jeremie Harris",
+      status: "Listening",
+      note: "In-depth, long format podcast that dives into the weeds of model preformance, research and more.",
+      link: "https://podcasts.apple.com/us/podcast/last-week-in-ai/id1510985491",
+    },
+  ],
+} as const;
 
 export const testimonials = [
   {
@@ -161,10 +214,4 @@ export const testimonials = [
     name: "Fernando Mendoza",
     title: "Customer Success Manager",
   },
-] as const;
-
-export const awards = [
-  "2023 Gainsight Digital CS Disruptor Award (team)",
-  "Q2 2024 Alteryx Leadership & Mentor Award",
-  "Alteryx Activate — Foundations of Leadership (inaugural class)",
 ] as const;
