@@ -3,3 +3,11 @@ compatibility_date = "2025-01-01"
 
 [assets]
 directory = "./dist"
+
+[[routes]]
+pattern = "26-w.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.26-w.com"
+custom_domain = true
