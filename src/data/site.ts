@@ -3,14 +3,14 @@ export const site = {
   opening: {
     paragraphs: [
       "What's up and welcome to my site.", 
-      "To preface, this all came about as a fun vibe coding project and quickly morphed into a smorgasbord of sharing experiences, ideas, and a few things in between.",
-      "This site was built with the help of AI tools however... and a big however, I did my absolute best to cut out as much slop as possible. All of the content has been written by myself (a real human) as I know many are tired of consuming unoriginal brain rotting, em dash filled content.",
-      "With that, enjoy the run on sentences, grammatical errors, half baked ideas, and more importantly hope I can spark some fun ideas for y'all.",
+      "Quick pre-read, this all came about as a fun vibe coding project and quickly morphed into a smorgasbord of trying to share experiences, ideas, and a few things in between.",
+      "This site was built with the help of AI tools however; I did my absolute best to cut out as much slop as possible. All of the content has been written by me, as I know many (myself included) are tired of consuming unoriginal brain rotting, em dash filled thoughts.",
+      "With that, enjoy the run on sentences, grammatical errors, half baked ideas, and hope I can spark some fun thoughts and a few laughs too.",
     ],
     signOff: "Cheers,",
   },
   shortBio:
-    "Customer Success leader at Cloudflare. I build scaled CS teams, AI-augmented workflows, and customer journeys that drive retention and growth. Featured by Google for AI prompting; speaker at Gainsight Pulse. Coaching-first leader — metrics follow when the people are right.",
+    "Going from Data Analytics to a company that provides a copious amounts of mission critical Internet services that run 24/7 with passionate customers…who will let you know. It's fun being apart of a crew that thrives off pressure, grit and of course sugar. From deploying growth propensity segmentation and scoring, to running onsite customer bootcamp, to Uber Eats-in $200 of Vegan friendly meals 20 mins before lunch (whoops), Cloudflare continues to teach life long lessons.   ",
   about: [
     "I've spent my career in Customer Success because I genuinely believe the best growth happens at the intersection of people and systems, and I love building both.",
     "My leadership style is rooted in coaching. I'm most energized when I'm unlocking something in someone that they didn't know was there — whether that's a CSM finding their commercial voice or a team discovering a smarter way to work. The metrics follow when the people are right.",
@@ -44,28 +44,28 @@ export const path = [
   {
     label: "University",
     blurb:
-      "Monmouth University — B.A. International Business. Four years as a D1 student-athlete, where the habits around competition, accountability, and showing up for a team first started to take shape.",
+      "Walked on to play D-1 football at Monmouth University in New Jersey. Majored in International Business and spent time studying abroad in Hungary, Czech Republic, and Poland. Also had to take German lessons to pass the curriculum…'Ein Bier bitte' is all I really mastered. Lastly yes, that turf really is that shade of teal IRL.",
     image: "/images/gallery-image.jpg",
     alt: "Monmouth University football",
   },
   {
     label: "UBS",
     blurb:
-      "Started in financial services at UBS, learning how high-stakes client relationships actually work — precision, trust, and the discipline of following through. The foundation for everything that came after in Customer Success.",
+      "Kicked off my professional moving to Nashville to join UBS's Robotic Process Automation team, supporting developers across the US and India. Earned my stripes wearing tucked in button-downs, and uncomfortable dress shoes 5 days a week. Got my hands on an Alteryx license to help support an ERP migration for Wealth Management Americas...aka 7 weeks stright of analyizing data dev changes. In turn, propelled me to become an analyst and developer myself, and introed me to the world of Customer Success.",
     image: "/images/ubs.jpg",
     alt: "UBS",
   },
   {
     label: "Alteryx",
     blurb:
-      "Built and led Customer Success at Alteryx — scaled journeys, coached CSMs into their commercial voice, and took the work on stage: Gainsight Pulse on AI-augmented success plans, and the Grand Prix at Inspire in front of 350+ customers.",
+      "Welp...the tucked-in button-down tradition followed me to Alteryx. This is where I earned my chops in Customer Success, going from player to coach, learning to operate in the gray, and racking up some serious airline miles too. I have a ton of love for Alteryx: they invested in me, helping me gain meaningful coaching reps and pushing me out of my comfort zone. That massively shaped how I lead, coach, run a business unit, and build connections today.",
     image: "/images/ayx-bus.png",
     alt: "Alteryx Grand Prix at Inspire",
   },
   {
     label: "Cloudflare",
     blurb:
-      "Customer Success leader at Cloudflare. I build scaled CS teams, AI-augmented workflows, and customer journeys that drive retention and growth — and hosted a fireside with Cloudflare's CTO on the future of the platform and AI agents.",
+      "A new challeng going from Data Analytics to a company that provides mission critical Internet services 24/7 to passionate customers… who will let you know. It's fun being apart of a crew that thrives off pressure, grit and sugar. From deploying growth propensity segmentation and scoring, to onsite customer bootcamps, to $200 Uber Eats orders of Vegan friendly meals 20 minutes before lunch (whoops), Cloudflare continues to teach life-long lessons.",
     image: "/images/cloudflare-leadership.jpg",
     alt: "Fireside chat with Cloudflare CTO",
   },
@@ -74,14 +74,15 @@ export const path = [
 export const featured = [
   {
     title: "Fireside Chat with Cloudflare CTO",
-    description: "Hosted Dane Knecht for a conversation on the future of Cloudflare, AI agents, and the legendary Dane's Gold Musings channel.",
+    description: "Hosted Dane Knecht for a conversation on the future of Cloudflare, AI, Agents, and the legendary Dane's Gold Musings channel. *Photo quality courtersy of a '04 Razr phone.",
     image: "/images/fireside-chat-cropped.jpeg",
     link: null,
     embed: null,
   },
   {
-    title: "Google AI Essentials — Featured Graduate",
-    description: "Featured by Google for applying Prompting Essentials to team workflows and CS leadership.",
+    title: "Google AI Essentials",
+
+description: "Featured by Google for applying Prompting Essentials into team workflows. Also got some sick glamor shots along the way. Exhibit A: profile picture above. ",
     image: "/images/google-ai-essentials.jpg",
     link: "https://publicpolicy.google/stories/ai-essentials-christian-tennessee/",
     embed:
@@ -89,15 +90,15 @@ export const featured = [
   },
   {
     title: "Gainsight Pulse Featured Speaker",
-    description: "Presented on evolving success plans from human-led to AI-augmented Customer Success.",
+    description: "Presented with my partner in crime, Galilea Sanchez, on the evolution of success plans: From Human ➡️ Machine ➡️ Cyborg. TLDR: data trends + team action to drive activation & utilization for expensive products.",
     image: "/images/gainsight-pulse-1.png",
     imageFit: "contain",
     link: "https://pulselibrary.gainsight.com/video/the-evolution-of-success-plans-at-alteryx-from-human-to-machine-to-cyborg/",
     embed: null,
   },
   {
-    title: "Alteryx Grand Prix at Inspire",
-    description: "Co-hosted and live demoed to 350+ customers at the Alteryx Inspire conference.",
+    title: "Alteryx Grand Prix at Inspire Conference",
+    description: "Co-hosted and live demoed to 350+ customers at the Alteryx Grand Prix. Gained valuable professional experience 'making it rain' via operating a cash cannon.",
     image: "/images/grand-prix-1.jpeg",
     imageLink: "https://www.instagram.com/p/DJt5RDdv3t4/?utm_source=ig_web_button_share_sheet",
     link: "https://community.alteryx.com/discussion/1380927/announcing-the-inspire-2025-grand-prix-are-you-ready-to-race?utm_source=community-share",
@@ -106,74 +107,29 @@ export const featured = [
   },
 ] as const;
 
-export const fieldNotes = [
-  {
-    title: "Account growth propensity",
-    teaser:
-      "How I score, prioritize, and align CS + GTM around where growth actually lives.",
-    status: "Tinkering",
-  },
-  {
-    title: "Growth and promotion framework",
-    teaser:
-      "A coaching-first way to talk about leveling, performance, and what “ready” means.",
-    status: "Tinkering",
-  },
-  {
-    title: "Burnout",
-    teaser:
-      "What it looks like on a CS team, what managers miss, and the habits that prevent it.",
-    status: "Tinkering",
-  },
-  {
-    title: "Demo booth crash course",
-    teaser:
-      "A practical playbook for live demos, energy, and not winging it on the show floor.",
-    status: "Tinkering",
-  },
-  {
-    title: "Hiring",
-    teaser:
-      "Signal I look for, interview design, and building a squad that can coach each other.",
-    status: "Tinkering",
-  },
-  {
-    title: "Coaching the squad",
-    teaser:
-      "1:1s, commercial voice, and the rituals I use when the metrics follow the people.",
-    status: "Tinkering",
-  },
-  {
-    title: "The first 100 days",
-    teaser:
-      "Diagnosis, relationships, and what not to boil the ocean on in a new seat.",
-    status: "Tinkering",
-  },
-] as const;
-
 export const influences = {
   books: [
     {
-      title: "Book title — replace me",
-      author: "Author name",
+      title: "Still deciding",
+      author: "TBD",
       status: "Read",
-      note: "One sentence on why this mattered — edit in site.ts.",
+      note: "Stay tuned, y'all. I'm writing up what I'm actually reading instead of leaving fake book titles here.",
       link: null,
       slug: "example-book",
     },
     {
-      title: "Book you’re in the middle of",
-      author: "Author name",
+      title: "Currently dog-earing something",
+      author: "TBD",
       status: "Reading",
-      note: "One sentence on why you’re reading it — edit in site.ts.",
+      note: "Stay tuned, y'all. I'm writing up what I'm actually reading instead of leaving fake book titles here.",
       link: null,
       slug: null,
     },
     {
-      title: "Book on the nightstand",
-      author: "Author name",
+      title: "On the nightstand (TBD)",
+      author: "TBD",
       status: "Up next",
-      note: "One sentence on why it’s queued — edit in site.ts.",
+      note: "Stay tuned, y'all. I'm writing up what I'm actually reading instead of leaving fake book titles here.",
       link: null,
       slug: null,
     },
@@ -197,8 +153,8 @@ export const influences = {
       title: "Last Week in AI — Independent",
       host: "Andrey Kurenkov and Jeremie Harris",
       status: "Listening",
-      note: "In-depth, long format podcast that dives into the weeds of model preformance, research and more.",
-      link: "https://podcasts.apple.com/us/podcast/last-week-in-ai/id1510985491",
+      note: "In-depth, long format podcast that dives into the weeds of model preformance, research and more. Typically by the end my brain is fried.",
+      link: "https://podcasts.apple.com/us/podcast/last-week-in-ai/id1502782720",
     },
   ],
 } as const;
@@ -208,18 +164,24 @@ export const testimonials = [
     quote:
       "Christian is one of the most hard working & naturally talented individuals I have led in my career… re-imagined our behavioral-based pay model… relentless drove a high-performance culture.",
     name: "Jordan Barker",
-    title: "VP, Customer Experience at Okta (former manager)",
+    title: "VP, Customer Experience | Okta",
   },
   {
     quote:
       "Christian was my manager at Cloudflare… instrumental in helping me adopt AI tools as a CSM… genuinely one of the best managers I've ever had.",
     name: "Regina Sampayo",
-    title: "Customer Success Manager at Cloudflare",
+    title: "Customer Success Manager | Cloudflare",
   },
   {
     quote:
       "Christian builds structures from scratch… I saw a direct positive impact on my performance metrics, specifically in adoption and account expansion.",
     name: "Fernando Mendoza",
-    title: "Customer Success Manager",
+    title: "Customer Success Manager | Kroll",
+  },
+  {
+    quote:
+      "Christian is one of the most driven and dedicated professionals I've come across… a natural problem-solver who doesn't get bogged down by obstacles… builds genuine relationships quickly and effectively.",
+    name: "Mena Estany",
+    title: "RPA Developer Lead | UBS",
   },
 ] as const;
