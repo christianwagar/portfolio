@@ -15,7 +15,17 @@ import { site } from "../data/site";
   <div class="hero-panel">
     <div class="hero-content reveal">
       <h1 class="hero-name">{site.name}</h1>
-      <p class="hero-tagline">{site.tagline}</p>
+      <div class="hero-opening">
+        {site.opening.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        <p class="hero-signoff">{site.opening.signOff}</p>
+        <img
+          class="hero-signature"
+          src="/signature-bold.png"
+          alt=""
+          width="862"
+          height="383"
+        />
+      </div>
       <div class="hero-actions">
         <a href="#notes" class="cta">Field notes</a>
         <a href={site.linkedin} class="cta" target="_blank" rel="noopener noreferrer">
@@ -29,7 +39,7 @@ import { site } from "../data/site";
 <style>
   .hero {
     display: grid;
-    grid-template-columns: 1.15fr 1fr;
+    grid-template-columns: 1fr 1.2fr;
     min-height: calc(100vh - 3.75rem);
     min-height: calc(100dvh - 3.75rem);
     background: var(--bg);
@@ -58,27 +68,44 @@ import { site } from "../data/site";
   }
 
   .hero-content {
-    max-width: 28rem;
+    max-width: 38rem;
   }
 
   .hero-name {
     font-family: var(--font-display);
-    font-size: clamp(2.75rem, 6vw, 4.25rem);
+    font-size: clamp(2.5rem, 5.5vw, 3.75rem);
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     line-height: 0.95;
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.5rem;
   }
 
-  .hero-tagline {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin: 0 0 2rem;
+  .hero-opening {
+    margin: 0;
+  }
+
+  .hero-opening p {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    line-height: 1.7;
     color: var(--text);
+    margin: 0 0 1rem;
+  }
+
+  .hero-opening .hero-signoff {
+    margin-top: 0.35rem;
+    margin-bottom: 0;
+  }
+
+  .hero-signature {
+    display: block;
+    width: 11.25rem;
+    height: auto;
+    margin: 0.35rem 0 1.75rem;
   }
 
   .hero-actions {
@@ -106,6 +133,18 @@ import { site } from "../data/site";
 
     .hero-panel {
       padding: 2.5rem 1.75rem 3.5rem;
+    }
+  }
+
+  @media (max-height: 820px) and (min-width: 901px) {
+    .hero {
+      min-height: 0;
+    }
+
+    .hero-panel {
+      align-items: flex-start;
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
     }
   }
 </style>

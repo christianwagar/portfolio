@@ -1,6 +1,14 @@
 export const site = {
   name: "Christian Wagar",
-  tagline: "Customer Success & GTM Leader · AI-Native Operator",
+  opening: {
+    paragraphs: [
+      "What's up and welcome to my site.", 
+      "To preface, this all came about as a fun vibe coding project and quickly morphed into a smorgasbord of sharing experiences, ideas, and a few things in between.",
+      "This site was built with the help of AI tools however... and a big however, I did my absolute best to cut out as much slop as possible. All of the content has been written by myself (a real human) as I know many are tired of consuming unoriginal brain rotting, em dash filled content.",
+      "With that, enjoy the run on sentences, grammatical errors, half baked ideas, and more importantly hope I can spark some fun ideas for y'all.",
+    ],
+    signOff: "Cheers,",
+  },
   shortBio:
     "Customer Success leader at Cloudflare. I build scaled CS teams, AI-augmented workflows, and customer journeys that drive retention and growth. Featured by Google for AI prompting; speaker at Gainsight Pulse. Coaching-first leader — metrics follow when the people are right.",
   about: [
@@ -37,28 +45,28 @@ export const path = [
     label: "University",
     blurb:
       "Monmouth University — B.A. International Business. Four years as a D1 student-athlete, where the habits around competition, accountability, and showing up for a team first started to take shape.",
-    image: "gallery_image.jpg",
+    image: "/images/gallery-image.jpg",
     alt: "Monmouth University football",
   },
   {
     label: "UBS",
     blurb:
       "Started in financial services at UBS, learning how high-stakes client relationships actually work — precision, trust, and the discipline of following through. The foundation for everything that came after in Customer Success.",
-    image: "UBS.jpg",
+    image: "/images/ubs.jpg",
     alt: "UBS",
   },
   {
     label: "Alteryx",
     blurb:
       "Built and led Customer Success at Alteryx — scaled journeys, coached CSMs into their commercial voice, and took the work on stage: Gainsight Pulse on AI-augmented success plans, and the Grand Prix at Inspire in front of 350+ customers.",
-    image: "AYX Bus.png",
+    image: "/images/ayx-bus.png",
     alt: "Alteryx Grand Prix at Inspire",
   },
   {
     label: "Cloudflare",
     blurb:
       "Customer Success leader at Cloudflare. I build scaled CS teams, AI-augmented workflows, and customer journeys that drive retention and growth — and hosted a fireside with Cloudflare's CTO on the future of the platform and AI agents.",
-    image: "Cloudflare_Leadership.JPG",
+    image: "/images/cloudflare-leadership.jpg",
     alt: "Fireside chat with Cloudflare CTO",
   },
 ] as const;
@@ -67,7 +75,7 @@ export const featured = [
   {
     title: "Fireside Chat with Cloudflare CTO",
     description: "Hosted Dane Knecht for a conversation on the future of Cloudflare, AI agents, and the legendary Dane's Gold Musings channel.",
-    image: "Fireside Chat Cropped.jpeg",
+    image: "/images/fireside-chat-cropped.jpeg",
     link: null,
     embed: null,
   },
@@ -90,7 +98,7 @@ export const featured = [
   {
     title: "Alteryx Grand Prix at Inspire",
     description: "Co-hosted and live demoed to 350+ customers at the Alteryx Inspire conference.",
-    image: "/Grand Prix1.jpeg",
+    image: "/images/grand-prix-1.jpeg",
     imageLink: "https://www.instagram.com/p/DJt5RDdv3t4/?utm_source=ig_web_button_share_sheet",
     link: "https://community.alteryx.com/discussion/1380927/announcing-the-inspire-2025-grand-prix-are-you-ready-to-race?utm_source=community-share",
     cta: "Read More",
