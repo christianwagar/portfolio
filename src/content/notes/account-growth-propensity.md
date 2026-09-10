@@ -1,7 +1,9 @@
 ---
 title: Account growth propensity
-teaser: How I score, prioritize, and align CS + GTM around where growth actually lives.
+teaser: How I score, prioritize, and align CS + GTM around customer growth signals and patterns.
 status: Tinkering
+image: /images/notes/coming-soon.jpg
+imageAlt: Notebook sketch that says Coming Soon
 order: 1
 ---
 

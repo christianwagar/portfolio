@@ -2,6 +2,8 @@
 title: Burnout
 teaser: What it looks like on a CS team, what managers miss, and the habits that prevent it.
 status: Tinkering
+image: /images/notes/on-deck.jpg
+imageAlt: Chalkboard with On Deck written in chalk
 order: 3
 ---
 

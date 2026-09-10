@@ -74,7 +74,7 @@ export const path = [
 export const featured = [
   {
     title: "Fireside Chat with Cloudflare CTO",
-    description: "Hosted Dane Knecht for a conversation on the future of Cloudflare, AI, Agents, and the legendary Dane's Gold Musings channel. *Photo quality courtersy of a '04 Razr phone.",
+    description: "Hosted Dane Knecht for a conversation on the future of Cloudflare, AI, Agents, and the legendary Dane's Gold Musings channel.",
     image: "/images/fireside-chat-cropped.jpeg",
     link: null,
     embed: null,

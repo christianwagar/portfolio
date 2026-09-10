@@ -2,6 +2,8 @@
 title: Growth and promotion framework
 teaser: A coaching-first way to talk about leveling, performance, and what “ready” means.
 status: Tinkering
+image: /images/notes/to-do.jpg
+imageAlt: Ink sketch of the letters To Do
 order: 2
 ---
 

@@ -6,7 +6,7 @@ import Footer from "../../components/Footer.astro";
 import { site } from "../../data/site";
 
 export async function getStaticPaths() {
-  const notes = await getCollection("notes");
+  const notes = (await getCollection("notes")).filter((note) => !note.data.hidden);
   return notes.map((note) => ({
     params: { slug: note.id },
     props: { note },

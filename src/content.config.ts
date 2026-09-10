@@ -16,6 +16,7 @@ const notes = defineCollection({
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     order: z.number(),
+    hidden: z.boolean().optional().default(false),
   }),
 });
 
