@@ -90,7 +90,7 @@ description: "Featured by Google for applying Prompting Essentials into team wor
   },
   {
     title: "Gainsight Pulse Featured Speaker",
-    description: "Presented with my partner in crime, Galilea Sanchez, on the evolution of success plans: From Human ➡️ Machine ➡️ Cyborg. TLDR: data trends + team action to drive activation & utilization for expensive products.",
+    description: "Presented with the best in the biz, Galilea Sanchez, on the evolution of success plans: From Human ➡️ Machine ➡️ Cyborg. TLDR: data trends + team action to drive activation & utilization for expensive products.",
     image: "/images/gainsight-pulse-1.png",
     imageFit: "contain",
     link: "https://pulselibrary.gainsight.com/video/the-evolution-of-success-plans-at-alteryx-from-human-to-machine-to-cyborg/",
@@ -98,7 +98,7 @@ description: "Featured by Google for applying Prompting Essentials into team wor
   },
   {
     title: "Alteryx Grand Prix at Inspire Conference",
-    description: "Co-hosted and live demoed to 350+ customers at the Alteryx Grand Prix. Gained valuable professional experience 'making it rain' via operating a cash cannon.",
+    description: "Co-hosted and live demoed to customers at the Alteryx Grand Prix. Gained valuable professional experience 'making it rain' via operating a cash cannon.",
     image: "/images/grand-prix-1.jpeg",
     imageLink: "https://www.instagram.com/p/DJt5RDdv3t4/?utm_source=ig_web_button_share_sheet",
     link: "https://community.alteryx.com/discussion/1380927/announcing-the-inspire-2025-grand-prix-are-you-ready-to-race?utm_source=community-share",
