@@ -159,32 +159,41 @@ const pageTitle = `${title} — ${site.name}`;
 
   .note-body :global(.split-figure) {
     display: grid;
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: "image copy";
     gap: 2.5rem 3rem;
     align-items: center;
     margin: 3rem 0;
     max-width: none;
   }
 
+  .note-body :global(.split-figure-right) {
+    grid-template-areas: "copy image";
+  }
+
+  .note-body :global(.split-media) {
+    grid-area: image;
+  }
+
   .note-body :global(.split-image) {
-    aspect-ratio: 3 / 4;
     overflow: hidden;
     background: var(--bg-soft);
   }
 
   .note-body :global(.split-image img) {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    display: block;
   }
 
   .note-body :global(.split-placeholder) {
     width: 100%;
-    height: 100%;
+    min-height: 12rem;
     background: var(--bg-soft);
   }
 
   .note-body :global(.split-copy) {
+    grid-area: copy;
     margin: 0;
   }
 
@@ -209,18 +218,17 @@ const pageTitle = `${title} — ${site.name}`;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin: 1.5rem 0 0;
+    margin: 0.75rem 0 0;
   }
 
   @media (max-width: 800px) {
-    .note-body :global(.split-figure) {
+    .note-body :global(.split-figure),
+    .note-body :global(.split-figure-right) {
       grid-template-columns: 1fr;
+      grid-template-areas:
+        "image"
+        "copy";
       gap: 1.5rem;
-    }
-
-    .note-body :global(.split-image) {
-      aspect-ratio: 3 / 4;
-      max-height: 520px;
     }
   }
 </style>

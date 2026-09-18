@@ -8,7 +8,7 @@ const books = defineCollection({
 });
 
 const notes = defineCollection({
-  loader: glob({ base: "./src/content/notes", pattern: "**/*.md" }),
+  loader: glob({ base: "./src/content/notes", pattern: "**/*.{md,mdx}" }),
   schema: z.object({
     title: z.string(),
     teaser: z.string(),
