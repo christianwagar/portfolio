@@ -29,6 +29,8 @@ export const site = {
   },
   cta: "Let's connect",
   linkedin: "https://www.linkedin.com/in/christian-wagar-316b59139/",
+  github: "https://github.com/christianwagar",
+  x: "https://x.com/ChristianWagar",
   education: [
     "Monmouth University — B.A. International Business (2015–2018), D1 student-athlete",
     "Red Bank Catholic High School (2011–2014)",
