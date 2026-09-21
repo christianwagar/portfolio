@@ -112,12 +112,15 @@ description: "Featured by Google for applying Prompting Essentials into team wor
 export const influences = {
   books: [
     {
-      title: "Still deciding",
-      author: "TBD",
+      title: "Grinding It Out",
+      author: null,
       status: "Read",
-      note: "Stay tuned, y'all. I'm writing up what I'm actually reading instead of leaving fake book titles here.",
-      link: null,
-      slug: "example-book",
+      note: "My hot-take on scaling out an industry I know nothing about.",
+      link: "https://a.co/d/0aRGc93r",
+      slug: "grinding-it-out",
+      date: "September 21, 2026",
+      image: "/images/books/grinding-it-out.jpg",
+      imageAlt: "Paperback of Grinding It Out by Ray Kroc on a wood table",
     },
     {
       title: "Currently dog-earing something",
@@ -126,6 +129,9 @@ export const influences = {
       note: "Stay tuned, y'all. I'm writing up what I'm actually reading instead of leaving fake book titles here.",
       link: null,
       slug: null,
+      date: null,
+      image: null,
+      imageAlt: null,
     },
     {
       title: "On the nightstand (TBD)",
@@ -134,6 +140,9 @@ export const influences = {
       note: "Stay tuned, y'all. I'm writing up what I'm actually reading instead of leaving fake book titles here.",
       link: null,
       slug: null,
+      date: null,
+      image: null,
+      imageAlt: null,
     },
   ],
   podcasts: [

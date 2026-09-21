@@ -20,27 +20,20 @@ const reviewIds = new Set(reviews.map((review) => review.id));
         {
           influences.books.map((book) => (
             <article class="influence-item">
+              {book.image && (
+                <div class="influence-thumb">
+                  <img src={book.image} alt={book.imageAlt ?? book.title} loading="lazy" />
+                </div>
+              )}
               <p class="influence-status">{book.status}</p>
               <h4>{book.title}</h4>
-              <p class="influence-credit">{book.author}</p>
+              {book.author && <p class="influence-credit">{book.author}</p>}
               <p class="influence-note">{book.note}</p>
-              {(book.link || (book.slug && reviewIds.has(book.slug))) && (
+              {book.slug && reviewIds.has(book.slug) && (
                 <div class="influence-ctas">
-                  {book.link && (
-                    <a
-                      href={book.link}
-                      class="cta"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Amazon
-                    </a>
-                  )}
-                  {book.slug && reviewIds.has(book.slug) && (
-                    <a href={`/books/${book.slug}`} class="cta">
-                      Full review
-                    </a>
-                  )}
+                  <a href={`/books/${book.slug}`} class="cta">
+                    Full review
+                  </a>
                 </div>
               )}
             </article>
@@ -111,6 +104,20 @@ const reviewIds = new Set(reviews.map((review) => review.id));
   .influence-item {
     display: flex;
     flex-direction: column;
+  }
+
+  .influence-thumb {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: var(--bg-soft);
+    margin-bottom: 1rem;
+  }
+
+  .influence-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .influence-status {
