@@ -3,7 +3,7 @@
 
 ## Good for Who?
 
-Individuals who are looking to scale out a proven product/operation… For all the tech-bro’s (10 → 100).
+Individuals who are looking to scale out a proven product/operation… For my fellow WIT & tech-bro’s (10 → 100).
 
 ## When to Read?
 
@@ -11,15 +11,15 @@ When you or the team are trained up, have multiple live iterations run and know 
 
 ## My 2¢
 
-This book was published in 1977. A Big Mac cost right around 82¢ (equivalent to $4 in 2026) and Star Wars was screening in theaters. It certainly was a different time then but all things considered Ray Kroc was a trailblazer when it came to scaling a business into a multi-national franchise, as well as the intensive site-selection process, and relentless commitment to product as McDonald’s Sprite & Fries are still second to none to this day.
+This book was published in 1977. A Big Mac cost right around 82¢ (equivalent to $4 in 2026) and Star Wars was screening its 1st film in theaters. It certainly was a different time then but all things considered Ray Kroc was a trailblazer. From scaling a business into a multi-national franchise, to the intensive site-selection process, as well as relentless commitment to product consistency, there has undoubtedly been a lasting impact that changed the food industry as McDonald’s Sprite & Fries are still second to none.
 
-Additionally to note this book is written from Ray's POV so all things, Dick and Mac related (aka the OG McDonald’s brothers) is more of “they had a great business but couldn't see the forest for the trees” perspective.
+Additionally to note this book is written from Ray's POV so all things, Dick and Mac related (aka the OG McDonald’s brothers) is more of “they had a great business but couldn't see the forest for the trees” perspective. As the kids would say, Ray was aura farming.
 
-As a whole, read the book first, keep in mind Ray Kroc was 52 when he met the McDonald brothers and he was a seasoned salesman / entrepreneur who spent years driving all over the United States. In his 30+ years of ‘Grinding it out’ before McDonalds and to his credit he built an extensive wealth of knowledge and experiences. There is no doubt that it was monumental to make McDonalds a global franchise. Once you finish the book, watch the movie as it’ll give you some insights and counter views that are more balanced in telling the story.
+As a whole, read the book first, keep in mind Ray Kroc was in his 50s when he met the McDonald brothers. He was also a seasoned salesman who spent 30ish years driving all over the United States selling cups and mixers to restaurants. His years of ‘Grinding it out’ before McDonalds wasn't happenstance; he built an extensive wealth of knowledge and experiences in the food service industry. There is no doubt it was a critical element to making McDonalds a global franchise. Once you finish the book, watch the movie as it’ll give you some insights and counter views that are more balanced in telling the story.
 
 ## Steal This
 
-Sometimes the best ideas won’t scale until someone else's energy, idea’s, visions, experiences or resources are interjected...Just make sure you have an incredible legal team in your corner.
+Sometimes the best ideas won’t scale until someone else's energy, idea’s, visions, experiences or resources are interjected...Just make sure you have an incredible legal team in your corner before you share the secret sauce.
 
 ## Closing Notes
 
