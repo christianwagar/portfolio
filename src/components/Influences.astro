@@ -11,33 +11,36 @@ const reviewIds = new Set(reviews.map((review) => review.id));
     <span class="section-label">Influences</span>
     <h2 class="section-title">The Shelf</h2>
     <p class="influences-intro">
-      Podcasts I'm already in the rotation on, and books I'm still picking (and writing up) like a human.
+      Books I've read, reading, and still need to figure out. Podcasts that I think are solid as well as a few things in between.
     </p>
 
     <div class="influence-shelf">
       <h3 class="shelf-label">Books</h3>
       <div class="grid-3">
         {
-          influences.books.map((book) => (
-            <article class="influence-item">
-              {book.image && (
-                <div class="influence-thumb">
-                  <img src={book.image} alt={book.imageAlt ?? book.title} loading="lazy" />
-                </div>
-              )}
-              <p class="influence-status">{book.status}</p>
-              <h4>{book.title}</h4>
-              {book.author && <p class="influence-credit">{book.author}</p>}
-              <p class="influence-note">{book.note}</p>
-              {book.slug && reviewIds.has(book.slug) && (
-                <div class="influence-ctas">
-                  <a href={`/books/${book.slug}`} class="cta">
-                    Full review
-                  </a>
-                </div>
-              )}
-            </article>
-          ))
+          influences.books.map((book) => {
+            const href = book.slug && reviewIds.has(book.slug) ? `/books/${book.slug}` : null;
+            const card = (
+              <>
+                {book.image && (
+                  <div class="influence-thumb">
+                    <img src={book.image} alt={book.imageAlt ?? book.title} loading="lazy" />
+                  </div>
+                )}
+                <p class="influence-status">{book.status}</p>
+                <h4>{book.title}</h4>
+                {book.author && <p class="influence-credit">{book.author}</p>}
+                <p class="influence-note">{book.note}</p>
+              </>
+            );
+            return href ? (
+              <a href={href} class="influence-item">
+                {card}
+              </a>
+            ) : (
+              <article class="influence-item">{card}</article>
+            );
+          })
         }
       </div>
     </div>
@@ -104,6 +107,16 @@ const reviewIds = new Set(reviews.map((review) => review.id));
   .influence-item {
     display: flex;
     flex-direction: column;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a.influence-item:hover {
+    opacity: 1;
+  }
+
+  a.influence-item:hover .influence-thumb img {
+    transform: scale(1.03);
   }
 
   .influence-thumb {
@@ -118,6 +131,7 @@ const reviewIds = new Set(reviews.map((review) => review.id));
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transition: transform 0.5s ease;
   }
 
   .influence-status {

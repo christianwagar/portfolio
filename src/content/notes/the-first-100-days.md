@@ -1,6 +1,6 @@
 ---
 title: The first 100 days
-teaser: Diagnosis, relationships, and what not to boil the ocean on in a new seat.
+teaser: 30, 60, 90... 100... Everyone thinks they have a plan.
 status: Tinkering
 image: /images/notes/slow-man-at-work.jpg
 imageAlt: Diamond-shaped sketch that says Slow Man at Work

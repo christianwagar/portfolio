@@ -1,6 +1,6 @@
 ---
 title: Coaching the squad
-teaser: 1:1s, commercial voice, and the rituals I use when the metrics follow the people.
+teaser: May have to do a 3 or 4 part breakdown on this, as many confuse Coaching with Managing, Mentoring, and Leading.
 status: Tinkering
 image: /images/notes/in-the-works.jpg
 imageAlt: Ink sketch that says In the Works

@@ -1,6 +1,6 @@
 ---
 title: Growth and promotion framework
-teaser: A coaching-first way to talk about leveling, performance, and what “ready” means.
+teaser: Ill probably drop this around December when everyone is filling out their EOY assessment and wants a raise in 2027.
 status: Tinkering
 image: /images/notes/to-do.jpg
 imageAlt: Ink sketch of the letters To Do
