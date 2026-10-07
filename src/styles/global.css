@@ -143,6 +143,12 @@ a:hover {
   grid-template-columns: repeat(3, 1fr);
 }
 
+.grid-4 {
+  display: grid;
+  gap: 2.5rem 2rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
 /* Soft image reveal on scroll */
 @keyframes fade-up {
   from {
@@ -160,7 +166,8 @@ a:hover {
 }
 
 @media (max-width: 900px) {
-  .grid-3 {
+  .grid-3,
+  .grid-4 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -171,7 +178,8 @@ a:hover {
   }
 
   .grid-2,
-  .grid-3 {
+  .grid-3,
+  .grid-4 {
     grid-template-columns: 1fr;
   }
 

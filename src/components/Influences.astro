@@ -47,26 +47,36 @@ const reviewIds = new Set(reviews.map((review) => review.id));
 
     <div class="influence-shelf">
       <h3 class="shelf-label">Podcasts</h3>
-      <div class="grid-3">
+      <div class="grid-4">
         {
-          influences.podcasts.map((show) => (
-            <article class="influence-item">
-              <p class="influence-status">{show.status}</p>
-              <h4>{show.title}</h4>
-              <p class="influence-credit">{show.host}</p>
-              <p class="influence-note">{show.note}</p>
-              {show.link && (
-                <a
-                  href={show.link}
-                  class="cta influence-cta"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Listen
-                </a>
-              )}
-            </article>
-          ))
+          influences.podcasts.map((show) => {
+            const card = (
+              <>
+                {show.image && (
+                  <div class="podcast-thumb">
+                    <img src={show.image} alt={show.imageAlt ?? show.title} loading="lazy" />
+                  </div>
+                )}
+                <p class="influence-status">{show.status}</p>
+                <h4>{show.title}</h4>
+                <p class="influence-credit">{show.host}</p>
+                <p class="influence-note">{show.note}</p>
+                {show.link && <span class="cta influence-cta">Listen</span>}
+              </>
+            );
+            return show.link ? (
+              <a
+                href={show.link}
+                class="influence-item"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {card}
+              </a>
+            ) : (
+              <article class="influence-item">{card}</article>
+            );
+          })
         }
       </div>
     </div>
@@ -124,6 +134,17 @@ const reviewIds = new Set(reviews.map((review) => review.id));
     overflow: hidden;
     background: var(--bg-soft);
     margin-bottom: 1rem;
+  }
+
+  .podcast-thumb {
+    margin-bottom: 1rem;
+    background: var(--bg-soft);
+  }
+
+  .podcast-thumb img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
   }
 
   .influence-thumb img {

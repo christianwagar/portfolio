@@ -113,7 +113,7 @@ export const influences = {
   books: [
     {
       title: "Grinding It Out",
-      author: null,
+      author: " Ray Kroc (with Robert Anderson)",
       status: "Read",
       note: "My hot-take on scaling out an industry I know nothing about.",
       link: "https://a.co/d/0aRGc93r",
@@ -125,7 +125,7 @@ export const influences = {
     },
     {
       title: "Shoe Dog",
-      author: null,
+      author: "Phil Knight",
       status: "Read",
       note: "Success is rarely linear and has varying timelines.",
       link: "https://a.co/d/058ONN8p",
@@ -137,7 +137,7 @@ export const influences = {
     },
     {
       title: "The Psychology of Money",
-      author: null,
+      author: "Morgan Housel",
       status: "Read",
       note: "Comparison is the thief of joy.",
       link: "https://a.co/d/0g5MmXSI",
@@ -150,11 +150,26 @@ export const influences = {
   ],
   podcasts: [
     {
+      title: "Machine Gods — NPR",
+      host: "Kevin Roose and Casey Newton",
+      status: "Will be listening to this soon",
+      note: "Waiting to hear them on-air Oct 19th!",
+      link: "https://podcasts.apple.com/us/podcast/machine-gods/id6812430636",
+      slug: "machine-gods",
+      date: null,
+      image: "/images/machine-gods.png",
+      imageAlt: "Machine Gods podcast cover",
+    },
+    {
       title: "Hard Fork — The New York Times",
-      host: "Kevin Roose and Casey Newton ",
+      host: " Max Read",
       status: "Listening",
-      note: "Highly recommend this podcast to gather the general TLDR of the lastest in all things AI over the last week. Admittedly, I listen to this when I do my laundry on Sundays.",
+      note: "New host Max taking over this podcast. Still a solid podcast to get a world view of AI.",
       link: "https://podcasts.apple.com/us/podcast/hard-fork/id1528594034",
+      slug: "psychology-of-money",
+      date: null,
+      image: "/images/hard-fork.png",
+      imageAlt: "Hard Fork thumbnail",
     },
     {
       title: "Grit — Kleiner Perkins",
@@ -162,6 +177,10 @@ export const influences = {
       status: "Listening",
       note: "Really helpful in getting visibility + learning how Founders and C-level executives think, operate and run their businesses.",
       link: "https://podcasts.apple.com/us/podcast/grit/id1510985491",
+      slug: "grit",
+      date: null,
+      image: "/images/grit.png",
+      imageAlt: "Grit by Joubin Mirzadegan",
     },
     {
       title: "Last Week in AI — Independent",
@@ -169,6 +188,10 @@ export const influences = {
       status: "Listening",
       note: "In-depth, long format podcast that dives into the weeds of model preformance, research and more. Typically by the end my brain is fried.",
       link: "https://podcasts.apple.com/us/podcast/last-week-in-ai/id1502782720",
+      slug: "last-week-in-ai",
+      date: null,
+      image: "/images/last-week-in-ai.png",
+      imageAlt: "Last Week in AI",
     },
   ],
 } as const;
