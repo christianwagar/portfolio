@@ -13,6 +13,10 @@ const notes = defineCollection({
     title: z.string(),
     teaser: z.string(),
     status: z.string().default("Tinkering"),
+    /** Small uppercase label above the title. Falls back to status. */
+    eyebrow: z.string().optional(),
+    /** Document title and social title. Falls back to the note title plus the site name. */
+    seoTitle: z.string().optional(),
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     order: z.number(),

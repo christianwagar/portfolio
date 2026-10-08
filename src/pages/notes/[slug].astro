@@ -19,8 +19,9 @@ interface Props {
 
 const { note } = Astro.props;
 const { Content } = await render(note);
-const { title, teaser, status, image, imageAlt } = note.data;
-const pageTitle = `${title} — ${site.name}`;
+const { title, teaser, status, image, imageAlt, eyebrow, seoTitle } = note.data;
+const kicker = eyebrow ?? status;
+const pageTitle = seoTitle ?? `${title} — ${site.name}`;
 ---
 
 <Layout title={pageTitle} description={teaser}>
@@ -39,7 +40,7 @@ const pageTitle = `${title} — ${site.name}`;
         }
 
         <header class="note-header">
-          <p class="note-status">{status}</p>
+          <p class="note-status">{kicker}</p>
           <h1 class="note-title">{title}</h1>
         </header>
 
