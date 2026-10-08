@@ -459,6 +459,41 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
       Data source: {sourceLabel}. <span id="gp-shown">{accounts.length}</span> of {accounts.length} accounts. Lowest overall score first.
     </p>
   </section>
+
+  <section class="gp-block gp-built" id="how-its-built">
+    <h2>How it's built</h2>
+    <p class="gp-prose">
+      The account data lives in a single wide Postgres table on <a href="https://supabase.com">Supabase</a>. A SQL scoring function bands each field golf-style, rolls the bands into weighted bucket scores, and assigns P1 to P4 by quartile (ntile). This page reads a display-only view at build time with supabase-js, and row-level security keeps the raw inputs and notes private.
+    </p>
+    <details class="gp-more gp-model">
+      <summary class="cta">
+        <span class="gp-more-closed">Full data model</span>
+        <span class="gp-more-open">Hide the field list</span>
+      </summary>
+      <dl class="gp-fields">
+        <div>
+          <dt>GTM</dt>
+          <dd>NRR, ARR, NBEC, attach rate, attach dollars, percent of opportunities closed won, account team activity and notes.</dd>
+        </div>
+        <div>
+          <dt>Marketing and programmatic</dt>
+          <dd>Event, conference, and webinar attendance, webinar NPS, newsletter subscribed and opens, advocate or champion, success story published.</dd>
+        </div>
+        <div>
+          <dt>Post-sales</dt>
+          <dd>Premium success or SLA plan, CSQLs generated, CSQL win rate, onboarding delivered, onboarding completed, adoption achieved, value realized, CSM pulse RAG, CSM engaged and activity notes, support case count, SLA breaches, average days to resolve, professional services hours purchased and used.</dd>
+        </div>
+        <div>
+          <dt>Product</dt>
+          <dd>Feature requests.</dd>
+        </div>
+        <div>
+          <dt>Down and distance</dt>
+          <dd>Time to next renewal, key stakeholder alignment, years as a customer, 10-K signal, customer sentiment.</dd>
+        </div>
+      </dl>
+    </details>
+  </section>
 </div>
 
 <script>
@@ -839,6 +874,46 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
   .gp-more[open] .gp-more-closed,
   .gp-more:not([open]) .gp-more-open {
     display: none;
+  }
+
+  .gp-built {
+    max-width: 46rem;
+  }
+
+  .gp-model {
+    margin-top: 0.25rem;
+  }
+
+  .gp-fields {
+    margin: 1rem 0 0;
+  }
+
+  .gp-fields div {
+    display: grid;
+    grid-template-columns: minmax(9rem, 13rem) minmax(0, 1fr);
+    gap: 0.25rem 1.25rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .gp-fields div:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gp-fields dt {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .gp-fields dd {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    line-height: 1.5;
   }
 
   .gp-board {
@@ -1351,7 +1426,8 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     }
 
     .gp-detail-top,
-    .gp-weights div {
+    .gp-weights div,
+    .gp-fields div {
       grid-template-columns: 1fr;
     }
   }
