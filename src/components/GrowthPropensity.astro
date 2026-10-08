@@ -1,0 +1,1448 @@
+---
+import {
+  FOCUS_RULE,
+  SCORE_FIELDS,
+  WEIGHTS,
+  accountBrief,
+  buildChart,
+  clusterGroups,
+  focusAccounts,
+  formatArr,
+  formatNrr,
+  formatScore,
+  loadGrowthAccounts,
+  sumArr,
+} from "../lib/growth-propensity";
+
+const { accounts, source } = await loadGrowthAccounts();
+const groups = clusterGroups(accounts);
+const focus = focusAccounts(accounts);
+const featured = focus[0]?.name ?? accounts[0]?.name ?? "";
+const chart = buildChart(accounts);
+const totalArr = sumArr(accounts);
+const briefs = new Map(accounts.map((account) => [account.name, accountBrief(account)]));
+const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
+---
+
+<div class="gp" id="growth-propensity">
+  <section class="gp-block">
+    <p class="gp-label">Method</p>
+    <h2>Lower score, higher priority</h2>
+    <p class="gp-prose">
+      Each signal gets a band score from 1 to 8, like a stroke in golf. The strokes roll into five buckets, the buckets roll into one overall score, and the lowest total gets the team's attention first. Missing data scores an 8, so a blind spot does not get a free pass.
+    </p>
+    <p class="gp-prose">
+      Clusters are quartiles of that overall score. P1 is the best 25 percent, then P2, P3, and P4.
+    </p>
+    <dl class="gp-weights">
+      {
+        WEIGHTS.map((bucket) => (
+          <div>
+            <dt>
+              <span>{bucket.name}</span>
+              <strong>{bucket.weight}</strong>
+              <span class="gp-bar" aria-hidden="true">
+                <span style={`width: ${bucket.width}%`} />
+              </span>
+            </dt>
+            <dd>{bucket.fields}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    <p class="gp-disclaimer">
+      <strong>Demo data</strong>
+      Brand names are labels only, and all metrics are invented. Apple, Bose, Coca-Cola, PlayStation, Nike, and the other names are not customers. None of these numbers describe the real companies.
+    </p>
+  </section>
+
+  <div class="gp-board">
+    <div class="gp-lists">
+      <p class="gp-label">Clusters</p>
+      <h2>P1 through P4</h2>
+      <p class="gp-prose gp-list-intro">
+        {accounts.length} accounts, {formatArr(totalArr)} total ARR. Each list is ranked by overall score, lowest first.
+      </p>
+      {
+        groups.map((group) => (
+          <section class="gp-cluster">
+            <header class="gp-cluster-head">
+              <h3>
+                <span class={`gp-badge gp-${group.cluster}`}>{group.cluster}</span>
+                {group.name}
+              </h3>
+              <p>
+                <strong>{group.count}</strong> accounts
+                <span class="gp-dot-sep" aria-hidden="true">·</span>
+                <strong>{formatArr(group.arr)}</strong> ARR
+              </p>
+            </header>
+            <p class="gp-cluster-line">{group.line}</p>
+            <ol class="gp-rank-list">
+              {group.rows.slice(0, 3).map((account, index) => (
+                <li>
+                  <button
+                    type="button"
+                    class="gp-rank"
+                    data-account={account.name}
+                    aria-current={account.name === featured ? "true" : undefined}
+                  >
+                    <span class="gp-rank-n">#{index + 1}</span>
+                    <span class="gp-rank-name">{account.name}</span>
+                    <span class="gp-rank-score">{formatScore(account.overall)}</span>
+                    <span class="gp-rank-arr">{formatArr(account.arr)}</span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+            {
+              group.rows.length > 3 && (
+                <details class="gp-more">
+                  <summary class="cta">
+                    <span class="gp-more-closed">Show the full list</span>
+                    <span class="gp-more-open">Show the top 3</span>
+                  </summary>
+                  <ol class="gp-rank-list" start={4}>
+                    {group.rows.slice(3).map((account, index) => (
+                      <li>
+                        <button
+                          type="button"
+                          class="gp-rank"
+                          data-account={account.name}
+                          aria-current={account.name === featured ? "true" : undefined}
+                        >
+                          <span class="gp-rank-n">#{index + 4}</span>
+                          <span class="gp-rank-name">{account.name}</span>
+                          <span class="gp-rank-score">{formatScore(account.overall)}</span>
+                          <span class="gp-rank-arr">{formatArr(account.arr)}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ol>
+                </details>
+              )
+            }
+          </section>
+        ))
+      }
+    </div>
+
+    <section class="gp-chart" aria-labelledby="gp-chart-heading">
+      <p class="gp-label">Quadrant</p>
+      <h2 id="gp-chart-heading">Growth vs ARR</h2>
+      <p class="gp-prose">
+        Growth is NRR. It is the revenue-expansion number already on the account. The overall score is a priority rank, so it is not the vertical axis. Dot color is the P1 to P4 score cluster. The crosshairs are the median ARR ({chart.medianArrLabel}) and the median NRR ({chart.medianNrrLabel}).
+      </p>
+      <div class="gp-chart-frame">
+        <svg
+          viewBox={`0 0 ${chart.width} ${chart.height}`}
+          role="img"
+          aria-label="Scatter chart of NRR against ARR. Each dot is an account colored by score cluster."
+        >
+          <rect
+            x={chart.plot.x}
+            y={chart.plot.y}
+            width={chart.plot.w}
+            height={chart.plot.h}
+            class="gp-plot"
+          />
+          {
+            chart.quadrants.map((quadrant) => (
+              <text
+                class="gp-quad-label"
+                x={quadrant.x}
+                y={quadrant.y}
+                text-anchor={quadrant.anchor}
+              >
+                {quadrant.text}
+              </text>
+            ))
+          }
+          <line
+            class="gp-cross"
+            x1={chart.medianX}
+            x2={chart.medianX}
+            y1={chart.plot.y}
+            y2={chart.plot.y + chart.plot.h}
+          />
+          <line
+            class="gp-cross"
+            y1={chart.medianY}
+            y2={chart.medianY}
+            x1={chart.plot.x}
+            x2={chart.plot.x + chart.plot.w}
+          />
+          <text class="gp-axis-end" x={chart.plot.x - 8} y={chart.plot.y + 4} text-anchor="end">
+            {chart.yMaxLabel}
+          </text>
+          <text
+            class="gp-axis-end"
+            x={chart.plot.x - 8}
+            y={chart.plot.y + chart.plot.h}
+            text-anchor="end"
+          >
+            {chart.yMinLabel}
+          </text>
+          <text
+            class="gp-axis-end"
+            x={chart.plot.x}
+            y={chart.plot.y + chart.plot.h + 14}
+            text-anchor="start"
+          >
+            {chart.xMinLabel}
+          </text>
+          <text
+            class="gp-axis-end"
+            x={chart.plot.x + chart.plot.w}
+            y={chart.plot.y + chart.plot.h + 14}
+            text-anchor="end"
+          >
+            {chart.xMaxLabel}
+          </text>
+          <text
+            class="gp-axis-title"
+            x={chart.plot.x + chart.plot.w / 2}
+            y={chart.height - 10}
+            text-anchor="middle"
+          >
+            ARR
+          </text>
+          <text
+            class="gp-axis-title"
+            x="18"
+            y={chart.plot.y + chart.plot.h / 2}
+            text-anchor="middle"
+            transform={`rotate(-90 18 ${chart.plot.y + chart.plot.h / 2})`}
+          >
+            Growth (NRR)
+          </text>
+          {
+            chart.dots.map((dot) => (
+              <g
+                class="gp-dot"
+                data-account={dot.account.name}
+                data-label={dot.label}
+                tabindex="0"
+                role="button"
+                aria-label={dot.label}
+                aria-current={dot.account.name === featured ? "true" : undefined}
+              >
+                <title>{dot.label}</title>
+                <circle class="gp-dot-hit" cx={dot.cx} cy={dot.cy} r="12" />
+                <circle class="gp-dot-halo" cx={dot.cx} cy={dot.cy} r="7.5" />
+                <circle
+                  class={`gp-dot-mark gp-${dot.account.cluster}`}
+                  cx={dot.cx}
+                  cy={dot.cy}
+                  r="5.5"
+                />
+                <circle class="gp-dot-ring" cx={dot.cx} cy={dot.cy} r="10" />
+              </g>
+            ))
+          }
+        </svg>
+      </div>
+      <p class="gp-readout" id="gp-readout">Select a dot, or a name in the lists, for the account detail.</p>
+      <ul class="gp-legend">
+        <li><span class="gp-badge gp-P1">P1</span> Expand now</li>
+        <li><span class="gp-badge gp-P2">P2</span> Grow into it</li>
+        <li><span class="gp-badge gp-P3">P3</span> Protect and re-ignite</li>
+        <li><span class="gp-badge gp-P4">P4</span> Scale and monitor</li>
+      </ul>
+    </section>
+
+    <section class="gp-focus" aria-labelledby="gp-focus-heading">
+      <p class="gp-label">This week</p>
+      <h2 id="gp-focus-heading">Recommended accounts to focus on this week</h2>
+      <ol class="gp-focus-list">
+        {
+          focus.map((account) => (
+            <li>
+              <button
+                type="button"
+                class="gp-focus-btn"
+                data-account={account.name}
+                aria-current={account.name === featured ? "true" : undefined}
+              >
+                <span class={`gp-badge gp-${account.cluster}`}>{account.cluster}</span>
+                <span class="gp-focus-name">{account.name}</span>
+                <span class="gp-focus-meta">
+                  {formatScore(account.overall)} overall
+                  <span class="gp-dot-sep" aria-hidden="true">·</span>
+                  {Math.round(account.renewal)} days to renewal
+                  <span class="gp-dot-sep" aria-hidden="true">·</span>
+                  {formatArr(account.arr)} ARR
+                </span>
+              </button>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="gp-rule">{FOCUS_RULE}</p>
+    </section>
+
+    <section class="gp-soon" aria-labelledby="gp-soon-heading">
+      <p class="gp-label">Roadmap</p>
+      <h2 id="gp-soon-heading">Not in this scoring run</h2>
+      <article>
+        <p class="gp-soon-flag">Coming soon</p>
+        <h3>Accounts moving MoM</h3>
+        <p>
+          Month-over-month cluster changes need a second score snapshot. This view has one scoring run, so nothing has moved yet.
+        </p>
+      </article>
+      <article>
+        <p class="gp-soon-flag">Coming soon</p>
+        <h3>Account overrides (60 days)</h3>
+        <p>
+          When someone pins an account to a different cluster, the account, the override, and the 60-day window will show here. No overrides are on file.
+        </p>
+      </article>
+      <article>
+        <p class="gp-soon-flag">Coming soon</p>
+        <h3>Scoring feedback notes</h3>
+        <p>A place for notes that should change the model. It is not connected yet.</p>
+      </article>
+    </section>
+  </div>
+
+  <section class="gp-block gp-detail" id="gp-detail" aria-labelledby="gp-detail-label">
+    <p class="gp-label" id="gp-detail-label">Account</p>
+    {
+      accounts.map((account) => {
+        const brief = briefs.get(account.name);
+        return (
+          <article data-detail={account.name} hidden={account.name !== featured}>
+            <div class="gp-detail-top">
+              <div>
+                <h2 class="gp-detail-name" tabindex="-1">{account.name}</h2>
+                <p class="gp-detail-arr">{formatArr(account.arr)}</p>
+                <p class="gp-detail-meta">
+                  <span class={`gp-badge gp-${account.cluster}`}>{account.cluster}</span>
+                  <span>Overall {formatScore(account.overall)}</span>
+                  <span>{formatNrr(account.nrr)} NRR</span>
+                  <span>{Math.round(account.renewal)} days to renewal</span>
+                </p>
+              </div>
+              <div class="gp-blurbs">
+                <section>
+                  <h3>Why {account.cluster}</h3>
+                  <p>{brief?.why}</p>
+                </section>
+                <section>
+                  <h3>Recommended plan</h3>
+                  <p>{brief?.plan}</p>
+                </section>
+                <section>
+                  <h3>What to watch out for</h3>
+                  <p>{brief?.watch}</p>
+                </section>
+                <p class="gp-auto">Auto-generated from scores; AI summary coming</p>
+              </div>
+            </div>
+            <ol class="gp-scores">
+              {SCORE_FIELDS.map((field) => (
+                <li>
+                  <span class="gp-score-label">{field.label}</span>
+                  <span class="gp-score-num">{formatScore(account[field.key])}</span>
+                  <span class="gp-score-weight">{field.weight} weight</span>
+                </li>
+              ))}
+            </ol>
+          </article>
+        );
+      })
+    }
+  </section>
+
+  <section class="gp-block" aria-labelledby="gp-table-heading">
+    <p class="gp-label">Accounts</p>
+    <h2 id="gp-table-heading">All accounts</h2>
+    <p class="gp-prose">
+      The full book, lowest overall score first. Filter by cluster, search by name, or select a column to sort. Select a name to open the account detail.
+    </p>
+    <div class="gp-controls">
+      <div class="gp-filters" role="group" aria-label="Filter by cluster">
+        {
+          ["All", "P1", "P2", "P3", "P4"].map((filter) => (
+            <button
+              type="button"
+              class="gp-chip"
+              data-filter={filter}
+              aria-pressed={filter === "All" ? "true" : "false"}
+            >
+              {filter}
+            </button>
+          ))
+        }
+      </div>
+      <input class="gp-search" type="search" placeholder="Search accounts" aria-label="Search accounts" />
+    </div>
+    <p class="gp-scroll-hint">Scroll sideways for every score.</p>
+    <div class="gp-table-wrap" tabindex="0" role="region" aria-label="Account scores">
+      <table class="gp-table">
+        <thead>
+          <tr>
+            <th scope="col" data-k="name" aria-sort="none">
+              <button type="button">Account</button>
+            </th>
+            <th scope="col" data-k="arr" aria-sort="none">
+              <button type="button">ARR</button>
+            </th>
+            <th scope="col" data-k="nrr" aria-sort="none">
+              <button type="button">NRR</button>
+            </th>
+            <th scope="col" data-k="renewal" aria-sort="none">
+              <button type="button">Days to renewal</button>
+            </th>
+            {
+              SCORE_FIELDS.map((field) => (
+                <th scope="col" data-k={field.key} aria-sort="none" title={field.label}>
+                  <button type="button">{field.short}</button>
+                </th>
+              ))
+            }
+            <th scope="col" data-k="overall" aria-sort="ascending">
+              <button type="button">Overall</button>
+            </th>
+            <th scope="col" data-k="cluster" aria-sort="none">
+              <button type="button">Cluster</button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            accounts.map((account) => (
+              <tr
+                data-name={account.name}
+                data-cluster={account.cluster}
+                data-arr={account.arr}
+                data-nrr={account.nrr}
+                data-renewal={account.renewal}
+                data-gtm={account.gtm}
+                data-mkt={account.mkt}
+                data-post={account.post}
+                data-prod={account.prod}
+                data-dd={account.dd}
+                data-overall={account.overall}
+              >
+                <td>
+                  <button
+                    type="button"
+                    class="gp-name-btn"
+                    data-account={account.name}
+                    aria-current={account.name === featured ? "true" : undefined}
+                  >
+                    {account.name}
+                  </button>
+                </td>
+                <td>{formatArr(account.arr)}</td>
+                <td>{formatNrr(account.nrr)}</td>
+                <td>{Math.round(account.renewal)}</td>
+                {SCORE_FIELDS.map((field) => (
+                  <td>{formatScore(account[field.key])}</td>
+                ))}
+                <td class="gp-overall">{formatScore(account.overall)}</td>
+                <td>
+                  <span class={`gp-badge gp-${account.cluster}`}>{account.cluster}</span>
+                </td>
+              </tr>
+            ))
+          }
+          <tr class="gp-empty" hidden>
+            <td colspan="11">No accounts match.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="gp-meta">
+      Data source: {sourceLabel}. <span id="gp-shown">{accounts.length}</span> of {accounts.length} accounts. Lowest overall score first.
+    </p>
+  </section>
+
+  <section class="gp-block gp-built" id="how-its-built">
+    <h2>How it's built</h2>
+    <p class="gp-prose">
+      The account data lives in a single wide Postgres table on <a href="https://supabase.com">Supabase</a>. A SQL scoring function bands each field golf-style, rolls the bands into weighted bucket scores, and assigns P1 to P4 by quartile (ntile). This page reads a display-only view at build time with supabase-js, and row-level security keeps the raw inputs and notes private.
+    </p>
+    <details class="gp-more gp-model">
+      <summary class="cta">
+        <span class="gp-more-closed">Full data model</span>
+        <span class="gp-more-open">Hide the field list</span>
+      </summary>
+      <dl class="gp-fields">
+        <div>
+          <dt>GTM</dt>
+          <dd>NRR, ARR, NBEC, attach rate, attach dollars, percent of opportunities closed won, account team activity and notes.</dd>
+        </div>
+        <div>
+          <dt>Marketing and programmatic</dt>
+          <dd>Event, conference, and webinar attendance, webinar NPS, newsletter subscribed and opens, advocate or champion, success story published.</dd>
+        </div>
+        <div>
+          <dt>Post-sales</dt>
+          <dd>Premium success or SLA plan, CSQLs generated, CSQL win rate, onboarding delivered, onboarding completed, adoption achieved, value realized, CSM pulse RAG, CSM engaged and activity notes, support case count, SLA breaches, average days to resolve, professional services hours purchased and used.</dd>
+        </div>
+        <div>
+          <dt>Product</dt>
+          <dd>Feature requests.</dd>
+        </div>
+        <div>
+          <dt>Down and distance</dt>
+          <dd>Time to next renewal, key stakeholder alignment, years as a customer, 10-K signal, customer sentiment.</dd>
+        </div>
+      </dl>
+    </details>
+  </section>
+</div>
+
+<script>
+  const root = document.getElementById("growth-propensity");
+  if (root) {
+    const tbody = root.querySelector("tbody");
+    const search = root.querySelector<HTMLInputElement>(".gp-search");
+    const readout = root.querySelector("#gp-readout");
+    const shown = root.querySelector("#gp-shown");
+    const panel = root.querySelector<HTMLElement>("#gp-detail");
+    let sortKey = "overall";
+    let dir = 1;
+    let filter = "All";
+
+    const numericKeys = new Set([
+      "arr",
+      "nrr",
+      "renewal",
+      "gtm",
+      "mkt",
+      "post",
+      "prod",
+      "dd",
+      "overall",
+    ]);
+
+    function defaultDir(key: string) {
+      return key === "arr" || key === "nrr" ? -1 : 1;
+    }
+
+    function showAccount(name: string, shouldScroll: boolean) {
+      root.querySelectorAll<HTMLElement>("[data-detail]").forEach((article) => {
+        article.hidden = article.getAttribute("data-detail") !== name;
+      });
+      root.querySelectorAll<HTMLElement>("[data-account]").forEach((control) => {
+        if (control.getAttribute("data-account") === name) control.setAttribute("aria-current", "true");
+        else control.removeAttribute("aria-current");
+      });
+      if (readout) readout.textContent = name;
+      if (!shouldScroll || !panel) return;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      panel.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
+      const heading = panel.querySelector<HTMLElement>("[data-detail]:not([hidden]) h2");
+      heading?.focus({ preventScroll: true });
+    }
+
+    function applyFilter() {
+      if (!tbody) return;
+      const query = search?.value.trim().toLowerCase() ?? "";
+      let count = 0;
+      tbody.querySelectorAll<HTMLTableRowElement>("tr[data-name]").forEach((row) => {
+        const name = (row.dataset.name ?? "").toLowerCase();
+        const cluster = row.dataset.cluster ?? "";
+        const match = (filter === "All" || cluster === filter) && name.includes(query);
+        row.hidden = !match;
+        if (match) count += 1;
+      });
+      const empty = tbody.querySelector<HTMLTableRowElement>("tr.gp-empty");
+      if (empty) empty.hidden = count !== 0;
+      if (shown) shown.textContent = String(count);
+    }
+
+    function applySort(key: string) {
+      if (!tbody) return;
+      if (key === sortKey) dir *= -1;
+      else {
+        sortKey = key;
+        dir = defaultDir(key);
+      }
+      const rows = [...tbody.querySelectorAll<HTMLTableRowElement>("tr[data-name]")];
+      const indexed = rows.map((row, index) => ({ row, index }));
+      indexed.sort((a, b) => {
+        const av = a.row.dataset[sortKey] ?? "";
+        const bv = b.row.dataset[sortKey] ?? "";
+        let cmp = numericKeys.has(sortKey) ? Number(av) - Number(bv) : av.localeCompare(bv);
+        if (cmp === 0) cmp = (a.row.dataset.name ?? "").localeCompare(b.row.dataset.name ?? "");
+        if (cmp === 0) cmp = a.index - b.index;
+        return cmp * dir;
+      });
+      const empty = tbody.querySelector("tr.gp-empty");
+      indexed.forEach((item) => tbody.appendChild(item.row));
+      if (empty) tbody.appendChild(empty);
+      root.querySelectorAll<HTMLTableCellElement>(".gp-table th").forEach((th) => {
+        th.setAttribute(
+          "aria-sort",
+          th.dataset.k === sortKey ? (dir === 1 ? "ascending" : "descending") : "none",
+        );
+      });
+    }
+
+    root.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const control = target.closest<HTMLElement>("[data-account]");
+      if (!control || !root.contains(control)) return;
+      const name = control.getAttribute("data-account");
+      if (name) showAccount(name, true);
+    });
+
+    root.querySelectorAll<HTMLElement>(".gp-dot").forEach((dot) => {
+      const label = () => {
+        if (readout) readout.textContent = dot.getAttribute("data-label") ?? "";
+      };
+      dot.addEventListener("mouseenter", label);
+      dot.addEventListener("focus", label);
+      dot.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        const name = dot.getAttribute("data-account");
+        if (name) showAccount(name, true);
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>(".gp-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        filter = chip.dataset.filter ?? "All";
+        root.querySelectorAll(".gp-chip").forEach((item) => {
+          item.setAttribute("aria-pressed", item === chip ? "true" : "false");
+        });
+        applyFilter();
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>(".gp-table th button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const key = button.closest("th")?.dataset.k;
+        if (key) applySort(key);
+      });
+    });
+
+    search?.addEventListener("input", applyFilter);
+  }
+</script>
+
+<style>
+  .gp {
+    margin-top: 3rem;
+    padding-top: 2.75rem;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .gp-block + .gp-block,
+  .gp-board {
+    margin-top: 3.25rem;
+  }
+
+  .gp-label {
+    display: block;
+    margin: 0 0 0.45rem;
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .gp h2 {
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+    text-transform: uppercase;
+  }
+
+  .gp h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .gp p {
+    margin: 0 0 1rem;
+  }
+
+  .gp-prose {
+    max-width: 65ch;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+
+  .gp-weights {
+    max-width: 46rem;
+    margin: 0.5rem 0 1.75rem;
+  }
+
+  .gp-weights div {
+    display: grid;
+    grid-template-columns: minmax(11rem, 16rem) minmax(0, 1fr);
+    gap: 0.35rem 1.5rem;
+    padding: 0.85rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .gp-weights div:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gp-weights dt {
+    margin: 0;
+  }
+
+  .gp-weights dt span:first-child {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .gp-weights strong {
+    display: block;
+    margin-top: 0.15rem;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  .gp-bar {
+    display: block;
+    height: 4px;
+    margin-top: 0.45rem;
+    background: var(--bg-soft);
+  }
+
+  .gp-bar span {
+    display: block;
+    height: 100%;
+    background: var(--text);
+  }
+
+  .gp-weights dd {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .gp-disclaimer {
+    max-width: 46rem;
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-strong);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .gp-disclaimer strong {
+    display: inline-block;
+    margin-right: 0.55rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .gp-list-intro {
+    margin-bottom: 1.5rem;
+  }
+
+  .gp-cluster {
+    margin-top: 1.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .gp-cluster-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.35rem 1rem;
+    align-items: baseline;
+  }
+
+  .gp-cluster-head h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .gp-cluster-head p {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  .gp-cluster-line {
+    margin: 0.55rem 0 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .gp-rank-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .gp-rank,
+  .gp-focus-btn,
+  .gp-name-btn,
+  .gp-chip,
+  .gp-table th button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .gp-rank {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr) auto auto;
+    gap: 0.65rem;
+    align-items: baseline;
+    width: 100%;
+    padding: 0.55rem 0 0.55rem 0.35rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .gp-rank-n,
+  .gp-rank-score,
+  .gp-rank-arr {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.875rem;
+  }
+
+  .gp-rank-n {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .gp-rank-name,
+  .gp-focus-name,
+  .gp-name-btn {
+    font-weight: 500;
+  }
+
+  .gp-rank-score,
+  .gp-rank-arr {
+    color: var(--text-muted);
+  }
+
+  .gp-rank[aria-current="true"],
+  .gp-focus-btn[aria-current="true"] {
+    box-shadow: inset 2px 0 0 var(--text);
+  }
+
+  .gp-rank[aria-current="true"] .gp-rank-name,
+  .gp-focus-btn[aria-current="true"] .gp-focus-name,
+  .gp-name-btn[aria-current="true"] {
+    font-weight: 600;
+  }
+
+  .gp-more {
+    margin-top: 0.65rem;
+  }
+
+  .gp-more summary {
+    list-style: none;
+    width: fit-content;
+  }
+
+  .gp-more summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .gp-more[open] .gp-more-closed,
+  .gp-more:not([open]) .gp-more-open {
+    display: none;
+  }
+
+  .gp-built {
+    max-width: 46rem;
+  }
+
+  .gp-model {
+    margin-top: 0.25rem;
+  }
+
+  .gp-fields {
+    margin: 1rem 0 0;
+  }
+
+  .gp-fields div {
+    display: grid;
+    grid-template-columns: minmax(9rem, 13rem) minmax(0, 1fr);
+    gap: 0.25rem 1.25rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .gp-fields div:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gp-fields dt {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .gp-fields dd {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .gp-board {
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+
+  .gp-chart-frame {
+    margin: 0.25rem 0 0.75rem;
+  }
+
+  .gp-chart-frame svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .gp-plot {
+    fill: var(--bg);
+    stroke: var(--border);
+  }
+
+  .gp-cross {
+    stroke: var(--text);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .gp-quad-label,
+  .gp-axis-end {
+    fill: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+
+  .gp-axis-title {
+    fill: var(--text);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .gp-dot {
+    cursor: pointer;
+  }
+
+  .gp-dot-hit {
+    fill: transparent;
+  }
+
+  .gp-dot-halo {
+    fill: var(--bg);
+  }
+
+  .gp-dot-mark {
+    stroke: var(--text);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .gp-dot-ring {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 1;
+    opacity: 0;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .gp-dot:hover .gp-dot-ring,
+  .gp-dot:focus-visible .gp-dot-ring,
+  .gp-dot[aria-current="true"] .gp-dot-ring {
+    opacity: 1;
+  }
+
+  .gp-readout,
+  .gp-rule,
+  .gp-meta,
+  .gp-scroll-hint {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .gp-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin: 0.85rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+  }
+
+  .gp-legend li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .gp-focus {
+    padding: 1.25rem 1.25rem 1.1rem;
+    border: 1px solid var(--border-strong);
+  }
+
+  .gp-focus-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .gp-focus-btn {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.15rem 0.75rem;
+    width: 100%;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .gp-focus-list li:last-child .gp-focus-btn {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gp-focus-btn .gp-badge {
+    grid-row: span 2;
+    align-self: center;
+  }
+
+  .gp-focus-meta {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  .gp-rule {
+    margin: 0.85rem 0 0;
+  }
+
+  .gp-soon article {
+    margin-top: 1rem;
+    padding: 1rem 1rem 0.9rem;
+    background: var(--bg-soft);
+  }
+
+  .gp-soon article p:last-child {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .gp-soon-flag {
+    margin: 0 0 0.35rem;
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .gp-detail {
+    scroll-margin-top: 5.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .gp-detail article[hidden] {
+    display: none;
+  }
+
+  .gp-detail-top {
+    display: grid;
+    grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
+    gap: 1.5rem 2.5rem;
+    align-items: start;
+  }
+
+  .gp h2.gp-detail-name {
+    margin: 0 0 0.35rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .gp-detail-name:focus {
+    outline: none;
+  }
+
+  .gp-detail-arr {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1;
+  }
+
+  .gp-detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.9rem;
+    align-items: center;
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  .gp-blurbs h3 {
+    margin: 0 0 0.3rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.12em;
+  }
+
+  .gp-blurbs section + section {
+    margin-top: 1rem;
+  }
+
+  .gp-blurbs p {
+    margin: 0;
+    font-size: 0.975rem;
+    line-height: 1.6;
+  }
+
+  .gp-auto {
+    margin-top: 1.1rem !important;
+    color: var(--text-muted);
+    font-family: var(--font-display);
+    font-size: 0.6875rem !important;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .gp-scores {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0 0;
+    padding: 1rem 0 0;
+    border-top: 1px solid var(--border);
+    list-style: none;
+  }
+
+  .gp-score-label,
+  .gp-score-weight {
+    display: block;
+    color: var(--text-muted);
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .gp-score-num {
+    display: block;
+    margin: 0.25rem 0 0.15rem;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .gp-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.25rem;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 0.85rem;
+  }
+
+  .gp-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .gp-chip {
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--border-strong);
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .gp-chip[aria-pressed="true"] {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  .gp-search {
+    min-width: min(100%, 16rem);
+    padding: 0.4rem 0.1rem;
+    border: 0;
+    border-bottom: 1px solid var(--border-strong);
+    background: transparent;
+    font: inherit;
+    font-size: 0.9375rem;
+    outline: none;
+  }
+
+  .gp-scroll-hint {
+    display: none;
+    margin-bottom: 0.45rem;
+  }
+
+  .gp-table-wrap {
+    overflow-x: auto;
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .gp-table {
+    width: 100%;
+    min-width: 68rem;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gp-table th,
+  .gp-table td {
+    padding: 0.65rem 0.5rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .gp-table th {
+    border-bottom: 1px solid var(--border-strong);
+    font-weight: 600;
+  }
+
+  .gp-table th button {
+    width: 100%;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-align: inherit;
+    text-transform: uppercase;
+  }
+
+  .gp-table th[aria-sort="ascending"] button::after {
+    content: " ↑";
+  }
+
+  .gp-table th[aria-sort="descending"] button::after {
+    content: " ↓";
+  }
+
+  .gp-table td {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gp-table th:first-child,
+  .gp-table td:first-child,
+  .gp-table th:last-child,
+  .gp-table td:last-child {
+    text-align: left;
+  }
+
+  .gp-table th:first-child,
+  .gp-table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--bg);
+    box-shadow: 1px 0 0 var(--border);
+  }
+
+  .gp-table th:first-child {
+    z-index: 2;
+  }
+
+  .gp-table tbody tr:hover td,
+  .gp-table tr:has([aria-current="true"]) td {
+    background: var(--bg-soft);
+  }
+
+  .gp-table tr[hidden] {
+    display: none;
+  }
+
+  .gp-name-btn {
+    padding: 0;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .gp-overall {
+    font-weight: 600;
+  }
+
+  .gp-empty td {
+    padding: 1rem 0.5rem;
+    color: var(--text-muted);
+    text-align: left;
+  }
+
+  .gp-badge {
+    display: inline-block;
+    padding: 0.28rem 0.4rem;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1;
+  }
+
+  .gp-badge.gp-P1,
+  .gp-dot-mark.gp-P1 {
+    background: #000;
+    color: #fff;
+    fill: #000;
+  }
+
+  .gp-badge.gp-P2,
+  .gp-dot-mark.gp-P2 {
+    background: #3f3f3f;
+    color: #fff;
+    fill: #3f3f3f;
+  }
+
+  .gp-badge.gp-P3,
+  .gp-dot-mark.gp-P3 {
+    background: #737373;
+    color: #fff;
+    fill: #737373;
+  }
+
+  .gp-badge.gp-P4 {
+    background: #f2f2f2;
+    color: #000;
+    box-shadow: inset 0 0 0 1px #000;
+  }
+
+  .gp-dot-mark.gp-P4 {
+    fill: #fff;
+  }
+
+  .gp-dot-sep {
+    margin: 0 0.3rem;
+  }
+
+  .gp button:focus-visible,
+  .gp summary:focus-visible,
+  .gp .gp-search:focus-visible {
+    outline: 1px solid var(--text);
+    outline-offset: 3px;
+  }
+
+  .gp-rank:hover .gp-rank-name,
+  .gp-focus-btn:hover .gp-focus-name,
+  .gp-name-btn:hover {
+    opacity: 0.55;
+  }
+
+  @media (min-width: 901px) {
+    .gp-board {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-areas:
+        "lists chart"
+        "lists focus"
+        "lists soon";
+      column-gap: 3.5rem;
+      row-gap: 2.5rem;
+      align-items: start;
+    }
+
+    .gp-lists {
+      grid-area: lists;
+    }
+
+    .gp-chart {
+      grid-area: chart;
+    }
+
+    .gp-focus {
+      grid-area: focus;
+    }
+
+    .gp-soon {
+      grid-area: soon;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .gp-chart {
+      order: 1;
+    }
+
+    .gp-focus {
+      order: 2;
+    }
+
+    .gp-lists {
+      order: 3;
+    }
+
+    .gp-soon {
+      order: 4;
+    }
+
+    .gp-scroll-hint {
+      display: block;
+    }
+
+    .gp-detail-top,
+    .gp-weights div,
+    .gp-fields div {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .gp-scores {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .gp-rank {
+      grid-template-columns: 2rem minmax(0, 1fr) auto;
+    }
+
+    .gp-rank-score {
+      display: none;
+    }
+  }
+</style>
