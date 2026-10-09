@@ -1,4 +1,4 @@
-// Build-time growth propensity data for the True North note.
+// Build-time growth propensity data for the A-GPS note.
 // Reads the public view growth_accounts_public. The publishable key is a public
 // client key. Never use a service_role key here.
 import { createClient } from "@supabase/supabase-js";
