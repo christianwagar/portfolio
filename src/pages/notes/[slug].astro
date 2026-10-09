@@ -33,7 +33,12 @@ const pageTitle = seoTitle ?? `${title} — ${site.name}`;
 
         {
           image && (
-            <div class="note-hero">
+            <div
+              class:list={[
+                "note-hero",
+                { "note-hero-wide": note.id === "account-growth-propensity" },
+              ]}
+            >
               <img src={image} alt={imageAlt ?? title} />
             </div>
           )
@@ -75,10 +80,18 @@ const pageTitle = seoTitle ?? `${title} — ${site.name}`;
     margin: 0 0 2.75rem;
   }
 
+  .note-hero-wide {
+    aspect-ratio: 2 / 1;
+  }
+
   .note-hero img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .note-hero-wide img {
+    object-position: center 26%;
   }
 
   .note-header {
