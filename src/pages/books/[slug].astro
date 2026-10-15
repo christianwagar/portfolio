@@ -3,6 +3,7 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
+import ListenPlayer from "../../components/ListenPlayer.astro";
 import { influences, site } from "../../data/site";
 
 type Book = (typeof influences.books)[number];
@@ -29,6 +30,7 @@ interface Props {
 
 const { book, review } = Astro.props;
 const { Content } = await render(review);
+const { audio, audioMinutes } = review.data;
 const pageTitle = `${book.title} — ${site.name}`;
 ---
 
@@ -59,6 +61,7 @@ const pageTitle = `${book.title} — ${site.name}`;
             </a>
           )}
         </header>
+        {audio && <ListenPlayer src={audio} minutes={audioMinutes} title={book.title} />}
         <div class="review-body">
           <Content />
         </div>

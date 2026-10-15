@@ -1,4 +1,6 @@
 ---
+audio: /audio/shoe-dog.mp3
+audioMinutes: 3
 ---
 
 ## Good for Who?

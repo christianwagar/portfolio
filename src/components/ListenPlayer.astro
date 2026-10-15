@@ -1,0 +1,115 @@
+---
+interface Props {
+  /** MP3 path, e.g. /audio/burnout.mp3 */
+  src: string;
+  /** Narration length in minutes, shown in the label. */
+  minutes?: number;
+  /** Article title, used for the accessible label. */
+  title: string;
+}
+
+const { src, minutes, title } = Astro.props;
+const labelId = `listen-label-${src.replace(/[^a-z0-9]+/gi, "-")}`;
+const labelText = `Listen${minutes ? ` · ${minutes} min` : ""} · Read by Christian`;
+---
+
+<div class="note-listen" data-listen-player>
+  <p class="note-listen-label" id={labelId} data-listen-label data-label={labelText}>
+    {labelText}
+  </p>
+  <audio
+    controls
+    preload="none"
+    src={src}
+    aria-labelledby={labelId}
+    aria-label={`Listen to ${title}, read by Christian`}
+  >
+    <a href={src}>Download the audio</a>
+  </audio>
+</div>
+
+<script>
+  // The static host ignores HTTP Range requests, so browsers can't seek a
+  // streamed MP3. On first play/seek, fetch the whole file as a Blob and swap
+  // in a blob: URL, which is fully seekable. Position and play state carry over.
+  function setup(root: HTMLElement) {
+    const audio = root.querySelector("audio");
+    const label = root.querySelector<HTMLElement>("[data-listen-label]");
+    if (!audio || !label || typeof fetch !== "function" || !window.URL) return;
+
+    let started = false;
+    let swapped = false;
+    let wanted = 0;
+
+    const onSeeking = () => {
+      if (!swapped) wanted = audio.currentTime;
+    };
+    audio.addEventListener("seeking", onSeeking);
+    audio.addEventListener("timeupdate", () => {
+      if (!swapped && !audio.seeking) wanted = audio.currentTime;
+    });
+
+    const load = async () => {
+      if (started) return;
+      started = true;
+      const original = label.dataset.label ?? label.textContent ?? "";
+      label.textContent = `${original} · Loading…`;
+      try {
+        const res = await fetch(audio.currentSrc || audio.src);
+        if (!res.ok) throw new Error(String(res.status));
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const resume = !audio.paused;
+        const at = wanted;
+        swapped = true;
+        audio.addEventListener(
+          "loadedmetadata",
+          () => {
+            audio.currentTime = at;
+            if (resume) audio.play().catch(() => {});
+          },
+          { once: true },
+        );
+        audio.src = url;
+        audio.load();
+      } catch {
+        started = false; // fall back to normal streaming; retry next play
+      } finally {
+        label.textContent = original;
+      }
+    };
+
+    audio.addEventListener("play", load);
+    audio.addEventListener("seeking", load);
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-listen-player]").forEach(setup);
+</script>
+
+<style>
+  .note-listen {
+    max-width: 42rem;
+    margin: 0 0 2.5rem;
+    padding: 1rem 0;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .note-listen-label {
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #666;
+    margin: 0 0 0.625rem;
+  }
+
+  .note-listen audio {
+    display: block;
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 0;
+    color-scheme: light;
+  }
+</style>

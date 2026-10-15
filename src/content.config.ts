@@ -4,7 +4,12 @@ import { z } from "astro/zod";
 
 const books = defineCollection({
   loader: glob({ base: "./src/content/books", pattern: "**/*.md" }),
-  schema: z.object({}),
+  schema: z.object({
+    /** Optional narration MP3 path, e.g. /audio/shoe-dog.mp3. Renders a Listen player. */
+    audio: z.string().optional(),
+    /** Narration length in minutes, shown in the Listen label. */
+    audioMinutes: z.number().optional(),
+  }),
 });
 
 const notes = defineCollection({
