@@ -8,7 +8,9 @@ interface Props {
 }
 
 const { title = site.seo.title, description = site.seo.description } = Astro.props;
-const ogImage = Astro.url.origin + "/og-image.png";
+const siteUrl = Astro.site ?? "https://26-w.com";
+const ogImage = new URL("/og-image.png", siteUrl).href;
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 ---
 
 <!doctype html>
@@ -24,7 +26,8 @@ const ogImage = Astro.url.origin + "/og-image.png";
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:url" content={Astro.url.origin} />
+    <meta property="og:url" content={canonicalUrl} />
+    <link rel="canonical" href={canonicalUrl} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
