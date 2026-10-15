@@ -19,6 +19,10 @@ const notes = defineCollection({
     seoTitle: z.string().optional(),
     image: z.string().optional(),
     imageAlt: z.string().optional(),
+    /** Optional narration MP3 path, e.g. /audio/burnout.mp3. Renders a Listen player. */
+    audio: z.string().optional(),
+    /** Narration length in minutes, shown in the Listen label. */
+    audioMinutes: z.number().optional(),
     order: z.number(),
     hidden: z.boolean().optional().default(false),
   }),
