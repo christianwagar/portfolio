@@ -1,4 +1,6 @@
 ---
+audio: /audio/psychology-of-money.mp3
+audioMinutes: 4
 ---
 
 ## Good for Who?

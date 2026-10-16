@@ -1,4 +1,6 @@
 ---
+audio: /audio/grinding-it-out.mp3
+audioMinutes: 3
 ---
 
 ## Good for Who?
