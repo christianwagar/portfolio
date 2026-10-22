@@ -1,10 +1,10 @@
 ---
+import GrowthQuadrantPreview from "./GrowthQuadrantPreview.astro";
 import {
   FOCUS_RULE,
   SCORE_FIELDS,
   WEIGHTS,
   accountBrief,
-  buildChart,
   clusterGroups,
   focusAccounts,
   formatArr,
@@ -12,15 +12,21 @@ import {
   formatScore,
   loadGrowthAccounts,
   sumArr,
+  CLUSTERS,
+  CLUSTER_META,
+  DEMO_OVERRIDES,
+  WATCH,
+  type Cluster,
 } from "../lib/growth-propensity";
 
 const { accounts, source } = await loadGrowthAccounts();
 const groups = clusterGroups(accounts);
 const focus = focusAccounts(accounts);
 const featured = focus[0]?.name ?? accounts[0]?.name ?? "";
-const chart = buildChart(accounts);
 const totalArr = sumArr(accounts);
 const briefs = new Map(accounts.map((account) => [account.name, accountBrief(account)]));
+const seedFor = (name: string) => DEMO_OVERRIDES.find((o) => o.account === name);
+const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
 ---
 
@@ -32,7 +38,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
       Each signal gets a band score from 1 to 8, like a stroke in golf. The strokes roll into five buckets, the buckets roll into one overall score, and the lowest total gets the team's attention first. Missing data scores an 8, so a blind spot does not get a free pass.
     </p>
     <p class="gp-prose">
-      Clusters are quartiles of that overall score. P1 is the best 25 percent, then P2, P3, and P4.
+      Clusters come from two questions: how likely is the account to grow, and how much does it spend? Growth potential is the A-GPS score with ARR taken out, so size never counts twice. Each axis is split at the median of the book, so the four groups rebalance every time the data changes and nobody ends up with everything in P1. Separately, a WATCH flag marks any account with NRR under 90 percent or a growth score worse than 6.0, wherever it lands.
     </p>
     <dl class="gp-weights">
       {
@@ -50,208 +56,58 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
         ))
       }
     </dl>
-    <p class="gp-disclaimer">
-      <strong>Demo data</strong>
-      Brand names are labels only, and all metrics are invented. Apple, Bose, Coca-Cola, PlayStation, Nike, and the other names are not customers. None of these numbers describe the real companies.
-    </p>
   </section>
 
-  <div class="gp-board">
-    <div class="gp-lists">
-      <p class="gp-label">Clusters</p>
-      <h2>P1 through P4</h2>
-      <p class="gp-prose gp-list-intro">
-        {accounts.length} accounts, {formatArr(totalArr)} total ARR. Each list is ranked by overall score, lowest first.
+  <div class="gp-row gp-r1">
+    <div class="gp-r1-left">
+      <p class="gp-disclaimer">
+        <strong>Demo data</strong>
+        Brand names are labels only, and all metrics are invented. Apple, Bose, Coca-Cola, PlayStation, Nike, and the other names are not customers. None of these numbers describe the real companies.
       </p>
-      {
-        groups.map((group) => (
-          <section class="gp-cluster">
-            <header class="gp-cluster-head">
-              <h3>
-                <span class={`gp-badge gp-${group.cluster}`}>{group.cluster}</span>
-                {group.name}
-              </h3>
-              <p>
-                <strong>{group.count}</strong> accounts
-                <span class="gp-dot-sep" aria-hidden="true">·</span>
-                <strong>{formatArr(group.arr)}</strong> ARR
-              </p>
-            </header>
-            <p class="gp-cluster-line">{group.line}</p>
-            <ol class="gp-rank-list">
-              {group.rows.slice(0, 3).map((account, index) => (
-                <li>
-                  <button
-                    type="button"
-                    class="gp-rank"
-                    data-account={account.name}
-                    aria-current={account.name === featured ? "true" : undefined}
-                  >
-                    <span class="gp-rank-n">#{index + 1}</span>
-                    <span class="gp-rank-name">{account.name}</span>
-                    <span class="gp-rank-score">{formatScore(account.overall)}</span>
-                    <span class="gp-rank-arr">{formatArr(account.arr)}</span>
-                  </button>
-                </li>
-              ))}
-            </ol>
-            {
-              group.rows.length > 3 && (
-                <details class="gp-more">
-                  <summary class="cta">
-                    <span class="gp-more-closed">Show the full list</span>
-                    <span class="gp-more-open">Show the top 3</span>
-                  </summary>
-                  <ol class="gp-rank-list" start={4}>
-                    {group.rows.slice(3).map((account, index) => (
-                      <li>
-                        <button
-                          type="button"
-                          class="gp-rank"
-                          data-account={account.name}
-                          aria-current={account.name === featured ? "true" : undefined}
-                        >
-                          <span class="gp-rank-n">#{index + 4}</span>
-                          <span class="gp-rank-name">{account.name}</span>
-                          <span class="gp-rank-score">{formatScore(account.overall)}</span>
-                          <span class="gp-rank-arr">{formatArr(account.arr)}</span>
-                        </button>
-                      </li>
-                    ))}
-                  </ol>
-                </details>
-              )
-            }
-          </section>
-        ))
-      }
-    </div>
-
-    <section class="gp-chart" aria-labelledby="gp-chart-heading">
-      <p class="gp-label">Quadrant</p>
-      <h2 id="gp-chart-heading">Growth vs ARR</h2>
-      <p class="gp-prose">
-        Growth is NRR. It is the revenue-expansion number already on the account. The overall score is a priority rank, so it is not the vertical axis. Dot color is the P1 to P4 score cluster. The crosshairs are the median ARR ({chart.medianArrLabel}) and the median NRR ({chart.medianNrrLabel}).
-      </p>
-      <div class="gp-chart-frame">
-        <svg
-          viewBox={`0 0 ${chart.width} ${chart.height}`}
-          role="img"
-          aria-label="Scatter chart of NRR against ARR. Each dot is an account colored by score cluster."
-        >
-          <rect
-            x={chart.plot.x}
-            y={chart.plot.y}
-            width={chart.plot.w}
-            height={chart.plot.h}
-            class="gp-plot"
-          />
-          {
-            chart.quadrants.map((quadrant) => (
-              <text
-                class="gp-quad-label"
-                x={quadrant.x}
-                y={quadrant.y}
-                text-anchor={quadrant.anchor}
-              >
-                {quadrant.text}
-              </text>
-            ))
-          }
-          <line
-            class="gp-cross"
-            x1={chart.medianX}
-            x2={chart.medianX}
-            y1={chart.plot.y}
-            y2={chart.plot.y + chart.plot.h}
-          />
-          <line
-            class="gp-cross"
-            y1={chart.medianY}
-            y2={chart.medianY}
-            x1={chart.plot.x}
-            x2={chart.plot.x + chart.plot.w}
-          />
-          <text class="gp-axis-end" x={chart.plot.x - 8} y={chart.plot.y + 4} text-anchor="end">
-            {chart.yMaxLabel}
-          </text>
-          <text
-            class="gp-axis-end"
-            x={chart.plot.x - 8}
-            y={chart.plot.y + chart.plot.h}
-            text-anchor="end"
-          >
-            {chart.yMinLabel}
-          </text>
-          <text
-            class="gp-axis-end"
-            x={chart.plot.x}
-            y={chart.plot.y + chart.plot.h + 14}
-            text-anchor="start"
-          >
-            {chart.xMinLabel}
-          </text>
-          <text
-            class="gp-axis-end"
-            x={chart.plot.x + chart.plot.w}
-            y={chart.plot.y + chart.plot.h + 14}
-            text-anchor="end"
-          >
-            {chart.xMaxLabel}
-          </text>
-          <text
-            class="gp-axis-title"
-            x={chart.plot.x + chart.plot.w / 2}
-            y={chart.height - 10}
-            text-anchor="middle"
-          >
-            ARR
-          </text>
-          <text
-            class="gp-axis-title"
-            x="18"
-            y={chart.plot.y + chart.plot.h / 2}
-            text-anchor="middle"
-            transform={`rotate(-90 18 ${chart.plot.y + chart.plot.h / 2})`}
-          >
-            Growth (NRR)
-          </text>
-          {
-            chart.dots.map((dot) => (
-              <g
-                class="gp-dot"
-                data-account={dot.account.name}
-                data-label={dot.label}
-                tabindex="0"
-                role="button"
-                aria-label={dot.label}
-                aria-current={dot.account.name === featured ? "true" : undefined}
-              >
-                <title>{dot.label}</title>
-                <circle class="gp-dot-hit" cx={dot.cx} cy={dot.cy} r="12" />
-                <circle class="gp-dot-halo" cx={dot.cx} cy={dot.cy} r="7.5" />
-                <circle
-                  class={`gp-dot-mark gp-${dot.account.cluster}`}
-                  cx={dot.cx}
-                  cy={dot.cy}
-                  r="5.5"
-                />
-                <circle class="gp-dot-ring" cx={dot.cx} cy={dot.cy} r="10" />
-              </g>
-            ))
-          }
-        </svg>
+      <div class="gp-quads" role="list">
+        {
+          ["P2", "P1", "P4", "P3"].map((c) => {
+            const group = groups.find((g) => g.cluster === c)!;
+            const row = (account: (typeof accounts)[number]) => (
+              <li>
+                <button type="button" class="gp-qitem" data-account={account.name} aria-current={account.name === featured ? "true" : undefined}>
+                  <strong>{account.name}{account.watch && <span class="gq-wtag" title={account.watchReason}>Watch</span>}</strong>
+                  <span>{formatScore(account.growth ?? account.overall)} growth · {formatArr(account.arr)}</span>
+                  <em>↑ {account.indicator}</em>
+                </button>
+              </li>
+            );
+            return (
+              <section class="gp-quad" role="listitem" aria-label={`${c} ${group.name}`}>
+                <header>
+                  <h3><span class={`gp-badge gp-${c}`}>{c}</span> {group.name}</h3>
+                  <span class="gp-quad-n">{group.count}</span>
+                </header>
+                <p class="gp-quad-sub">{CLUSTER_META[c as Cluster].quad} · {formatArr(group.arr)} ARR</p>
+                <ol>{group.rows.slice(0, 3).map(row)}</ol>
+                {group.rows.length > 3 && (
+                  <details class="gp-quad-more">
+                    <summary>+ {group.rows.length - 3} more{group.rows.slice(3).some((r) => r.watch) ? ` · ${group.rows.slice(3).filter((r) => r.watch).length} watch` : ""}</summary>
+                    <ol>{group.rows.slice(3).map(row)}</ol>
+                  </details>
+                )}
+              </section>
+            );
+          })
+        }
       </div>
-      <p class="gp-readout" id="gp-readout">Select a dot, or a name in the lists, for the account detail.</p>
-      <ul class="gp-legend">
-        <li><span class="gp-badge gp-P1">P1</span> Expand now</li>
-        <li><span class="gp-badge gp-P2">P2</span> Grow into it</li>
-        <li><span class="gp-badge gp-P3">P3</span> Protect and re-ignite</li>
-        <li><span class="gp-badge gp-P4">P4</span> Scale and monitor</li>
-      </ul>
-    </section>
+    </div>
+    <div class="gp-r1-right">
+      <div class="gp-r1-chart"><GrowthQuadrantPreview /></div>
+        <div class="gp-how">
+          <p><strong>How to read it:</strong> up and to the right is where to expand. Hover, tap, or tab to a dot for the account card; click it to open the account below. Dot shade is the cluster, P1 darkest.</p>
+          <p><svg class="gp-key" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#fff" stroke="#000" /><circle cx="12" cy="12" r="9.5" fill="none" stroke="#000" stroke-dasharray="2 2" /></svg> <span class="gq-wtag">Watch</span> Health guardrail, separate from the median split: NRR under {WATCH.nrrBelow}% or growth score worse than {WATCH.growthWorseThan.toFixed(1)}. Both thresholds are configurable.</p>
+        </div>
+    </div>
+  </div>
 
-    <section class="gp-focus" aria-labelledby="gp-focus-heading">
+  <div class="gp-row gp-r2">
+    <section class="gp-focus gp-card" aria-labelledby="gp-focus-heading">
       <p class="gp-label">This week</p>
       <h2 id="gp-focus-heading">Recommended accounts to focus on this week</h2>
       <ol class="gp-focus-list">
@@ -267,7 +123,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                 <span class={`gp-badge gp-${account.cluster}`}>{account.cluster}</span>
                 <span class="gp-focus-name">{account.name}</span>
                 <span class="gp-focus-meta">
-                  {formatScore(account.overall)} overall
+                  {formatScore(account.growth ?? account.overall)} growth
                   <span class="gp-dot-sep" aria-hidden="true">·</span>
                   {Math.round(account.renewal)} days to renewal
                   <span class="gp-dot-sep" aria-hidden="true">·</span>
@@ -281,32 +137,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
       <p class="gp-rule">{FOCUS_RULE}</p>
     </section>
 
-    <section class="gp-soon" aria-labelledby="gp-soon-heading">
-      <p class="gp-label">Roadmap</p>
-      <h2 id="gp-soon-heading">Not in this scoring run</h2>
-      <article>
-        <p class="gp-soon-flag">Coming soon</p>
-        <h3>Accounts moving MoM</h3>
-        <p>
-          Month-over-month cluster changes need a second score snapshot. This view has one scoring run, so nothing has moved yet.
-        </p>
-      </article>
-      <article>
-        <p class="gp-soon-flag">Coming soon</p>
-        <h3>Account overrides (60 days)</h3>
-        <p>
-          When someone pins an account to a different cluster, the account, the override, and the 60-day window will show here. No overrides are on file.
-        </p>
-      </article>
-      <article>
-        <p class="gp-soon-flag">Coming soon</p>
-        <h3>Scoring feedback notes</h3>
-        <p>A place for notes that should change the model. It is not connected yet.</p>
-      </article>
-    </section>
-  </div>
-
-  <section class="gp-block gp-detail" id="gp-detail" aria-labelledby="gp-detail-label">
+  <section class="gp-detail" id="gp-detail" aria-labelledby="gp-detail-label">
     <p class="gp-label" id="gp-detail-label">Account</p>
     {
       accounts.map((account) => {
@@ -319,7 +150,9 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                 <p class="gp-detail-arr">{formatArr(account.arr)}</p>
                 <p class="gp-detail-meta">
                   <span class={`gp-badge gp-${account.cluster}`}>{account.cluster}</span>
+                  <span>Growth {formatScore(account.growth ?? account.overall)}</span>
                   <span>Overall {formatScore(account.overall)}</span>
+                  {account.watch && <span class="gq-wtag-inline" title={account.watchReason}>Watch · {account.watchReason}</span>}
                   <span>{formatNrr(account.nrr)} NRR</span>
                   <span>{Math.round(account.renewal)} days to renewal</span>
                 </p>
@@ -355,11 +188,14 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     }
   </section>
 
-  <section class="gp-block" aria-labelledby="gp-table-heading">
+  </div>
+
+  <div class="gp-row gp-r3">
+  <section class="gp-tablebox" aria-labelledby="gp-table-heading">
     <p class="gp-label">Accounts</p>
     <h2 id="gp-table-heading">All accounts</h2>
     <p class="gp-prose">
-      The full book, lowest overall score first. Filter by cluster, search by name, or select a column to sort. Select a name to open the account detail.
+      The full book, best growth score first. Filter by cluster, search by name, or select a column to sort. Select a name to open the account detail.
     </p>
     <div class="gp-controls">
       <div class="gp-filters" role="group" aria-label="Filter by cluster">
@@ -378,7 +214,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
       </div>
       <input class="gp-search" type="search" placeholder="Search accounts" aria-label="Search accounts" />
     </div>
-    <p class="gp-scroll-hint">Scroll sideways for every score.</p>
+    <p class="gp-scroll-hint">Bucket scores are hidden on small screens. Open an account to see them.</p>
     <div class="gp-table-wrap" tabindex="0" role="region" aria-label="Account scores">
       <table class="gp-table">
         <thead>
@@ -393,21 +229,22 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
               <button type="button">NRR</button>
             </th>
             <th scope="col" data-k="renewal" aria-sort="none">
-              <button type="button">Days to renewal</button>
+              <button type="button" title="Days to renewal">Renewal</button>
             </th>
             {
               SCORE_FIELDS.map((field) => (
-                <th scope="col" data-k={field.key} aria-sort="none" title={field.label}>
+                <th scope="col" class="gp-lo" data-k={field.key} aria-sort="none" title={field.label}>
                   <button type="button">{field.short}</button>
                 </th>
               ))
             }
             <th scope="col" data-k="overall" aria-sort="ascending">
-              <button type="button">Overall</button>
+              <button type="button">Growth</button>
             </th>
-            <th scope="col" data-k="cluster" aria-sort="none">
+            <th scope="col" class="gp-c" data-k="cluster" aria-sort="none">
               <button type="button">Cluster</button>
             </th>
+            <th scope="col" class="gp-ov-head" title="Account overrides, last 90 days">Override<br /><span>90 days</span></th>
           </tr>
         </thead>
         <tbody>
@@ -424,7 +261,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                 data-post={account.post}
                 data-prod={account.prod}
                 data-dd={account.dd}
-                data-overall={account.overall}
+                data-overall={account.growth ?? account.overall}
               >
                 <td>
                   <button
@@ -440,30 +277,69 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                 <td>{formatNrr(account.nrr)}</td>
                 <td>{Math.round(account.renewal)}</td>
                 {SCORE_FIELDS.map((field) => (
-                  <td>{formatScore(account[field.key])}</td>
+                  <td class="gp-lo">{formatScore(account[field.key])}</td>
                 ))}
-                <td class="gp-overall">{formatScore(account.overall)}</td>
-                <td>
+                <td class="gp-overall">{formatScore(account.growth ?? account.overall)}</td>
+                <td class="gp-c">
                   <span class={`gp-badge gp-${account.cluster}`}>{account.cluster}</span>
+                </td>
+                <td class="gp-ov-cell" data-ov-cell={account.name}>
+                  {seedFor(account.name) && (
+                    <button type="button" class={`gp-ov gp-badge gp-${seedFor(account.name)!.cluster}`} aria-describedby={`ov-${slug(account.name)}`}>
+                      {seedFor(account.name)!.cluster}
+                      <span class="gp-ov-tip" role="tooltip" id={`ov-${slug(account.name)}`}>
+                        <b>{seedFor(account.name)!.date} · Overridden to {seedFor(account.name)!.cluster} <i>Demo</i></b>
+                        <span>Reason: {seedFor(account.name)!.reason}</span>
+                        <span>{seedFor(account.name)!.note}</span>
+                      </span>
+                    </button>
+                  )}
                 </td>
               </tr>
             ))
           }
           <tr class="gp-empty" hidden>
-            <td colspan="11">No accounts match.</td>
+            <td colspan="12">No accounts match.</td>
           </tr>
         </tbody>
       </table>
     </div>
     <p class="gp-meta">
-      Data source: {sourceLabel}. <span id="gp-shown">{accounts.length}</span> of {accounts.length} accounts. Lowest overall score first.
+      Data source: {sourceLabel}. <span id="gp-shown">{accounts.length}</span> of {accounts.length} accounts. Best growth score first. Override chips marked Demo are invented examples.
     </p>
   </section>
 
-  <section class="gp-block gp-built" id="how-its-built">
+    <section class="gp-ovpanel gp-card" aria-labelledby="gp-ov-heading" id="gp-ovpanel">
+      <p class="gp-label">Demo</p>
+      <h2 id="gp-ov-heading">Scoring override entry</h2>
+      <p class="gp-ov-demo">Demo: entries stay in your browser. Nothing is sent or saved to a server.</p>
+      <form class="gp-ovform">
+        <label>Account
+          <select name="account">{accounts.map((a) => <option value={a.name} selected={a.name === "Stripe"}>{a.name}</option>)}</select>
+        </label>
+        <label>Date <input type="date" name="date" required /></label>
+        <fieldset>
+          <legend>Override score</legend>
+          <div class="gp-ovpick">{CLUSTERS.map((c) => <label><input type="radio" name="cluster" value={c} required /> <span>{c}</span></label>)}</div>
+        </fieldset>
+        <label>Notes on override score
+          <textarea name="note" rows="4" required placeholder="What did you learn, and why does the score miss it?"></textarea>
+          <small>Your notes and findings will be used to improve the model.</small>
+        </label>
+        <button type="submit" class="gp-ovsubmit">Submit override</button>
+        <p class="gp-ovmsg" role="status"></p>
+      </form>
+      <h3 class="gp-ovtl-head">Previous override entries · <span data-ov-acct>Stripe</span></h3>
+      <ol class="gp-ovtl" aria-live="polite"></ol>
+      <button type="button" class="gp-ovclear">Clear my demo entries</button>
+    </section>
+  </div>
+
+  <div class="gp-row gp-r4">
+  <section class="gp-built" id="how-its-built">
     <h2>How it's built</h2>
     <p class="gp-prose">
-      The account data lives in a single wide Postgres table on <a href="https://supabase.com">Supabase</a>. A SQL scoring function bands each field golf-style, rolls the bands into weighted bucket scores, and assigns P1 to P4 by quartile (ntile). This page reads a display-only view at build time with supabase-js, and row-level security keeps the raw inputs and notes private.
+      The account data lives in a single wide Postgres table on <a href="https://supabase.com">Supabase</a>. A SQL scoring function bands each field golf-style, rolls the bands into weighted bucket scores, and the page assigns P1 to P4 by splitting the book at the median on two axes: growth potential (the A-GPS score with ARR taken out) and spend (ARR). A separate WATCH floor flags NRR under 90 percent or a growth score worse than 6.0. This page reads a display-only view at build time with supabase-js, and row-level security keeps the raw inputs and notes private.
     </p>
     <details class="gp-more gp-model">
       <summary class="cta">
@@ -494,14 +370,32 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
       </dl>
     </details>
   </section>
+    <section class="gp-soon" aria-labelledby="gp-soon-heading">
+      <p class="gp-label">Roadmap</p>
+      <h2 id="gp-soon-heading">Not in this scoring run</h2>
+      <article>
+        <p class="gp-soon-flag">Coming soon</p>
+        <h3>Accounts moving MoM</h3>
+        <p>Month-over-month cluster changes need a second score snapshot. This view has one scoring run, so nothing has moved yet.</p>
+      </article>
+      <article>
+        <p class="gp-soon-flag">Coming soon</p>
+        <h3>Saved overrides that feed the model</h3>
+        <p>Overrides above are a browser-only demo. Next step: store them in a private table, show the real 90-day window, and use the notes to retune weights.</p>
+      </article>
+    </section>
+  </div>
 </div>
+
+<script define:vars={{ seeds: DEMO_OVERRIDES }}>
+  window.__gpSeeds = seeds;
+</script>
 
 <script>
   const root = document.getElementById("growth-propensity");
   if (root) {
     const tbody = root.querySelector("tbody");
     const search = root.querySelector<HTMLInputElement>(".gp-search");
-    const readout = root.querySelector("#gp-readout");
     const shown = root.querySelector("#gp-shown");
     const panel = root.querySelector<HTMLElement>("#gp-detail");
     let sortKey = "overall";
@@ -532,7 +426,6 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
         if (control.getAttribute("data-account") === name) control.setAttribute("aria-current", "true");
         else control.removeAttribute("aria-current");
       });
-      if (readout) readout.textContent = name;
       if (!shouldScroll || !panel) return;
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       panel.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
@@ -593,19 +486,110 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
       if (name) showAccount(name, true);
     });
 
-    root.querySelectorAll<HTMLElement>(".gp-dot").forEach((dot) => {
-      const label = () => {
-        if (readout) readout.textContent = dot.getAttribute("data-label") ?? "";
-      };
-      dot.addEventListener("mouseenter", label);
-      dot.addEventListener("focus", label);
-      dot.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        const name = dot.getAttribute("data-account");
-        if (name) showAccount(name, true);
-      });
+    document.addEventListener("gp:select", (event) => {
+      const d = (event as CustomEvent<{ name?: string; scroll?: boolean }>).detail;
+      if (d?.name) showAccount(d.name, !!d.scroll);
     });
+
+    // ---- Overrides (DEMO: seeds are invented; new entries live in localStorage only) ----
+    type Ov = { account: string; date: string; cluster: string; reason: string; note: string; demo?: boolean };
+    const KEY = "agps-demo-overrides";
+    const seeds: Ov[] = (window as unknown as { __gpSeeds?: Ov[] }).__gpSeeds ?? [];
+    const esc = (t: string) => t.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+    const local = (): Ov[] => {
+      try { return JSON.parse(localStorage.getItem(KEY) ?? "[]"); } catch { return []; }
+    };
+    const all = () => [...seeds, ...local()].sort((x, y) => y.date.localeCompare(x.date));
+    const today = () => {
+      const n = new Date();
+      return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, "0")}-${String(n.getDate()).padStart(2, "0")}`;
+    };
+    const within90 = (date: string) => (Date.now() - new Date(`${date}T12:00:00`).getTime()) / 864e5 <= 90;
+    const fmt = (date: string) => new Date(`${date}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+
+    function renderCells() {
+      const list = all();
+      root.querySelectorAll<HTMLElement>("[data-ov-cell]").forEach((cell) => {
+        const name = cell.dataset.ovCell ?? "";
+        const o = list.find((x) => x.account === name && within90(x.date));
+        if (!o) { cell.innerHTML = ""; return; }
+        const id = `ov-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+        cell.innerHTML = `<button type="button" class="gp-ov gp-badge gp-${o.cluster}" aria-describedby="${id}">${o.cluster}<span class="gp-ov-tip" role="tooltip" id="${id}"><b>${fmt(o.date)} · Overridden to ${o.cluster} <i>${o.demo ? "Demo" : "Your entry"}</i></b><span>Reason: ${esc(o.reason)}</span><span>${esc(o.note)}</span></span></button>`;
+      });
+    }
+
+    const form = root.querySelector<HTMLFormElement>(".gp-ovform");
+    const tl = root.querySelector<HTMLElement>(".gp-ovtl");
+    const acctLabel = root.querySelector<HTMLElement>("[data-ov-acct]");
+    const msg = root.querySelector<HTMLElement>(".gp-ovmsg");
+    function renderTimeline() {
+      if (!form || !tl) return;
+      const name = (form.elements.namedItem("account") as HTMLSelectElement).value;
+      if (acctLabel) acctLabel.textContent = name;
+      const items = all().filter((o) => o.account === name);
+      tl.innerHTML = items.length
+        ? items.map((o) => `<li><p class="gp-ovtl-top"><span class="gp-badge gp-${o.cluster}">${o.cluster}</span><b>${fmt(o.date)}</b><i>${o.demo ? "Demo" : "Your entry · this browser"}</i></p><p>${o.reason ? `<strong>${esc(o.reason)}.</strong> ` : ""}${esc(o.note)}</p></li>`).join("")
+        : `<li class="gp-ovtl-empty">No overrides on file for ${esc(name)}.</li>`;
+    }
+    if (form) {
+      const date = form.elements.namedItem("date") as HTMLInputElement;
+      date.value = today();
+      date.max = today();
+      form.elements.namedItem("account")?.addEventListener("change", renderTimeline);
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const f = new FormData(form);
+        const note = String(f.get("note") ?? "").trim();
+        const entry: Ov = {
+          account: String(f.get("account")),
+          date: String(f.get("date")),
+          cluster: String(f.get("cluster")),
+          reason: note.split(/[.!?\n]/)[0].slice(0, 60),
+          note,
+        };
+        try {
+          localStorage.setItem(KEY, JSON.stringify([...local(), entry]));
+          if (msg) msg.textContent = `Saved in this browser: ${entry.account} → ${entry.cluster}.`;
+        } catch {
+          if (msg) msg.textContent = "This browser blocked local storage, so the entry was not saved.";
+        }
+        (form.elements.namedItem("note") as HTMLTextAreaElement).value = "";
+        renderTimeline();
+        renderCells();
+      });
+    }
+    root.querySelector(".gp-ovclear")?.addEventListener("click", () => {
+      localStorage.removeItem(KEY);
+      if (msg) msg.textContent = "Your demo entries were cleared. The invented examples stay.";
+      renderTimeline();
+      renderCells();
+    });
+    renderCells();
+    renderTimeline();
+
+    const float = document.createElement("div");
+    float.className = "gp-ovfloat";
+    float.hidden = true;
+    document.body.appendChild(float);
+    const showTip = (chip: Element) => {
+      const tip = chip.querySelector(".gp-ov-tip");
+      if (!tip) return;
+      float.innerHTML = tip.innerHTML;
+      float.hidden = false;
+      const r = chip.getBoundingClientRect();
+      const w = float.offsetWidth, h = float.offsetHeight;
+      let x = r.right - w, y = r.top - h - 8;
+      if (y < 8) y = r.bottom + 8;
+      x = Math.max(8, Math.min(window.innerWidth - w - 8, x));
+      float.style.left = `${x}px`;
+      float.style.top = `${y}px`;
+    };
+    const hideTip = () => { float.hidden = true; };
+    root.addEventListener("mouseover", (e) => { const c = (e.target as Element).closest?.(".gp-ov"); if (c) showTip(c); });
+    root.addEventListener("mouseout", (e) => { if ((e.target as Element).closest?.(".gp-ov")) hideTip(); });
+    root.addEventListener("focusin", (e) => { const c = (e.target as Element).closest?.(".gp-ov"); if (c) showTip(c); });
+    root.addEventListener("focusout", hideTip);
+    window.addEventListener("scroll", hideTip, { passive: true });
 
     root.querySelectorAll<HTMLButtonElement>(".gp-chip").forEach((chip) => {
       chip.addEventListener("click", () => {
@@ -922,15 +906,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     gap: 2.75rem;
   }
 
-  .gp-chart-frame {
-    margin: 0.25rem 0 0.75rem;
-  }
 
-  .gp-chart-frame svg {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
 
   .gp-plot {
     fill: var(--bg);
@@ -944,52 +920,13 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
   }
 
   .gp-quad-label,
-  .gp-axis-end {
-    fill: var(--text-muted);
-    font-family: var(--font-body);
-    font-size: 11px;
-  }
 
-  .gp-axis-title {
-    fill: var(--text);
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
 
-  .gp-dot {
-    cursor: pointer;
-  }
 
-  .gp-dot-hit {
-    fill: transparent;
-  }
 
-  .gp-dot-halo {
-    fill: var(--bg);
-  }
 
-  .gp-dot-mark {
-    stroke: var(--text);
-    stroke-width: 1;
-    vector-effect: non-scaling-stroke;
-  }
 
-  .gp-dot-ring {
-    fill: none;
-    stroke: var(--text);
-    stroke-width: 1;
-    opacity: 0;
-    vector-effect: non-scaling-stroke;
-  }
 
-  .gp-dot:hover .gp-dot-ring,
-  .gp-dot:focus-visible .gp-dot-ring,
-  .gp-dot[aria-current="true"] .gp-dot-ring {
-    opacity: 1;
-  }
 
   .gp-readout,
   .gp-rule,
@@ -1327,25 +1264,10 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
   }
 
   .gp-badge.gp-P1,
-  .gp-dot-mark.gp-P1 {
-    background: #000;
-    color: #fff;
-    fill: #000;
-  }
 
   .gp-badge.gp-P2,
-  .gp-dot-mark.gp-P2 {
-    background: #3f3f3f;
-    color: #fff;
-    fill: #3f3f3f;
-  }
 
   .gp-badge.gp-P3,
-  .gp-dot-mark.gp-P3 {
-    background: #737373;
-    color: #fff;
-    fill: #737373;
-  }
 
   .gp-badge.gp-P4 {
     background: #f2f2f2;
@@ -1353,9 +1275,6 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     box-shadow: inset 0 0 0 1px #000;
   }
 
-  .gp-dot-mark.gp-P4 {
-    fill: #fff;
-  }
 
   .gp-dot-sep {
     margin: 0 0.3rem;
@@ -1374,75 +1293,192 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     opacity: 0.55;
   }
 
-  @media (min-width: 901px) {
-    .gp-board {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      grid-template-areas:
-        "lists chart"
-        "lists focus"
-        "lists soon";
-      column-gap: 3.5rem;
-      row-gap: 2.5rem;
-      align-items: start;
-    }
+  /* ---- Dashboard rows ---- */
+  .gp-row { display: grid; gap: 1.5rem; margin-top: 2.5rem; align-items: start; }
+  .gp-r1 { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .gp-r2 { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+  .gp-r3 { grid-template-columns: minmax(0, 8.5fr) minmax(0, 3.5fr); }
+  .gp-r4 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .gp-card, .gp-r1-chart, .gp-detail, .gp-tablebox, .gp-built, .gp-soon, .gp-how, .gp-quads { border: 1px solid var(--border-strong, #000); background: var(--bg); }
+  .gp-card, .gp-detail, .gp-tablebox, .gp-built, .gp-soon { padding: 1.25rem 1.35rem; }
+  .gp-r1-left { display: grid; gap: 1rem; }
+  .gp-r1 .gp-disclaimer { margin: 0; padding: .9rem 1rem; border: 1px solid #000; font-size: .85rem; }
+  .gp-how { padding: .8rem 1rem; font-size: .82rem; line-height: 1.5; color: var(--text-muted); }
+  .gp-how p { margin: 0 0 .5rem; }
+  .gp-how p:last-child { margin: 0; }
+  .gp-key { display: inline-block; width: 1.05rem; height: 1.05rem; vertical-align: -.2rem; }
+  .gp-how :global(.gq-wtag) { margin-left: 0; }
+  .gp-r1-chart { padding: .75rem .75rem .25rem; position: sticky; top: 4.5rem; }
+  .gp-quads { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border-strong, #000); }
+  .gp-quad { background: var(--bg); padding: .75rem .8rem; min-width: 0; }
+  .gp-quad header { display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+  .gp .gp-quad h3 { display: flex; align-items: center; gap: .45rem; font-size: .8rem; letter-spacing: .08em; }
+  .gp-quad h3 .gp-badge { font-size: .65rem; }
+  .gp-quad-n { font-family: var(--font-display); font-size: .75rem; font-weight: 700; color: var(--text-muted); }
+  .gp .gp-quad-sub { margin: .25rem 0 .35rem; font-family: var(--font-display); font-size: .6rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
+  .gp-quad ol { list-style: none; margin: 0; padding: 0; }
+  .gp-qitem { display: grid; width: 100%; padding: .45rem 0; border: 0; border-top: 1px solid var(--border); background: none; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+  .gp-qitem strong { font-size: .82rem; text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: .15em; }
+  .gp-qitem span, .gp-qitem em { font-size: .72rem; color: var(--text-muted); font-style: normal; }
+  .gp-qitem em { color: var(--text); }
+  .gp-qitem:hover strong, .gp-qitem[aria-current="true"] strong { text-decoration-color: currentColor; }
+  .gp-qitem :global(.gq-wtag) { font-size: .5rem; margin-left: .35rem; }
+  .gp-quad-more summary { cursor: pointer; padding-top: .4rem; border-top: 1px solid var(--border); font-family: var(--font-display); font-size: .6rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
+  .gp-r2 .gp-focus, .gp-r2 .gp-detail { margin: 0; height: 100%; }
+  .gp-tablebox .gp-table-wrap { max-width: 100%; }
+  .gp-tablebox .gp-table { font-size: .8rem; }
+  .gp-ov-head { font-family: var(--font-display); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; text-align: center; line-height: 1.2; }
+  .gp-ov-head span { color: var(--text-muted); }
+  .gp-ov-cell { text-align: center; }
+  :global(.gp-ov) { position: relative; border: 0; cursor: help; }
+  :global(.gp-ov:focus-visible) { outline: 2px solid #000; outline-offset: 2px; }
+  :global(.gp-ov-tip) { display: none; }
+  :global(.gp-ovfloat) { position: fixed; z-index: 50; width: 17rem; padding: .7rem .85rem; background: #fff; color: #000; border: 1px solid #000; box-shadow: 4px 4px 0 #000; font-family: var(--font-body); font-size: .8rem; line-height: 1.45; text-align: left; letter-spacing: 0; text-transform: none; font-weight: 400; pointer-events: none; }
+  :global(.gp-ovfloat b) { display: block; font-family: var(--font-display); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .3rem; }
+  :global(.gp-ovfloat i) { font-style: normal; margin-left: .3rem; padding: 0 .25rem; border: 1px solid #000; font-size: .6rem; }
+  :global(.gp-ovfloat span) { display: block; margin-top: .25rem; }
+  .gp-ovpanel h2 { font-size: 1.15rem; }
+  .gp .gp-ov-demo { padding: .5rem .65rem; background: var(--bg-soft, #f4f4f4); border-left: 3px solid #000; font-size: .78rem; }
+  .gp-ovform { display: grid; gap: .8rem; }
+  .gp-ovform label, .gp-ovform legend { display: grid; gap: .3rem; font-family: var(--font-display); font-size: .65rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .gp-ovform fieldset { border: 0; padding: 0; margin: 0; }
+  .gp-ovform select, .gp-ovform input[type="date"], .gp-ovform textarea { font: inherit; font-family: var(--font-body); font-size: .85rem; letter-spacing: 0; text-transform: none; font-weight: 400; padding: .5rem .55rem; border: 1px solid #000; border-radius: 0; background: #fff; color: #000; width: 100%; box-sizing: border-box; }
+  .gp-ovform small { font-family: var(--font-body); font-size: .72rem; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--text-muted); }
+  .gp-ovpick { display: grid; grid-template-columns: repeat(4, 1fr); gap: .35rem; }
+  .gp-ovpick label { display: block; }
+  .gp-ovpick input { position: absolute; opacity: 0; }
+  .gp-ovpick span { display: block; padding: .45rem 0; text-align: center; border: 1px solid #000; cursor: pointer; font-size: .75rem; }
+  .gp-ovpick input:checked + span { background: #000; color: #fff; }
+  .gp-ovpick input:focus-visible + span { outline: 2px solid #000; outline-offset: 2px; }
+  .gp-ovsubmit, .gp-ovclear { padding: .7rem 1rem; border: 1px solid #000; background: #000; color: #fff; font-family: var(--font-display); font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
+  .gp-ovclear { margin-top: .75rem; background: #fff; color: #000; font-size: .62rem; padding: .45rem .7rem; }
+  .gp .gp-ovmsg { margin: 0; font-size: .78rem; min-height: 1em; }
+  .gp .gp-ovtl-head { margin-top: 1.25rem; font-size: .75rem; letter-spacing: .1em; }
+  .gp-ovtl { list-style: none; margin: .5rem 0 0; padding: 0; }
+  .gp-ovtl :global(li) { padding: .6rem .7rem; margin-top: .5rem; background: #111; color: #fff; font-size: .78rem; line-height: 1.45; }
+  .gp-ovtl :global(li p) { margin: 0; }
+  .gp-ovtl :global(.gp-ovtl-top) { display: flex; gap: .45rem; align-items: center; margin-bottom: .3rem; }
+  .gp-ovtl :global(.gp-ovtl-top i) { margin-left: auto; font-style: normal; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; opacity: .75; }
+  .gp-ovtl :global(.gp-ovtl-empty) { background: none; color: var(--text-muted); border: 1px dashed var(--border); }
+  .gp-ovtl :global(.gp-badge.gp-P4) { box-shadow: none; }
+  .gp-r4 .gp-built, .gp-r4 .gp-soon { margin: 0; height: 100%; }
 
-    .gp-lists {
-      grid-area: lists;
-    }
-
-    .gp-chart {
-      grid-area: chart;
-    }
-
-    .gp-focus {
-      grid-area: focus;
-    }
-
-    .gp-soon {
-      grid-area: soon;
-    }
+  @media (max-width: 1100px) {
+    .gp-r3 { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 900px) {
-    .gp-chart {
-      order: 1;
-    }
-
-    .gp-focus {
-      order: 2;
-    }
-
-    .gp-lists {
-      order: 3;
-    }
-
-    .gp-soon {
-      order: 4;
-    }
-
-    .gp-scroll-hint {
-      display: block;
-    }
-
-    .gp-detail-top,
-    .gp-weights div,
-    .gp-fields div {
-      grid-template-columns: 1fr;
-    }
+    .gp-r1, .gp-r2, .gp-r4 { grid-template-columns: 1fr; }
+    .gp-r1-left { display: contents; }
+    .gp-r1 .gp-disclaimer { order: 1; }
+    .gp-r1-chart { order: 2; position: static; padding: .4rem; }
+    .gp-how { order: 3; }
+    .gp-quads { order: 4; }
+    .gp-scroll-hint { display: block; }
+    .gp-detail-top, .gp-weights div, .gp-fields div { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 640px) {
-    .gp-scores {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .gp-rank {
-      grid-template-columns: 2rem minmax(0, 1fr) auto;
-    }
-
-    .gp-rank-score {
-      display: none;
-    }
+    .gp-scores { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .gp-card, .gp-detail, .gp-tablebox, .gp-built, .gp-soon { padding: 1rem; }
   }
+  .gq-wtag-inline { padding: .1rem .3rem; border: 1px solid #000; font-family: var(--font-display); font-size: .65rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+
+  /* ---- v6 polish: one spacing scale, one gutter, equal-height rows ---- */
+  .gp { --s1: .5rem; --s2: 1rem; --s3: 1.5rem; --s4: 3rem; --pad: 1.5rem; }
+  .gp-row { gap: var(--s3); margin-top: var(--s4); align-items: stretch; }
+  .gp-r1, .gp-r2 { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .gp-r3 { grid-template-columns: minmax(0, 17fr) minmax(0, 7fr); }
+  .gp-card, .gp-detail, .gp-tablebox, .gp-built, .gp-soon { padding: var(--pad); box-sizing: border-box; }
+  .gp-r1-left, .gp-r1-right { display: flex; flex-direction: column; gap: var(--s3); min-width: 0; }
+  .gp-r1 .gp-disclaimer { padding: var(--s2) var(--pad); font-size: .85rem; line-height: 1.55; }
+  .gp-quads { flex: 1; }
+  .gp-quad { padding: var(--s2) var(--s2) var(--s1); display: flex; flex-direction: column; }
+  .gp-r1-chart { position: static; flex: 1; display: flex; flex-direction: column; justify-content: center; padding: var(--s2); }
+  .gp-how { padding: var(--s2) var(--pad); font-size: .85rem; line-height: 1.6; }
+  .gp-how p { max-width: 68ch; }
+  .gp-qitem { padding: .55rem 0; gap: .1rem; }
+  .gp-qitem strong { font-size: .9rem; }
+  .gp-qitem span, .gp-qitem em { font-size: .78rem; line-height: 1.4; }
+  .gp .gp-quad h3 { font-size: .85rem; }
+  .gp .gp-quad-sub { font-size: .62rem; margin: .3rem 0 .5rem; }
+  /* headings + labels */
+  .gp-row h2 { font-size: 1.5rem; line-height: 1.1; margin: 0 0 var(--s2); }
+  .gp-row .gp-label { margin: 0 0 var(--s1); }
+  .gp-row .gp-prose { font-size: .95rem; line-height: 1.6; max-width: 68ch; margin: 0 0 var(--s2); }
+  .gp-ovpanel h2 { font-size: 1.5rem; }
+  .gp-r2 .gp-focus { display: flex; flex-direction: column; }
+  .gp-r2 .gp-focus .gp-rule { margin-top: auto; padding-top: var(--s2); border-top: 1px solid var(--border); font-size: .8rem; line-height: 1.5; color: var(--text-muted); }
+  /* table */
+  .gp-tablebox { display: flex; flex-direction: column; min-width: 0; }
+  .gp-tablebox .gp-table-wrap { flex: 1; max-height: 44rem; overflow: auto; border-bottom: 1px solid var(--border-strong); }
+  .gp-tablebox .gp-table { min-width: 0; width: 100%; font-size: .82rem; table-layout: auto; }
+  .gp-tablebox .gp-table th, .gp-tablebox .gp-table td { padding: .6rem .3rem; text-align: right; }
+  .gp-tablebox .gp-table th { white-space: normal; line-height: 1.15; }
+  .gp-tablebox .gp-table th { position: sticky; top: 0; z-index: 2; background: var(--bg); box-shadow: inset 0 -1px 0 var(--border-strong); vertical-align: bottom; }
+  .gp-tablebox .gp-table th:first-child { z-index: 3; }
+  .gp-tablebox .gp-table th:first-child, .gp-tablebox .gp-table td:first-child { text-align: left; max-width: 9rem; overflow: hidden; text-overflow: ellipsis; padding-left: 0; }
+  .gp-tablebox .gp-name-btn { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+  .gp-tablebox .gp-table th button { font-size: .66rem; letter-spacing: .07em; }
+  .gp-tablebox .gp-table .gp-c, .gp-tablebox .gp-table .gp-ov-cell, .gp-tablebox .gp-table th.gp-ov-head { text-align: center; }
+  .gp-tablebox .gp-table td:last-child { padding-right: 0; }
+  .gp-tablebox .gp-table .gp-overall { font-weight: 700; }
+  .gp-tablebox .gp-meta { margin: var(--s2) 0 0; font-size: .78rem; color: var(--text-muted); }
+  .gp-controls { margin-bottom: var(--s2); }
+  /* override panel */
+  .gp-ovpanel { display: flex; flex-direction: column; }
+  .gp-ovpanel .gp-ovtl { flex: 1; }
+  .gp-ovpanel .gp-ovclear { align-self: flex-start; }
+  .gp-ovform { gap: var(--s2); }
+  /* row 4 */
+  .gp-r4 .gp-built h2 { margin-top: 0; }
+  .gp-soon article { padding: var(--s2) 0; border-top: 1px solid var(--border); }
+  .gp-soon article:last-child { padding-bottom: 0; }
+
+  @media (max-width: 1100px) {
+    .gp-tablebox .gp-table-wrap { max-height: 36rem; }
+  }
+  @media (max-width: 900px) {
+    .gp-r1, .gp-r2 { grid-template-columns: 1fr; }
+    .gp-r1-left, .gp-r1-right { display: contents; }
+    .gp-r1 .gp-disclaimer { order: 1; }
+    .gp-r1-chart { order: 2; }
+    .gp-how { order: 3; }
+    .gp-quads { order: 4; }
+  }
+  @media (max-width: 640px) {
+    .gp { --pad: 1rem; --s4: 2rem; --s3: 1rem; }
+    .gp-row h2 { font-size: 1.3rem; }
+    .gp-tablebox .gp-table .gp-lo { display: none; }
+    .gp-tablebox .gp-table-wrap { max-height: 30rem; }
+    .gp-quads { grid-template-columns: 1fr; }
+  }
+
+  /* v6: align with 26-W site tokens (global.css + notes/[slug]) */
+  .gp { --s3: 2rem; --s4: 3rem; }
+  .gp-card, .gp-r1-chart, .gp-detail, .gp-tablebox, .gp-built, .gp-soon, .gp-how, .gp-r1 .gp-disclaimer { border-color: var(--border); }
+  .gp-quads { border: 1px solid var(--border); background: var(--border); }
+  .gp-row h2, .gp-ovpanel h2 { font-family: var(--font-display); font-size: 1.375rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; line-height: 1.1; }
+  .gp-row .gp-label { font-size: .6875rem; letter-spacing: .14em; color: var(--text-muted); }
+  .gp-row .gp-prose { line-height: 1.7; }
+  .gp-soon article { background: none; }
+  @media (max-width: 640px) {
+    .gp { --s3: 1.5rem; --s4: 2.5rem; }
+    .gp-tablebox .gp-table th:nth-child(4), .gp-tablebox .gp-table td:nth-child(4) { display: none; }
+    .gp-tablebox .gp-table { font-size: .78rem; }
+    .gp-tablebox .gp-table th.gp-ov-head br { display: none; }
+    .gp-tablebox .gp-table th.gp-ov-head span { display: none; }
+  }
+  .gp-ovpanel, .gp-ovform, .gp-ovform label, .gp-ovform fieldset { min-width: 0; }
+  .gp-r3 > * { min-width: 0; }
+  .gp-ovpick label { position: relative; }
+  .gp-ovpick input { left: 0; top: 0; width: 1px; height: 1px; }
+  .gp-ovform input[type="date"] { min-width: 0; max-width: 100%; -webkit-appearance: none; appearance: none; }
+  .gp-ovtl :global(.gp-ovtl-top) { flex-wrap: wrap; }
+  @media (max-width: 1100px) { .gp-r3 { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .gp-r4 { grid-template-columns: 1fr; } }
+  /* v7: built + roadmap as unboxed prose with site rules */
+  .gp-r4 .gp-built, .gp-r4 .gp-soon { border: 0; border-top: 1px solid var(--border); padding: var(--s3) 0 0; background: none; }
+  .gp-r4 { gap: 2.5rem 3rem; }
+  .gp-soon article { padding: var(--s2) 0; }
 </style>
