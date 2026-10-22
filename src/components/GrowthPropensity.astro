@@ -40,22 +40,6 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     <p class="gp-prose">
       Clusters come from two questions: how likely is the account to grow, and how much does it spend? Growth potential is the A-GPS score with ARR taken out, so size never counts twice. Each axis is split at the median of the book, so the four groups rebalance every time the data changes and nobody ends up with everything in P1. Separately, a WATCH flag marks any account with NRR under 90 percent or a growth score worse than 6.0, wherever it lands.
     </p>
-    <dl class="gp-weights">
-      {
-        WEIGHTS.map((bucket) => (
-          <div>
-            <dt>
-              <span>{bucket.name}</span>
-              <strong>{bucket.weight}</strong>
-              <span class="gp-bar" aria-hidden="true">
-                <span style={`width: ${bucket.width}%`} />
-              </span>
-            </dt>
-            <dd>{bucket.fields}</dd>
-          </div>
-        ))
-      }
-    </dl>
   </section>
 
   <div class="gp-row gp-r0">
@@ -355,6 +339,20 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     <p class="gp-prose">
       The account data lives in a single wide Postgres table on <a href="https://supabase.com">Supabase</a>. A SQL scoring function bands each field golf-style, rolls the bands into weighted bucket scores, and the page assigns P1 to P4 by splitting the book at the median on two axes: growth potential (the A-GPS score with ARR taken out) and spend (ARR). A separate WATCH floor flags NRR under 90 percent or a growth score worse than 6.0. This page reads a display-only view at build time with supabase-js, and row-level security keeps the raw inputs and notes private.
     </p>
+    <div class="gp-weights" aria-label="Bucket weights">
+      <p class="gp-wtitle">Bucket weights</p>
+      <div class="gp-wbar" role="img" aria-label="GTM 30%, Post-sales 25%, Situation and Timing 25%, Marketing 10%, Product 10%">
+        {WEIGHTS.map((b, i) => (<span class={`gp-wseg gp-ws${i}`} style={`flex: ${Math.round(Number(b.weight)*100)}`}>{Math.round(Number(b.weight)*100)}</span>))}
+      </div>
+      <dl class="gp-wgrid">
+        {WEIGHTS.map((b, i) => (
+          <div>
+            <dt><span class={`gp-wsw gp-ws${i}`} aria-hidden="true" />{b.name} <strong>{Math.round(Number(b.weight)*100)}%</strong></dt>
+            <dd>{b.fields}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
     <details class="gp-more gp-model">
       <summary class="cta">
         <span class="gp-more-closed">Full data model</span>
@@ -378,7 +376,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
           <dd>Feature requests.</dd>
         </div>
         <div>
-          <dt>Down and distance</dt>
+          <dt>Situation &amp; Timing</dt>
           <dd>Time to next renewal, key stakeholder alignment, years as a customer, 10-K signal, customer sentiment.</dd>
         </div>
       </dl>
@@ -706,64 +704,21 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     line-height: 1.75;
   }
 
-  .gp-weights {
-    max-width: 46rem;
-    margin: 0.5rem 0 1.75rem;
-  }
-
-  .gp-weights div {
-    display: grid;
-    grid-template-columns: minmax(11rem, 16rem) minmax(0, 1fr);
-    gap: 0.35rem 1.5rem;
-    padding: 0.85rem 0;
-    border-top: 1px solid var(--border);
-  }
-
-  .gp-weights div:last-child {
-    border-bottom: 1px solid var(--border);
-  }
-
-  .gp-weights dt {
-    margin: 0;
-  }
-
-  .gp-weights dt span:first-child {
-    display: block;
-    font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .gp-weights strong {
-    display: block;
-    margin-top: 0.15rem;
-    font-family: var(--font-display);
-    font-size: 1.35rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-  }
-
-  .gp-bar {
-    display: block;
-    height: 4px;
-    margin-top: 0.45rem;
-    background: var(--bg-soft);
-  }
-
-  .gp-bar span {
-    display: block;
-    height: 100%;
-    background: var(--text);
-  }
-
-  .gp-weights dd {
-    margin: 0;
-    color: var(--text-muted);
-    font-size: 0.9375rem;
-    line-height: 1.55;
-  }
+  .gp-weights { margin: 1rem 0 1.25rem; max-width: 52rem; }
+  .gp-wtitle { margin: 0 0 0.4rem; font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .gp-wbar { display: flex; height: 1.6rem; gap: 2px; }
+  .gp-wseg { display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; }
+  .gp-ws0 { background: #000; color: #fff; }
+  .gp-ws1 { background: #444; color: #fff; }
+  .gp-ws2 { background: #666; color: #fff; }
+  .gp-ws3 { background: #bbb; color: #000; }
+  .gp-ws4 { background: #e2e2e2; color: #000; }
+  .gp-wgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 0.6rem 1.25rem; margin: 0.75rem 0 0; }
+  .gp-wgrid div { margin: 0; }
+  .gp-wgrid dt { margin: 0; font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; display: flex; align-items: center; gap: 0.4rem; }
+  .gp-wgrid dt strong { margin-left: auto; }
+  .gp-wsw { display: inline-block; width: 0.7rem; height: 0.7rem; flex: none; }
+  .gp-wgrid dd { margin: 0.1rem 0 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.45; font-weight: 400; }
 
   .gp-disclaimer {
     max-width: 46rem;
@@ -1415,7 +1370,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     .gp-how { order: 3; }
     .gp-quads { order: 4; }
     .gp-scroll-hint { display: block; }
-    .gp-detail-top, .gp-weights div, .gp-fields div { grid-template-columns: 1fr; }
+    .gp-detail-top, .gp-fields div { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 640px) {
