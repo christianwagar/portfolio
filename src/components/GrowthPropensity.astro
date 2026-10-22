@@ -1,4 +1,5 @@
 ---
+import BrushRule from "./notes/BrushRule.astro";
 import GrowthQuadrantPreview from "./GrowthQuadrantPreview.astro";
 import {
   FOCUS_RULE,
@@ -323,6 +324,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     </section>
   </div>
 
+  <BrushRule flip />
   <div class="gp-row gp-r4">
   <section class="gp-built" id="how-its-built">
     <h2>How it's built</h2>
@@ -388,6 +390,12 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     </section>
   </div>
 </div>
+
+<style is:global>
+  .note-body:has(#growth-propensity) > :is(p, h2, h3, ul, ol, blockquote) { max-width: none; }
+  .note-body:has(#growth-propensity) .sketch-split-copy p { max-width: none; }
+  .gp > .brush-rule.brush-rule { margin: 2.5rem 0 0; }
+</style>
 
 <script define:vars={{ seeds: DEMO_OVERRIDES }}>
   window.__gpSeeds = seeds;

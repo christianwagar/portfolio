@@ -1,0 +1,15 @@
+---
+interface Props { flip?: boolean }
+const { flip = false } = Astro.props;
+---
+<div class:list={["brush-rule", flip && "brush-rule-flip"]} role="separator" aria-hidden="true">
+  <svg viewBox="0 0 1200 16" preserveAspectRatio="none" focusable="false">
+    <path fill="#000" d="M2 9.6 C40 6.4 90 5.2 160 5.6 C260 4.4 360 5.8 470 4.9 C590 4.1 700 5.4 820 4.6 C930 4 1030 5.1 1120 5.8 C1160 6.1 1186 6.9 1198 8.2 C1190 9.1 1170 9.6 1130 10.2 C1040 11.3 940 10.6 830 11.6 C720 12.4 610 11.1 500 12.2 C390 13 280 11.8 170 12.6 C100 13 50 12.4 18 11.6 C8 11.2 3 10.6 2 9.6 Z" />
+    <path fill="#000" opacity=".85" d="M230 4.8 C300 3.6 360 3.9 410 4.6 L405 5.6 C350 5.1 290 5.3 232 6 Z M880 11.7 C940 12.6 990 12.4 1040 11.6 L1036 10.6 C990 11.3 935 11.2 882 10.7 Z" />
+  </svg>
+</div>
+<style>
+  .brush-rule { width: 100%; margin: 2.5rem 0 1.5rem; line-height: 0; }
+  .brush-rule svg { display: block; width: 100%; height: 12px; }
+  .brush-rule-flip svg { transform: scaleX(-1); }
+</style>

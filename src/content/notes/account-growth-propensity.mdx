@@ -10,6 +10,7 @@ order: 1
 ---
 
 import GrowthPropensity from "../../components/GrowthPropensity.astro";
+import BrushRule from "../../components/notes/BrushRule.astro";
 import SketchSplit from "../../components/notes/SketchSplit.astro";
 
 Account - Growth Propensity Scoring. Tried to be clever with coming up with an acronym of this and thus A-GPS was what I went with.
@@ -64,7 +65,7 @@ Before you use this. This is a framework, not a magic number. I highly encourage
 
 ### Using Claude, Grok, ChatGPT, Gemini or any AI chat?
 
-<img src="/images/agps-any-ai-chat.gif" alt="Animated demo: pasting the A-GPS prompt into any AI chat with no setup and attaching a spreadsheet" loading="lazy" style="display:block;width:100%;height:auto;border:1px solid #e2e2e2;margin:1.25rem 0 1.5rem;" />
+<img src="/images/agps-any-ai-chat.gif" alt="Animated demo: pasting the A-GPS prompt into any AI chat with no setup and attaching a spreadsheet" loading="lazy" style="display:block;width:100%;max-width:720px;height:auto;border:1px solid #e2e2e2;image-rendering:auto;margin:1.25rem 0 1.5rem;" />
 
 1. Open the [A-GPS prompt](https://raw.githubusercontent.com/christianwagar/agps/main/integrations/any-llm/agps-prompt.txt) and copy everything (Ctrl+A or ⌘A, then Ctrl+C or ⌘C).
 2. Paste it into a new chat and press Enter.
@@ -72,11 +73,13 @@ Before you use this. This is a framework, not a magic number. I highly encourage
 
 ### Looking for an MCP connector for all you technical superstars?
 
-<img src="/images/agps-how-to-use.gif" alt="Animated walkthrough: how to use A-GPS, from copying the prompt to getting P1 to P4 results" loading="lazy" style="display:block;width:100%;height:auto;border:1px solid #e2e2e2;margin:1.25rem 0 1.5rem;" />
+<img src="/images/agps-how-to-use.gif" alt="Animated walkthrough: how to use A-GPS, from copying the prompt to getting P1 to P4 results" loading="lazy" style="display:block;width:100%;max-width:720px;height:auto;border:1px solid #e2e2e2;image-rendering:auto;margin:1.25rem 0 1.5rem;" />
 
 Plug it straight into your AI app. Add the A-GPS connector at [mcp.26-w.com](https://mcp.26-w.com/) to run the exact scoring inside Claude, ChatGPT or Cursor.
 
 Builders or developers? The code, settings file and tests are all on [GitHub](https://github.com/christianwagar/agps).
+
+<BrushRule />
 
 ## Ideal End State
 
