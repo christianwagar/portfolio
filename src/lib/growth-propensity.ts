@@ -19,6 +19,11 @@ export type Account = {
   dd: number;
   overall: number;
   cluster: Cluster;
+  growth?: number;
+  watch?: boolean;
+  indicator?: string;
+  prevCluster?: Cluster;
+  watchReason?: string;
 };
 
 export type ScoreKey = "gtm" | "mkt" | "post" | "prod" | "dd";
@@ -69,27 +74,15 @@ export const WEIGHTS: ReadonlyArray<{ name: string; weight: string; fields: stri
   },
 ];
 
-export const CLUSTER_META: Record<Cluster, { name: string; line: string }> = {
-  P1: {
-    name: "Expand now",
-    line: "Best 25 percent. Multi-thread the account and turn the renewal into a growth deal.",
-  },
-  P2: {
-    name: "Grow into it",
-    line: "Second quartile. Land and expand with programs and advocacy.",
-  },
-  P3: {
-    name: "Protect and re-ignite",
-    line: "Third quartile. Fix health before chasing a new use case.",
-  },
-  P4: {
-    name: "Scale and monitor",
-    line: "Bottom quartile. Digital or pooled coverage. Watch for a real move.",
-  },
+export const CLUSTER_META: Record<Cluster, { name: string; line: string; quad: string }> = {
+  P1: { name: "Expand now", quad: "High growth, high spend", line: "Above-median growth and spend. Multi-thread the account and turn the renewal into a growth deal." },
+  P2: { name: "Grow into it", quad: "High growth, moderate spend", line: "Above-median growth, below-median spend. Land and expand with programs and advocacy." },
+  P3: { name: "Protect and re-ignite", quad: "Moderate growth, high spend", line: "Big spend, below-median growth. Fix health before chasing a new use case." },
+  P4: { name: "Scale and monitor", quad: "Low growth, low spend", line: "Below median on both. Digital or pooled coverage. Watch for a real move." },
 };
 
 export const FOCUS_RULE =
-  "Rule: the three lowest overall scores among accounts renewing within 120 days. Ties break toward the sooner renewal. If fewer than three qualify, the next-soonest renewals fill the list.";
+  "Rule: P1 and P3 accounts renewing within 120 days, best growth score first. WATCH accounts only qualify from P3. If fewer than three qualify, the next-soonest P1 or P3 renewals fill the list.";
 
 const FOCUS_WINDOW_DAYS = 120;
 
@@ -140,29 +133,6 @@ export type ClusterGroup = {
   rows: Account[];
   count: number;
   arr: number;
-};
-
-export type ChartDot = {
-  account: Account;
-  cx: number;
-  cy: number;
-  label: string;
-};
-
-export type ChartModel = {
-  width: number;
-  height: number;
-  plot: { x: number; y: number; w: number; h: number };
-  medianX: number;
-  medianY: number;
-  xMinLabel: string;
-  xMaxLabel: string;
-  yMinLabel: string;
-  yMaxLabel: string;
-  medianArrLabel: string;
-  medianNrrLabel: string;
-  dots: ChartDot[];
-  quadrants: Array<{ x: number; y: number; anchor: "start" | "end"; text: string }>;
 };
 
 function isCluster(value: string): value is Cluster {
@@ -232,7 +202,7 @@ function viewAccount(row: ViewRow): Account | null {
 }
 
 function byOverall(a: Account, b: Account): number {
-  return a.overall - b.overall || a.name.localeCompare(b.name);
+  return (a.growth ?? a.overall) - (b.growth ?? b.overall) || a.name.localeCompare(b.name);
 }
 
 function readEnv(name: string): string | undefined {
@@ -286,13 +256,14 @@ export function clusterGroups(accounts: Account[]): ClusterGroup[] {
 }
 
 export function focusAccounts(accounts: Account[], count = 3): Account[] {
-  const compare = (a: Account, b: Account) =>
-    a.overall - b.overall || a.renewal - b.renewal || a.name.localeCompare(b.name);
-  const inWindow = accounts.filter((account) => account.renewal <= FOCUS_WINDOW_DAYS).sort(compare);
+  const g = (a: Account) => a.growth ?? a.overall;
+  const pool = accounts.filter(
+    (a) => (a.cluster === "P1" || a.cluster === "P3") && (!a.watch || a.cluster === "P3"),
+  );
+  const compare = (a: Account, b: Account) => g(a) - g(b) || a.renewal - b.renewal || a.name.localeCompare(b.name);
+  const inWindow = pool.filter((a) => a.renewal <= FOCUS_WINDOW_DAYS).sort(compare);
   if (inWindow.length >= count) return inWindow.slice(0, count);
-  const later = accounts
-    .filter((account) => account.renewal > FOCUS_WINDOW_DAYS)
-    .sort((a, b) => a.renewal - b.renewal || compare(a, b));
+  const later = pool.filter((a) => a.renewal > FOCUS_WINDOW_DAYS).sort((a, b) => a.renewal - b.renewal || compare(a, b));
   return [...inWindow, ...later].slice(0, count);
 }
 
@@ -310,15 +281,15 @@ export function accountBrief(account: Account): Brief {
   const weakest = ranked[ranked.length - 1];
   const strongScore = formatScore(account[strongest.key]);
   const weakScore = formatScore(account[weakest.key]);
-  const overall = formatScore(account.overall);
+  const overall = formatScore(account.growth ?? account.overall);
   const nrr = formatNrr(account.nrr);
   const days = Math.round(account.renewal);
 
   const whyLead: Record<Cluster, string> = {
-    P1: "P1 is the best quartile of overall score, the group to expand first.",
-    P2: "P2 is the second quartile. The score says grow into it, not a full expansion push.",
-    P3: "P3 is the third quartile. The score says protect the account before chasing new revenue.",
-    P4: "P4 is the bottom quartile. The score says keep coverage light and wait for a real move.",
+    P1: "P1 means above-median growth potential and above-median spend, the group to expand first.",
+    P2: "P2 means above-median growth potential on below-median spend. Grow into it, not a full expansion push.",
+    P3: "P3 means above-median spend with below-median growth potential. Protect the account before chasing new revenue.",
+    P4: "P4 means below median on both growth potential and spend. Keep coverage light and wait for a real move.",
   };
 
   const planLead: Record<Cluster, string> = {
@@ -355,7 +326,7 @@ export function accountBrief(account: Account): Brief {
   }
 
   return {
-    why: `${whyLead[account.cluster]} The overall score is ${overall}. ${strongest.label} is the strongest bucket at ${strongScore}, and ${weakest.label} is the weakest at ${weakScore}.`,
+    why: `${whyLead[account.cluster]} The growth score (A-GPS without ARR) is ${overall}. ${strongest.label} is the strongest bucket at ${strongScore}, and ${weakest.label} is the weakest at ${weakScore}.`,
     plan: `${planLead[account.cluster]} ${renewal}`,
     watch: watchBits.slice(0, 2).join(" "),
   };
@@ -366,55 +337,6 @@ function median(values: number[]): number {
   const mid = Math.floor(sorted.length / 2);
   if (sorted.length === 0) return 0;
   return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
-}
-
-export function buildChart(accounts: Account[]): ChartModel {
-  const width = 640;
-  const height = 420;
-  const pad = { l: 72, r: 16, t: 20, b: 52 };
-  const plot = { x: pad.l, y: pad.t, w: width - pad.l - pad.r, h: height - pad.t - pad.b };
-  const arrs = accounts.map((account) => account.arr);
-  const nrrs = accounts.map((account) => account.nrr);
-  const xMin = Math.min(...arrs);
-  const xMax = Math.max(...arrs);
-  const yMin = Math.min(...nrrs);
-  const yMax = Math.max(...nrrs);
-  const xPad = (xMax - xMin) * 0.06 || 1;
-  const yPad = (yMax - yMin) * 0.1 || 1;
-  const x0 = Math.max(0, xMin - xPad);
-  const x1 = xMax + xPad;
-  const y0 = yMin - yPad;
-  const y1 = yMax + yPad;
-  const xScale = (value: number) => plot.x + ((value - x0) / (x1 - x0)) * plot.w;
-  const yScale = (value: number) => plot.y + (1 - (value - y0) / (y1 - y0)) * plot.h;
-  const xMed = median(arrs);
-  const yMed = median(nrrs);
-
-  return {
-    width,
-    height,
-    plot,
-    medianX: xScale(xMed),
-    medianY: yScale(yMed),
-    xMinLabel: formatArr(xMin),
-    xMaxLabel: formatArr(xMax),
-    yMinLabel: formatNrr(yMin),
-    yMaxLabel: formatNrr(yMax),
-    medianArrLabel: formatArr(xMed),
-    medianNrrLabel: formatNrr(yMed),
-    dots: accounts.map((account) => ({
-      account,
-      cx: xScale(account.arr),
-      cy: yScale(account.nrr),
-      label: `${account.name}, ${account.cluster}, ${formatArr(account.arr)} ARR, ${formatNrr(account.nrr)} NRR`,
-    })),
-    quadrants: [
-      { x: plot.x + 8, y: plot.y + 16, anchor: "start", text: "Higher NRR, lower ARR" },
-      { x: plot.x + plot.w - 8, y: plot.y + 16, anchor: "end", text: "Higher NRR, higher ARR" },
-      { x: plot.x + 8, y: plot.y + plot.h - 10, anchor: "start", text: "Lower NRR, lower ARR" },
-      { x: plot.x + plot.w - 8, y: plot.y + plot.h - 10, anchor: "end", text: "Lower NRR, higher ARR" },
-    ],
-  };
 }
 
 export async function loadGrowthAccounts(): Promise<{
@@ -437,7 +359,7 @@ export async function loadGrowthAccounts(): Promise<{
 
     if (error) {
       console.warn(`[growth-propensity] Supabase fetch failed, using bundled JSON: ${error.message}`);
-      return { accounts: fallback, source: "bundled JSON" };
+      return { accounts: applyQuadrants(fallback), source: "bundled JSON" };
     }
 
     const accounts = ((data ?? []) as ViewRow[])
@@ -447,14 +369,150 @@ export async function loadGrowthAccounts(): Promise<{
 
     if (accounts.length === 0) {
       console.warn("[growth-propensity] Supabase fetch failed, using bundled JSON: no rows");
-      return { accounts: fallback, source: "bundled JSON" };
+      return { accounts: applyQuadrants(fallback), source: "bundled JSON" };
     }
 
     console.info(`[growth-propensity] Loaded ${accounts.length} accounts from Supabase`);
-    return { accounts, source: "Supabase" };
+    return { accounts: applyQuadrants(accounts), source: "Supabase" };
   } catch (error) {
     const message = error instanceof Error ? error.message : "unknown error";
     console.warn(`[growth-propensity] Supabase fetch failed, using bundled JSON: ${message}`);
-    return { accounts: fallback, source: "bundled JSON" };
+    return { accounts: applyQuadrants(fallback), source: "bundled JSON" };
   }
+}
+
+// ---- PREVIEW: growth-vs-spend quadrant (ARR on X, growth score without ARR on Y) ----
+// GTM holds 7 equally weighted fields, one of which is the ARR band. Public data carries
+// only bucket averages, so GTM without ARR = (7 * gtm - arrBand) / 6.
+const GTM_FIELD_COUNT = 7;
+const ARR_BANDS: Array<[number, number]> = [
+  [1_000_000, 1], [750_000, 2], [500_000, 3], [250_000, 4], [150_000, 5], [100_000, 6], [75_000, 7],
+];
+export function arrBand(arr: number): number {
+  for (const [min, score] of ARR_BANDS) if (arr >= min) return score;
+  return 8;
+}
+export type QuadAccount = Account & { growth: number; gtmEx: number; quad: Cluster; indicator: string; watch: boolean; best: string };
+export const WATCH = { nrrBelow: 90, growthWorseThan: 6.0 }; // configurable guardrail
+
+export function watchReason(a: { nrr: number; growth?: number }): string {
+  const bits: string[] = [];
+  if (a.nrr < WATCH.nrrBelow) bits.push(`NRR under ${WATCH.nrrBelow}%`);
+  if ((a.growth ?? 0) > WATCH.growthWorseThan) bits.push(`Growth score worse than ${WATCH.growthWorseThan.toFixed(1)}`);
+  return bits.join(" · ");
+}
+
+// DEMO overrides: invented, for layout only. Nobody made these calls.
+export type Override = { account: string; date: string; cluster: Cluster; reason: string; note: string; demo?: boolean };
+export const DEMO_OVERRIDES: Override[] = [
+  { account: "Stripe", date: "2026-10-09", cluster: "P2", reason: "Budget freeze until Q2", note: "TL;DR: champion confirmed no new spend before April. Keep warm with programs; revisit after their planning cycle.", demo: true },
+  { account: "GoPro", date: "2026-09-24", cluster: "P3", reason: "Exec sponsor left", note: "TL;DR: VP sponsor departed in September. Protect the renewal first and rebuild the stakeholder map.", demo: true },
+  { account: "Delta", date: "2026-10-14", cluster: "P2", reason: "Procurement consolidation", note: "TL;DR: renewal moving under a central procurement review. Expansion talk waits until the contract is signed.", demo: true },
+  { account: "Airbnb", date: "2026-08-28", cluster: "P4", reason: "Product overlap with in-house tool", note: "TL;DR: their platform team is building an internal alternative. Pooled coverage until usage data says otherwise.", demo: true },
+  { account: "Apple", date: "2026-10-01", cluster: "P2", reason: "Spend split across business units", note: "TL;DR: ARR is spread over three BUs; only one is ready to grow. Treat as land-and-expand inside that BU.", demo: true },
+];
+
+const BEST: Record<ScoreKey, (a: Account) => string> = {
+  gtm: (a) => (a.nrr >= 110 ? `spend up ${Math.round(a.nrr - 100)}% this year` : "sales activity and win rate"),
+  post: () => "adoption and CSM pulse",
+  dd: () => "stakeholders and renewal timing",
+  mkt: () => "events and advocacy",
+  prod: () => "product requests",
+};
+const INDICATOR: Record<ScoreKey, (a: Account) => string> = {
+  gtm: (a) => (a.nrr >= 110 ? `Spend up ${Math.round(a.nrr - 100)}% this year` : "Strong sales activity and win rate"),
+  post: () => "Strong adoption and CSM pulse",
+  dd: () => "Aligned stakeholders, good renewal timing",
+  mkt: () => "Shows up to events and advocates",
+  prod: () => "Asking for more from the product",
+};
+
+export function quadrantAccounts(accounts: Account[]): { rows: QuadAccount[]; medArr: number; medGrowth: number } {
+  const w: Record<ScoreKey, number> = { gtm: 0.3, mkt: 0.1, post: 0.25, prod: 0.1, dd: 0.25 };
+  const base = accounts.map((a) => {
+    const gtmEx = (GTM_FIELD_COUNT * a.gtm - arrBand(a.arr)) / (GTM_FIELD_COUNT - 1);
+    const growth = gtmEx * w.gtm + a.mkt * w.mkt + a.post * w.post + a.prod * w.prod + a.dd * w.dd;
+    const scores: Record<ScoreKey, number> = { gtm: gtmEx, mkt: a.mkt, post: a.post, prod: a.prod, dd: a.dd };
+    const rank: Record<ScoreKey, number> = { gtm: 0, post: 0.05, dd: 0.1, mkt: 0.4, prod: 0.9 }; // product last
+    const top = (Object.keys(w) as ScoreKey[]).sort((x, y) => scores[x] + rank[x] - (scores[y] + rank[y]))[0];
+    return { ...a, gtmEx, growth: Math.round(growth * 1000) / 1000, indicator: INDICATOR[top](a), best: BEST[top](a) };
+  });
+  const medArr = median(base.map((a) => a.arr));
+  const medGrowth = median(base.map((a) => a.growth));
+  const rows = base.map((a) => {
+    const g = a.growth <= medGrowth;
+    const s = a.arr > medArr;
+    const quad: Cluster = g ? (s ? "P1" : "P2") : s ? "P3" : "P4";
+    const watch = a.nrr < WATCH.nrrBelow || a.growth > WATCH.growthWorseThan;
+    const indicator = quad === "P4" || watch ? `Best signal: ${a.best}` : a.indicator;
+    return { ...a, quad, watch, indicator, watchReason: watchReason(a) };
+  });
+  return { rows: rows.sort((a, b) => a.growth - b.growth), medArr, medGrowth };
+}
+
+// Piecewise scale: min->median fills one half, median->max the other, log within each half.
+function halfLog(v: number, lo: number, mid: number, hi: number, log: boolean): number {
+  const f = (x: number) => (log ? Math.log(Math.max(x, 1e-9)) : x);
+  if (v <= mid) return mid === lo ? 0.5 : 0.5 * ((f(v) - f(lo)) / (f(mid) - f(lo)));
+  return hi === mid ? 0.5 : 0.5 + 0.5 * ((f(v) - f(mid)) / (f(hi) - f(mid)));
+}
+
+export function buildQuadrant(accounts: Account[]) {
+  const { rows, medArr, medGrowth } = quadrantAccounts(accounts);
+  const width = 720, height = 520;
+  const plot = { x: 64, y: 20, w: width - 64 - 16, h: height - 20 - 56 };
+  const inset = 18;
+  const arrs = rows.map((r) => r.arr), gs = rows.map((r) => r.growth);
+  const aMin = Math.min(...arrs), aMax = Math.max(...arrs);
+  const gMin = Math.min(...gs), gMax = Math.max(...gs);
+  const xs = (v: number) => plot.x + inset + halfLog(v, aMin, medArr, aMax, true) * (plot.w - 2 * inset);
+  // golf: lowest (best) growth at the top
+  const yin = 34; // room for corner quadrant labels
+  const ys = (v: number) => plot.y + yin + halfLog(v, gMin, medGrowth, gMax, false) * (plot.h - 2 * yin);
+  const midX = plot.x + plot.w / 2, midY = plot.y + plot.h / 2;
+  const pts = rows.map((r) => ({ r, cx: xs(r.arr), cy: ys(r.growth) }));
+  // collision nudge: keep dots 14px apart, never across a median line or out of the plot
+  const minD = 14;
+  for (let it = 0; it < 80; it++) {
+    let moved = false;
+    for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+      const a = pts[i], b = pts[j];
+      let dx = b.cx - a.cx, dy = b.cy - a.cy;
+      let d = Math.hypot(dx, dy);
+      if (d >= minD) continue;
+      if (d < 0.01) { dx = Math.cos(i + j); dy = Math.sin(i + j); d = 1; }
+      const push = (minD - d) / 2;
+      a.cx -= (dx / d) * push; a.cy -= (dy / d) * push;
+      b.cx += (dx / d) * push; b.cy += (dy / d) * push;
+      moved = true;
+    }
+    for (const p of pts) {
+      const right = p.r.arr > medArr, top = p.r.growth <= medGrowth;
+      p.cx = Math.min(right ? plot.x + plot.w - 8 : midX - 8, Math.max(right ? midX + 8 : plot.x + 8, p.cx));
+      p.cy = Math.min(top ? midY - 8 : plot.y + plot.h - 24, Math.max(top ? plot.y + 26 : midY + 8, p.cy));
+    }
+    if (!moved) break;
+  }
+  return {
+    width, height, plot, rows, medArr, medGrowth,
+    medianX: midX, medianY: midY,
+    xTicks: [
+      { x: plot.x + inset, label: formatArr(aMin), a: "start" },
+      { x: midX, label: `${formatArr(medArr)} median`, a: "middle" },
+      { x: plot.x + plot.w - inset, label: formatArr(aMax), a: "end" },
+    ],
+    yTicks: [
+      { y: plot.y + yin, label: formatScore(gMin) },
+      { y: midY, label: formatScore(medGrowth) },
+      { y: plot.y + plot.h - yin, label: formatScore(gMax) },
+    ],
+    dots: pts,
+  };
+}
+
+// Quadrants are the clusters: the median split replaces the stored cluster label.
+export function applyQuadrants(accounts: Account[]): Account[] {
+  if (accounts.length === 0) return accounts;
+  const { rows } = quadrantAccounts(accounts.map((a) => ({ ...a, prevCluster: a.prevCluster ?? a.cluster })));
+  return rows.map((r) => ({ ...r, cluster: r.quad })).sort(byOverall);
 }

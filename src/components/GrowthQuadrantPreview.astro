@@ -1,0 +1,109 @@
+---
+import { CLUSTERS, buildQuadrant, formatArr, formatScore, loadGrowthAccounts } from "../lib/growth-propensity";
+const { accounts } = await loadGrowthAccounts();
+const q = buildQuadrant(accounts);
+const built = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "America/Chicago" });
+const corner = { P1: "High growth, high spend", P2: "High growth, moderate spend", P3: "Moderate growth, high spend", P4: "Low growth, low spend" } as const;
+const pos = {
+  P1: { x: q.plot.x + q.plot.w - 8, y: q.plot.y + 16, a: "end" },
+  P2: { x: q.plot.x + 8, y: q.plot.y + 16, a: "start" },
+  P3: { x: q.plot.x + q.plot.w - 8, y: q.plot.y + q.plot.h - 10, a: "end" },
+  P4: { x: q.plot.x + 8, y: q.plot.y + q.plot.h - 10, a: "start" },
+};
+---
+<section class="gq" id="gq-preview" aria-labelledby="gq-title">
+  <p class="gq-label" id="gq-title">Growth potential vs spend · median split · data as of {built}</p>
+  <div class="gq-frame"><svg viewBox={`0 0 ${q.width} ${q.height}`} role="img" aria-label="Growth potential against ARR">
+    <rect x={q.plot.x} y={q.plot.y} width={q.plot.w} height={q.plot.h} class="gq-plot" />
+    <line class="gq-cross" x1={q.medianX} x2={q.medianX} y1={q.plot.y} y2={q.plot.y + q.plot.h} />
+    <line class="gq-cross" y1={q.medianY} y2={q.medianY} x1={q.plot.x} x2={q.plot.x + q.plot.w} />
+    {CLUSTERS.map((c) => <text class="gq-ql" x={pos[c].x} y={pos[c].y} text-anchor={pos[c].a}>{c} · {corner[c]}</text>)}
+    {q.xTicks.map((t) => <text class="gq-tick" x={t.x} y={q.plot.y + q.plot.h + 16} text-anchor={t.a}>{t.label}</text>)}
+    {q.yTicks.map((t) => <text class="gq-tick" x={q.plot.x - 8} y={t.y + 4} text-anchor="end">{t.label}</text>)}
+    <text class="gq-axis" x={q.plot.x + q.plot.w / 2} y={q.height - 8} text-anchor="middle">Spend (ARR)</text>
+    <text class="gq-axis" x="16" y={q.plot.y + q.plot.h / 2} text-anchor="middle" transform={`rotate(-90 16 ${q.plot.y + q.plot.h / 2})`}>Growth potential</text>
+    {q.dots.map((d) => (
+      <g class="gq-pt" tabindex="0" role="button" aria-label={`${d.r.name}, ${d.r.quad}, score ${formatScore(d.r.growth)}, ${formatArr(d.r.arr)} ARR`}
+        data-name={d.r.name} data-score={formatScore(d.r.growth)} data-arr={formatArr(d.r.arr)} data-ind={d.r.indicator} data-quad={d.r.quad} data-watch={d.r.watch ? "1" : ""} data-wr={d.r.watchReason ?? ""}>
+        <circle class="gq-hit" cx={d.cx} cy={d.cy} r="11" />
+        <circle class={`gq-dot gq-${d.r.quad}`} cx={d.cx} cy={d.cy} r="6" />
+        {d.r.watch && <circle class="gq-watch" cx={d.cx} cy={d.cy} r="10" />}
+      </g>
+    ))}
+  </svg><div class="gq-tip" role="status" hidden></div></div>
+</section>
+<script>
+  const frame = document.querySelector<HTMLElement>("#gq-preview .gq-frame");
+  const tip = frame?.querySelector<HTMLElement>(".gq-tip");
+  let pinned: Element | null = null;
+  const esc = (t: string) => t.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+  function show(g: Element) {
+    if (!frame || !tip) return;
+    const d = (g as HTMLElement).dataset;
+    tip.innerHTML = `<p class="gq-tip-top"><span class="gq-badge gq-${d.quad}">${d.quad}</span>${d.watch ? '<span class="gq-wtag">Watch</span>' : ""}</p><strong>${esc(d.name || "")}</strong><span>Score ${d.score}</span><span>${d.arr} ARR</span><em>${esc(d.ind || "")}</em>${d.watch && d.wr ? `<span class="gq-tip-wr">Watch: ${esc(d.wr)}</span>` : ""}<span class="gq-tip-hint">Click for account detail</span>`;
+    tip.hidden = false;
+    const f = frame.getBoundingClientRect(), r = g.getBoundingClientRect();
+    const cx = r.left + r.width / 2 - f.left, cy = r.top - f.top;
+    let x = cx - tip.offsetWidth / 2, y = cy - tip.offsetHeight - 10;
+    if (y < 0) y = r.bottom - f.top + 10;
+    x = Math.max(0, Math.min(f.width - tip.offsetWidth, x));
+    tip.style.left = `${x}px`; tip.style.top = `${y}px`;
+    frame.querySelectorAll(".gq-pt").forEach((p) => p.classList.toggle("on", p === g));
+  }
+  function select(g: Element, scroll: boolean) {
+    document.dispatchEvent(new CustomEvent("gp:select", { detail: { name: (g as HTMLElement).dataset.name, scroll } }));
+  }
+  function hide() { if (tip && !pinned) { tip.hidden = true; frame?.querySelectorAll(".gq-pt.on").forEach((p) => p.classList.remove("on")); } }
+  frame?.querySelectorAll(".gq-pt").forEach((g) => {
+    g.addEventListener("mouseenter", () => show(g));
+    g.addEventListener("mouseleave", hide);
+    g.addEventListener("focus", () => show(g));
+    g.addEventListener("blur", () => { pinned = null; hide(); });
+    g.addEventListener("click", (e) => { e.stopPropagation(); pinned = pinned === g ? null : g; show(g); select(g, false); });
+    g.addEventListener("keydown", (e) => { const k = (e as KeyboardEvent).key; if (k === "Enter" || k === " ") { e.preventDefault(); select(g, true); } });
+  });
+  document.addEventListener("click", () => { pinned = null; hide(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") { pinned = null; hide(); } });
+</script>
+<style>
+  .gq h2 { margin: 0 0 .5rem; }
+  .gq-label, .gq-sub, .gq-more { font-family: var(--font-display); font-size: .6875rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 .35rem; }
+  .gq-prose { color: var(--text-muted); font-size: .95rem; line-height: 1.6; max-width: 62ch; }
+  .gq { margin: 0; }
+  .gq svg { display: block; width: 100%; height: auto; margin: .25rem 0 0; }
+  .gq-plot { fill: var(--bg); stroke: var(--border); }
+  .gq-p1 { fill: var(--bg-soft, #f4f4f4); }
+  .gq-cross { stroke: var(--text); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .gq-ql { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; fill: var(--text); }
+  .gq-tick { font-size: 11px; fill: var(--text-muted); }
+  .gq-axis { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; fill: var(--text); }
+  .gq-dot { stroke: #000; stroke-width: 1; }
+  .gq-dot.gq-P1 { fill: #000; } .gq-dot.gq-P2 { fill: #3f3f3f; } .gq-dot.gq-P3 { fill: #737373; } .gq-dot.gq-P4 { fill: #fff; }
+  .gq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border-strong); border: 1px solid var(--border-strong); }
+  .gq-box { background: var(--bg); padding: 1rem 1.1rem; }
+  .gq-box h3 { margin: 0 0 .25rem; display: flex; gap: .5rem; align-items: center; font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; }
+  .gq-box h3 small { margin-left: auto; color: var(--text-muted); }
+  .gq-box ul { list-style: none; margin: .5rem 0 0; padding: 0; }
+  .gq-card { display: grid; padding: .55rem 0; border-top: 1px solid var(--border); font-size: .9rem; }
+  .gq-card span { color: var(--text-muted); font-size: .85rem; }
+  .gq-card em { font-style: normal; font-size: .85rem; }
+  :global(.gq-badge) { padding: .28rem .4rem; font-family: var(--font-display); font-size: .75rem; font-weight: 700; color: #fff; background: #000; }
+  .gq-tip :global(.gq-badge.gq-P2), .gq-badge.gq-P2 { background: #3f3f3f; } .gq-tip :global(.gq-badge.gq-P3), .gq-badge.gq-P3 { background: #737373; } .gq-tip :global(.gq-badge.gq-P4), .gq-badge.gq-P4 { background: #f2f2f2; color: #000; box-shadow: inset 0 0 0 1px #000; }
+  @media (max-width: 640px) { .gq-grid { grid-template-columns: 1fr; } }
+  .gq-watch { fill: none; stroke: #000; stroke-width: 1; stroke-dasharray: 2 2; }
+  :global(.gq-wtag) { margin-left: .5rem; padding: .1rem .3rem; border: 1px solid #000; font-family: var(--font-display); font-size: .6rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; vertical-align: middle; }
+  .gq-frame { position: relative; }
+  .gq-pt { cursor: pointer; outline: none; }
+  .gq-hit { fill: transparent; }
+  .gq-pt.on .gq-dot, .gq-pt:focus-visible .gq-dot { stroke-width: 3; }
+  .gq-tip { position: absolute; z-index: 5; width: 13.5rem; padding: .7rem .85rem; background: #fff; border: 1px solid #000; box-shadow: 4px 4px 0 #000; font-family: var(--font-body); font-size: .85rem; line-height: 1.4; color: #000; pointer-events: none; }
+  .gq-tip[hidden] { display: none; }
+  .gq-tip :global(strong) { display: block; font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; line-height: 1.05; margin-bottom: .2rem; }
+  .gq-tip :global(span:not(.gq-badge):not(.gq-wtag)) { display: block; }
+  .gq-tip :global(em) { display: block; margin-top: .3rem; padding-top: .3rem; border-top: 1px solid #ddd; font-style: italic; }
+  .gq-tip :global(.gq-tip-top) { display: flex; gap: .4rem; align-items: center; margin: 0 0 .4rem; }
+  .gq-tip :global(.gq-wtag) { margin-left: 0; }
+  .gq svg.gq-key { display: inline-block; width: 1.1rem; height: 1.1rem; margin: 0 .2rem -.2rem 0; }
+  .gq-tip :global(.gq-tip-wr) { margin-top: .3rem; font-weight: 600; }
+  .gq-tip :global(.gq-tip-hint) { margin-top: .35rem; font-size: .72rem; color: #666; }
+</style>
