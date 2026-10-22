@@ -10,7 +10,7 @@ order: 1
 ---
 
 import GrowthPropensity from "../../components/GrowthPropensity.astro";
-import SketchFigure from "../../components/notes/SketchFigure.astro";
+import SketchSplit from "../../components/notes/SketchSplit.astro";
 
 Account - Growth Propensity Scoring. Tried to be clever with coming up with an acronym of this and thus A-GPS was what I went with.
 
@@ -24,13 +24,15 @@ To round off the why. Several years ago leadership asked, “How can you 10X you
 
 ## How it works
 
+<SketchSplit src="/images/agps-quadrants-sketch.png" alt="Hand-drawn sketch of the P1 to P4 growth and spend quadrants" side="left">
+
 The scoring is similar to golf, the lower the score, the higher the propensity for growth. Or for all your SQL peeps, ORDER BY.
 
 The logic aims to be inclusive of data signals from GTM (Sales), Marketing, Customer Programs, Customer Success, Support, Pro-Services, Product and last but not least Situation & Timing. In total 34 different data elements are measured with 30% of the model's weight being attributed to GTM… aka ensuring it is focused on $ and ¢. Additionally 25% attributed to Post-Sales Teams as well as 25% to Situation & Timing. The remaining 20% of the weight allocated to Marketing | Customer Programs and Products.
 
 Here are the keys I really want to drive home. The entire premise of this is centered on Growth (Growth Potential) and Customer Spend (ARR/NRR). Meaning customers who have both substantial growth potential and spend will be landing in the P1 (upper right) quadrant and customers who have low growth potential and low spend will be in the P4. Given how the scoring works, it will additionally keep your larger spending customers on your radar typically landing in the P3 quadrant.
 
-<SketchFigure src="/images/agps-quadrants-sketch.png" alt="Hand-drawn sketch of the P1 to P4 growth and spend quadrants" />
+</SketchSplit>
 
 ## Where & When?
 
@@ -42,6 +44,8 @@ Some other quick things pertaining to timing. If your team has large account rat
 
 ## How to Roll it out?
 
+<SketchSplit src="/images/agps-rollout-sketch.png" alt="Hand-drawn sketch of the A-GPS rollout timeline" side="right">
+
 When rolling this out for the 1st iteration with your team, it's imperative that you have your full crew aware and present as well as whoever orchestrated tuning the scoring elements. I typically would allocate a full hour long call on a Monday or Tuesday and a full week before live roll out. Expect Questions, expect skepticism, expect early confusion and double down in your 1-2-1’s to listen to team concerns, ideas and get a gauge of their confidence.
 
 Now as a leader once it's live, support and coach your team over the next 2 to 10 weeks but also have channels for feedback of what's working & whats not working. Coupling this via providing a standardized way to measure the teams impact on targeted accounts and accounts they were able to actually deliver, actions, impacts and results is critical.
@@ -50,7 +54,7 @@ Towards the end of your rollout (typically 10 to 12 weeks) having centralized fe
 
 Lastly when you go to roll out say V2 of A-GPS, the team gets to see that their feedback was interjected into the logic as well as pick up on lessons learned and what actions drive the most impact for results they are aiming for.
 
-<SketchFigure src="/images/agps-rollout-sketch.png" alt="Hand-drawn sketch of the A-GPS rollout timeline" />
+</SketchSplit>
 
 ## Scoring Algorithm
 
