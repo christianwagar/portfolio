@@ -103,3 +103,21 @@ for raw in rows:
             if extra: h = f"{h}; {low(extra)}"
         acc[key]["headline"] = h
 json.dump(out, open(sys.argv[2] if len(sys.argv) > 2 else "src/data/growth-signals.json", "w"), indent=1)
+
+# v10: weakest real field per bucket (highest band), with plain negative wording for yes/no fields.
+NEG = {"advocate_champion": "no named advocate", "success_story_published": "no published success story", "premium_success_plan": "no premium success plan",
+       "adoption_achieved": "adoption goals not met", "value_realized": "value not yet realized"}
+for raw, s_ in zip(rows, scored):
+    acc = out[raw["account_name"]]
+    for bk, key in B.items():
+        if key not in acc: continue
+        worst = None
+        for f, spec in cfg["fields"].items():
+            if spec.get("bucket") != bk or f not in F or raw.get(f, "") == "": continue
+            sc = s_["_fields"].get(f)
+            if not isinstance(sc, (int, float)): continue
+            txt = NEG[f] if (f in NEG and str(raw[f]).lower() != "true") else F[f](raw[f])
+            if txt and (worst is None or sc > worst[0]): worst = (sc, txt)
+        if worst and worst[0] > acc[key]["score"]:
+            t = worst[1]; acc[key]["weak"] = t if (len(t) > 1 and t[1].isupper()) else t[0].lower() + t[1:]
+json.dump(out, open(sys.argv[2] if len(sys.argv) > 2 else "src/data/growth-signals.json", "w"), indent=1)

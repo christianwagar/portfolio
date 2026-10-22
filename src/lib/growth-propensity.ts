@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 import fallbackRows from "../data/growth-propensity.json";
 // Real field values behind each bucket (from the agps demo CSV via scripts/build-signals.py).
 import signalRows from "../data/growth-signals.json";
-type Signal = { field: string; score: number; text: string; headline?: string };
+type Signal = { field: string; score: number; text: string; headline?: string; weak?: string };
 const SIGNALS = signalRows as Record<string, Partial<Record<ScoreKey, Signal>>>;
 
 export const CLUSTERS = ["P1", "P2", "P3", "P4"] as const;
@@ -472,7 +472,7 @@ function halfLog(v: number, lo: number, mid: number, hi: number, log: boolean): 
 
 export function buildQuadrant(accounts: Account[]) {
   const { rows, medArr, medGrowth } = quadrantAccounts(accounts);
-  const width = 720, height = 520;
+  const width = 720, height = 600;
   const plot = { x: 64, y: 20, w: width - 64 - 16, h: height - 20 - 56 };
   const inset = 18;
   const arrs = rows.map((r) => r.arr), gs = rows.map((r) => r.growth);
@@ -528,4 +528,110 @@ export function applyQuadrants(accounts: Account[]): Account[] {
   if (accounts.length === 0) return accounts;
   const { rows } = quadrantAccounts(accounts.map((a) => ({ ...a, prevCluster: a.prevCluster ?? a.cluster })));
   return rows.map((r) => ({ ...r, cluster: r.quad })).sort(byOverall);
+}
+
+// ---- v10: plain-language account plan. Real fields only; dates are offsets resolved in the browser. ----
+export type PlanStep = { days: number; role: "AE" | "CSM" | "Exec sponsor"; text: string };
+export type AccountPlan = {
+  verdict: string;
+  verdictLine: string;
+  growthRank: string;
+  spendRank: string;
+  rawScore: string;
+  why: string[];
+  steps: PlanStep[];
+  renewalDays: number;
+  watchOut?: string;
+};
+
+const VERDICT: Record<Cluster, [string, string]> = {
+  P1: ["Expand now", "Strong signals, growing spend. Lead with expansion."],
+  P2: ["Grow into it", "Strong signals, smaller spend. Earn a first add-on."],
+  P3: ["Protect & grow", "Big spend, softer signals. Secure renewal, then grow."],
+  P4: ["Nurture", "Small spend, soft signals. Light touch for now."],
+};
+const WEAK_ACTION: Record<ScoreKey, { role: PlanStep["role"]; text: string }> = {
+  gtm: { role: "AE", text: "map one new use case and buyer" },
+  mkt: { role: "CSM", text: "invite them to the next event" },
+  post: { role: "CSM", text: "run an adoption check" },
+  prod: { role: "CSM", text: "review open product feedback" },
+  dd: { role: "Exec sponsor", text: "meet key stakeholders" },
+};
+const BUCKET_PLAIN: Record<ScoreKey, string> = {
+  gtm: "sales momentum", mkt: "marketing", post: "adoption", prod: "product feedback", dd: "relationships",
+};
+
+function ordinalTop(rank: number, n: number): string {
+  const pct = Math.ceil((rank / n) * 100);
+  return pct <= 50 ? `top ${Math.max(5, Math.ceil(pct / 5) * 5)}%` : `bottom ${Math.max(5, Math.ceil((101 - pct) / 5) * 5)}%`;
+}
+
+export function accountPlan(account: Account, all: Account[]): AccountPlan {
+  const n = all.length;
+  const g = (a: Account) => a.growth ?? a.overall;
+  const gRank = [...all].sort((a, b) => g(a) - g(b)).findIndex((a) => a.name === account.name) + 1;
+  const sRank = [...all].sort((a, b) => b.arr - a.arr).findIndex((a) => a.name === account.name) + 1;
+  const ranked = rankBuckets(account);
+  const strongest = ranked[0], weakest = ranked[ranked.length - 1];
+  const sig = SIGNALS[account.name] ?? {};
+  const watch = !!account.watch;
+  const [verdict, verdictLine] = watch
+    ? ["Fix first", "Stabilize before any growth push."]
+    : VERDICT[account.cluster];
+
+  const why: string[] = [];
+  const cap = (t: string) => t[0].toUpperCase() + t.slice(1);
+  const best = (sig[strongest.key]?.headline ?? "").split(";")[0].trim();
+  why.push(`Strength: ${BUCKET_PLAIN[strongest.key]}${best ? ` (${best[0].toLowerCase() + best.slice(1)})` : ""}`);
+  const weakTxt = sig[weakest.key]?.weak;
+  why.push(`Gap: ${BUCKET_PLAIN[weakest.key]}${weakTxt ? ` (${weakTxt})` : ""}`);
+  if (account.nrr < 100) why.push(`Spend shrinking: ${formatNrr(account.nrr)} NRR`);
+  else if (account.nrr >= 110) why.push(`Spend growing: ${formatNrr(account.nrr)} NRR`);
+  void cap;
+
+  const r = Math.max(1, Math.round(account.renewal));
+  // three checkpoints before renewal; pulled in proportionally when renewal is close
+  const at = (base: number, frac: number) => Math.max(1, Math.min(base, Math.round(r * frac)));
+  const wk = WEAK_ACTION[weakest.key];
+  const weakStep: PlanStep = { days: 0, role: wk.role, text: wk.text[0].toUpperCase() + wk.text.slice(1) };
+  let steps: PlanStep[];
+  if (watch) steps = [
+    { days: at(7, 0.2), role: "CSM", text: account.nrr < WATCH.nrrBelow ? "Call the champion: why is spend dropping?" : "Run a health review and agree a fix plan" },
+    { days: at(21, 0.45), role: "Exec sponsor", text: `Exec check-in on ${BUCKET_PLAIN[weakest.key]}` },
+    { days: at(45, 0.7), role: "AE", text: "Present a renewal save plan" },
+  ];
+  else if (account.cluster === "P1") steps = [
+    { days: at(14, 0.25), role: "CSM", text: "Book an exec value review" },
+    { days: at(40, 0.5), role: "AE", text: "Send the expansion proposal" },
+    { ...weakStep, days: at(60, 0.75) },
+  ];
+  else if (account.cluster === "P2") steps = [
+    { days: at(14, 0.25), role: "CSM", text: `Turn ${BUCKET_PLAIN[strongest.key]} into a CSQL` },
+    { ...weakStep, days: at(30, 0.5) },
+    { days: at(60, 0.75), role: "AE", text: "Propose a starter add-on" },
+  ];
+  else if (account.cluster === "P3") steps = [
+    { days: at(14, 0.25), role: "CSM", text: "Run a renewal health check" },
+    { ...weakStep, days: at(30, 0.5) },
+    { days: at(60, 0.75), role: "Exec sponsor", text: "Confirm renewal terms with the buyer" },
+  ];
+  else steps = [
+    { days: at(14, 0.25), role: "CSM", text: "Enroll in the digital success program" },
+    { ...weakStep, days: at(45, 0.5) },
+    { days: at(90, 0.8), role: "AE", text: "Renewal check-in call" },
+  ];
+
+  let watchOut: string | undefined;
+  if (watch) watchOut = `${account.watchReason}. Revenue at risk.`;
+  else if (account.nrr < 100) watchOut = `Spend contracting (${formatNrr(account.nrr)} NRR).`;
+  else if (r <= 60) watchOut = `Renewal in ${r} days. Move fast.`;
+  else if (account[weakest.key] >= 6) watchOut = `${BUCKET_PLAIN[weakest.key][0].toUpperCase() + BUCKET_PLAIN[weakest.key].slice(1)} gap could stall the plan.`;
+
+  return {
+    verdict, verdictLine,
+    growthRank: `#${gRank} of ${n} for growth (${ordinalTop(gRank, n)})`,
+    spendRank: `#${sRank} of ${n} by spend (${account.arr > median(all.map((a) => a.arr)) ? "top" : "bottom"} half)`,
+    rawScore: formatScore(g(account)),
+    why: why.slice(0, 3), steps, renewalDays: r, watchOut,
+  };
 }
