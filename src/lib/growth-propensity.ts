@@ -470,7 +470,7 @@ function halfLog(v: number, lo: number, mid: number, hi: number, log: boolean): 
   return hi === mid ? 0.5 : 0.5 + 0.5 * ((f(v) - f(mid)) / (f(hi) - f(mid)));
 }
 
-export function buildQuadrant(accounts: Account[], size: { width: number; height: number; left?: number; bottom?: number } = { width: 720, height: 500 }) {
+export function buildQuadrant(accounts: Account[], size: { width: number; height: number; left?: number; bottom?: number; yin?: number } = { width: 720, height: 500 }) {
   const { rows, medArr, medGrowth } = quadrantAccounts(accounts);
   const { width, height } = size, L = size.left ?? 70, Bm = size.bottom ?? 58;
   const plot = { x: L, y: 12, w: width - L - 12, h: height - 12 - Bm };
@@ -480,7 +480,7 @@ export function buildQuadrant(accounts: Account[], size: { width: number; height
   const gMin = Math.min(...gs), gMax = Math.max(...gs);
   const xs = (v: number) => plot.x + inset + halfLog(v, aMin, medArr, aMax, true) * (plot.w - 2 * inset);
   // golf: lowest (best) growth at the top
-  const yin = 30; // room for corner quadrant labels
+  const yin = size.yin ?? 30; // room for corner quadrant labels
   const ys = (v: number) => plot.y + yin + halfLog(v, gMin, medGrowth, gMax, false) * (plot.h - 2 * yin);
   const midX = plot.x + plot.w / 2, midY = plot.y + plot.h / 2;
   const pts = rows.map((r) => ({ r, cx: xs(r.arr), cy: ys(r.growth) }));
