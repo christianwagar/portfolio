@@ -81,7 +81,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                 <button type="button" class="gp-qitem" data-account={account.name} aria-current={account.name === featured ? "true" : undefined}>
                   <strong>{account.name}{account.watch && <span class="gq-wtag" title={account.watchReason}>Watch</span>}</strong>
                   <span>{formatScore(account.growth ?? account.overall)} growth · {formatArr(account.arr)}</span>
-                  <em class="gp-head">{account.indicator}</em>
+                  <em class="gp-head">{account.indicator?.replace(/^Best signal: /, "")}</em>
                 </button>
               </li>
             );
@@ -134,7 +134,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                   <span class="gp-dot-sep" aria-hidden="true">·</span>
                   {formatArr(account.arr)} ARR
                 </span>
-                {account.indicator && <span class="gp-focus-head gp-head">{account.indicator}</span>}
+                {account.indicator && <span class="gp-focus-head gp-head">{account.indicator.replace(/^Best signal: /, "")}</span>}
               </button>
             </li>
           ))
@@ -1648,13 +1648,24 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
   @media (max-width: 640px) { .gp-steps li { grid-template-columns: 4.6rem 1fr; row-gap: .1rem; } .gp-step-t { grid-column: 2; } }
   .gp .gp-focus ol > li > button { padding-top: .5rem; padding-bottom: .5rem; }
   .gp .gp-focus .gp-rule { font-size: .76rem; line-height: 1.45; }
+  /* v11: chart fills its card (root cause: flex row parent shrank .gq to its intrinsic ~380px width) */
+  .gp .gp-r1-chart { display: flex; flex-direction: column; justify-content: center; align-items: stretch; padding: .75rem .9rem; }
+  .gp .gp-r1-chart > .gq { width: 100%; }
+  /* v11: headlines in body font, regular weight, one line */
+  .gp :global(.gp-head), .gp .gp-qitem em.gp-head, .gp .gp-focus-head, .gp .gp-detail-signal strong {
+    font-family: var(--font-body); font-weight: 400; font-style: normal; color: #333; font-size: .78rem; line-height: 1.4; letter-spacing: 0; text-transform: none;
+    display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; min-width: 0;
+  }
+  .gp .gp-qitem strong, .gp .gp-focus strong { font-weight: 700; }
+  .gp .gp-detail-signal strong { display: inline; white-space: normal; font-size: .86rem; }
   /* v10b: detail hierarchy */
   @media (min-width: 641px) { .gp .gp-detail .gp-detail-top { grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); } }
   .gp .gp-verdict { margin: .9rem 0 .2rem; }
   .gp .gp-verdict-tag { font-family: var(--font-display); font-size: 1.35rem; letter-spacing: .05em; text-transform: uppercase; padding: .3rem .6rem; display: inline-block; line-height: 1.1; }
   .gp .gp-verdict-line { margin: .35rem 0 0; font-size: .95rem; line-height: 1.4; }
   .gp .gp-ranks { display: block; margin: .5rem 0 0; padding: 0; font-size: .8rem; color: var(--text-muted); }
-  .gp .gp-why { padding-left: 1rem; font-size: .86rem; line-height: 1.4; }
+  .gp .gp-why { padding-left: 1rem; font-size: .84rem; line-height: 1.4; }
+  .gp .gp-why li + li { margin-top: .3rem; }
   .gp .gp-why li + li { margin-top: .15rem; }
   .gp .gp-steps { margin: 0; padding: 0; list-style: none; }
   .gp .gp-detail .gp-steps li { display: grid; grid-template-columns: 4.9rem 4.3rem minmax(0,1fr); column-gap: .4rem; padding: .32rem 0; font-size: .84rem; }
