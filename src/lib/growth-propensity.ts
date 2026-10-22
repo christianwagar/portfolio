@@ -44,7 +44,7 @@ export const SCORE_FIELDS: ReadonlyArray<{
   { key: "mkt", short: "Marketing", label: "Marketing and programmatic", weight: "0.10" },
   { key: "post", short: "Post-sales", label: "Post-sales", weight: "0.25" },
   { key: "prod", short: "Product", label: "Product", weight: "0.10" },
-  { key: "dd", short: "Down & dist.", label: "Down and distance", weight: "0.25" },
+  { key: "dd", short: "Situation & timing", label: "Situation & Timing", weight: "0.25" },
 ];
 
 export const WEIGHTS: ReadonlyArray<{ name: string; weight: string; fields: string; width: number }> = [
@@ -61,7 +61,7 @@ export const WEIGHTS: ReadonlyArray<{ name: string; weight: string; fields: stri
     width: 83,
   },
   {
-    name: "Down and distance",
+    name: "Situation & Timing",
     weight: "0.25",
     fields: "Time to renewal, stakeholder alignment, years as a customer, 10-K signal, sentiment",
     width: 83,
