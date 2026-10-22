@@ -4,7 +4,7 @@ import {
   FOCUS_RULE,
   SCORE_FIELDS,
   WEIGHTS,
-  accountBrief,
+  accountPlan,
   clusterGroups,
   focusAccounts,
   formatArr,
@@ -24,7 +24,7 @@ const groups = clusterGroups(accounts);
 const focus = focusAccounts(accounts);
 const featured = focus[0]?.name ?? accounts[0]?.name ?? "";
 const totalArr = sumArr(accounts);
-const briefs = new Map(accounts.map((account) => [account.name, accountBrief(account)]));
+const plans = new Map(accounts.map((account) => [account.name, accountPlan(account, accounts)]));
 const seedFor = (name: string) => DEMO_OVERRIDES.find((o) => o.account === name);
 const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
@@ -147,7 +147,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     <p class="gp-label" id="gp-detail-label">Account</p>
     {
       accounts.map((account) => {
-        const brief = briefs.get(account.name);
+        const plan = plans.get(account.name)!;
         return (
           <article data-detail={account.name} hidden={account.name !== featured}>
             <div class="gp-detail-top">
@@ -156,30 +156,35 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                 <p class="gp-detail-arr">{formatArr(account.arr)}</p>
                 <p class="gp-detail-meta">
                   <span class={`gp-badge gp-${account.cluster}`}>{account.cluster}</span>
-                  <span>Growth {formatScore(account.growth ?? account.overall)}</span>
-                  <span>Overall {formatScore(account.overall)}</span>
                   {account.watch && <span class="gq-wtag-inline" title={account.watchReason}>Watch · {account.watchReason}</span>}
                   <span>{formatNrr(account.nrr)} NRR</span>
                   <span>{Math.round(account.renewal)} days to renewal</span>
                 </p>
-                {account.indicator && <p class="gp-detail-signal"><span>{account.indicator.startsWith("Watch:") ? "Watch" : "Best signal"}</span> <strong class="gp-head">{account.indicator.replace(/^(Best signal|Watch): /, "")}</strong></p>}
+                <p class="gp-verdict"><strong class={account.watch ? "gp-verdict-tag gp-verdict-watch" : `gp-verdict-tag gp-${account.cluster}`}>{plan.verdict}</strong></p>
+                <p class="gp-verdict-line">{plan.verdictLine}</p>
+                <p class="gp-ranks">{plan.growthRank} <span aria-hidden="true">·</span> {plan.spendRank}</p>
               </div>
               <div class="gp-blurbs">
+                {plan.watchOut && <p class="gp-watchout"><strong>Watch out</strong> {plan.watchOut}</p>}
+                <details class="gp-why-d" open>
+                  <summary><h3>Why</h3></summary>
+                  <ul class="gp-why">{plan.why.map((w) => <li>{w}</li>)}</ul>
+                </details>
                 <section>
-                  <h3>Why {account.cluster}</h3>
-                  <p>{brief?.why}</p>
+                  <h3>Next steps</h3>
+                  <ol class="gp-steps">
+                    {plan.steps.map((st) => (
+                      <li><span class="gp-when" data-days={st.days}>In {st.days} days</span> <span class="gp-role">{st.role}</span> <span class="gp-step-t">{st.text}</span></li>
+                    ))}
+                    <li class="gp-step-renew"><span class="gp-when" data-days={plan.renewalDays}>In {plan.renewalDays} days</span> <span class="gp-role">Renewal</span> <span class="gp-step-t">Contract renews</span></li>
+                  </ol>
                 </section>
-                <section>
-                  <h3>Recommended plan</h3>
-                  <p>{brief?.plan}</p>
-                </section>
-                <section>
-                  <h3>What to watch out for</h3>
-                  <p>{brief?.watch}</p>
-                </section>
-                <p class="gp-auto">Auto-generated from scores; AI summary coming</p>
               </div>
             </div>
+            <details class="gp-scoredet">
+              <summary>Score details</summary>
+              <p class="gp-raw">Growth score {plan.rawScore} · overall {formatScore(account.overall)} · lower is better, golf-style</p>
+              {account.indicator && <p class="gp-detail-signal"><span>{account.indicator.startsWith("Watch:") ? "Watch" : "Best signal"}</span> <strong class="gp-head">{account.indicator.replace(/^(Best signal|Watch): /, "")}</strong></p>}
             <ol class="gp-scores">
               {SCORE_FIELDS.map((field) => (
                 <li>
@@ -189,6 +194,8 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                 </li>
               ))}
             </ol>
+              <p class="gp-auto">Generated from the account's scores and fields. Dates count from today.</p>
+            </details>
           </article>
         );
       })
@@ -330,7 +337,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
           <div class="gp-ovpick">{CLUSTERS.map((c) => <label><input type="radio" name="cluster" value={c} required /> <span>{c}</span></label>)}</div>
         </fieldset>
         <label>Notes on override score
-          <textarea name="note" rows="4" required placeholder="What did you learn, and why does the score miss it?"></textarea>
+          <textarea name="note" rows="3" required placeholder="What did you learn, and why does the score miss it?"></textarea>
           <small>Your notes and findings will be used to improve the model.</small>
         </label>
         <button type="submit" class="gp-ovsubmit">Submit override</button>
@@ -447,6 +454,19 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
       panel.classList.add("gp-flash");
       window.setTimeout(() => panel.classList.remove("gp-flash"), 1600);
     }
+
+    // v10b: "Why" starts collapsed on phones to keep the detail short.
+    if (window.matchMedia("(max-width: 640px)").matches) root.querySelectorAll<HTMLDetailsElement>(".gp-why-d").forEach((d) => d.removeAttribute("open"));
+    // v10: resolve plan dates from today's date in the browser so they never go stale.
+    const fmtDay = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" });
+    const fmtYear = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" });
+    root.querySelectorAll<HTMLElement>(".gp-when[data-days]").forEach((el) => {
+      const d = new Date();
+      d.setDate(d.getDate() + Number(el.dataset.days));
+      const isRenew = el.closest(".gp-step-renew");
+      el.textContent = isRenew ? (d.getFullYear() !== new Date().getFullYear() + 0 && (d.getTime() - Date.now()) > 300 * 864e5 ? fmtYear.format(d) : fmtDay.format(d)) : `By ${fmtDay.format(d)}`;
+      el.setAttribute("title", `${el.dataset.days} days from today`);
+    });
 
     function applyFilter() {
       if (!tbody) return;
@@ -1559,4 +1579,95 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
   @keyframes gp-flash { 0%, 30% { box-shadow: 0 0 0 3px #000, 6px 6px 0 #000; } 100% { box-shadow: 0 0 0 0 transparent; } }
   @media (prefers-reduced-motion: reduce) { .gp-detail.gp-flash { animation: none; outline: 3px solid #000; } }
   .gp-tablebox .gp-table tbody tr[data-name] { cursor: pointer; }
+  /* v10: tighter rhythm, no stretched blank cards */
+  .gp { --s3: 1.25rem; --s4: 2rem; --pad: 1.25rem; }
+  @media (max-width: 640px) { .gp { --s3: 1rem; --s4: 1.5rem; --pad: .9rem; } }
+  .gp-row { gap: var(--s3); margin-top: var(--s4); }
+  .gp-r2, .gp-r3, .gp-r4 { align-items: start; }
+  .gp-r3 .gp-ovpanel, .gp-r3 .gp-tablebox { height: auto; }
+  .gp-r2 .gp-focus, .gp-r2 .gp-detail, .gp-r4 .gp-built, .gp-r4 .gp-soon { height: auto; }
+  .gp-r2 .gp-focus .gp-rule { margin-top: var(--s2); }
+  .gp-r4 { gap: var(--s3) var(--s4); }
+  .gp-r1-chart { padding: .6rem .75rem .25rem; }
+  .gp-quads .gp-quad { padding-top: .75rem; padding-bottom: .75rem; }
+  /* v10b: chart row is content-driven by the cluster lists (100px/item); compact items so the list column matches the chart */
+  .gp-qitem { grid-template-columns: 1fr auto; column-gap: .5rem; padding: .35rem 0; row-gap: 0; }
+  .gp-qitem strong { font-size: .84rem; }
+  .gp-qitem span { font-size: .7rem; align-self: baseline; text-align: right; white-space: nowrap; }
+  .gp-qitem em.gp-head { grid-column: 1 / -1; font-size: .74rem; line-height: 1.35; margin-top: .05rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gp-quad-sub { margin-bottom: .25rem; }
+  .gp-r1 { align-items: stretch; }
+  .gp-r1-chart { align-items: center; padding: .5rem; }
+  .gp-r1-chart svg { width: 100%; height: auto; }
+  /* v10b: compact table, ~12 rows visible, internal scroll */
+  .gp .gp-table th, .gp .gp-table td { padding: .3rem .45rem; }
+  .gp .gp-tablebox .gp-table-wrap { max-height: 24rem; flex: 0 1 auto; }
+  .gp .gp-ovpanel, .gp .gp-ovpanel * { min-height: 0; }
+  .gp .gp-ovpanel > :last-child { margin-top: var(--s2) !important; }
+  .gp .gp-r1-chart { padding: .25rem .5rem; }
+  .gp .gp-detail { padding-top: 1rem; padding-bottom: 1rem; }
+  .gp .gp-blurbs h3 { margin-bottom: .3rem; }
+  .gp .gp-auto { margin-top: .5rem; }
+  @media (max-width: 640px) { .gp .gp-tablebox .gp-table-wrap { max-height: 22rem; } .gp .gp-focus { padding-top: .9rem; padding-bottom: .9rem; } }
+  @media (min-width: 641px) {
+    .gp .gp-ovform { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem .75rem; }
+    .gp .gp-ovform > :not(label:nth-of-type(-n+2)) { grid-column: 1 / -1; }
+    .gp .gp-ovform > * { margin: 0; }
+    .gp .gp-ovform textarea { min-height: 3.4rem; height: 3.4rem; }
+    .gp .gp-ovpanel .gp-ovtl { flex: 0 0 auto; }
+    .gp .gp-ov-demo { margin: .5rem 0 .75rem; padding: .45rem .6rem; }
+  }
+  .gp-table thead th { position: sticky; top: 0; z-index: 1; background: var(--bg); }
+  .gp-why-d > summary { list-style: none; cursor: pointer; }
+  .gp-why-d > summary::-webkit-details-marker { display: none; }
+  .gp-why-d > summary h3 { display: inline; }
+  @media (min-width: 641px) { .gp-why-d > summary { pointer-events: none; } }
+  @media (max-width: 640px) {
+    .gp-why-d > summary h3::after { content: " +"; }
+    .gp-why-d[open] > summary h3::after { content: " −"; }
+    .gp-detail .gp-blurbs { gap: .75rem; }
+    .gp .gp-qitem em.gp-head { white-space: normal; }
+    .gp-ranks, .gp-raw { margin-top: .35rem; }
+  }
+  /* v10: plain-language detail */
+  .gp-verdict { margin: .75rem 0 .35rem; font-size: .95rem; line-height: 1.45; }
+  .gp-verdict-tag { display: inline-block; margin-right: .4rem; padding: .15rem .5rem; font-family: var(--font-display); font-weight: 700; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: #000; }
+  .gp-verdict-tag.gp-P1 { background: var(--c-p1); } .gp-verdict-tag.gp-P2 { background: var(--c-p2); } .gp-verdict-tag.gp-P3 { background: var(--c-p3); }
+  .gp-verdict-tag.gp-P4, .gp-verdict-watch { background: #000; color: #fff; }
+  .gp-ranks { list-style: none; margin: .4rem 0 0; padding: 0; font-size: .9rem; line-height: 1.5; }
+  .gp-ranks li { padding-left: 1.2rem; position: relative; } .gp-ranks li::before { content: "→"; position: absolute; left: 0; }
+  .gp-raw { margin: .35rem 0 0; font-size: .75rem; color: var(--text-muted); }
+  .gp-why { margin: 0; padding-left: 1.1rem; font-size: .9rem; line-height: 1.5; } .gp-why li + li { margin-top: .2rem; }
+  .gp-steps { list-style: none; margin: 0; padding: 0; font-size: .9rem; line-height: 1.45; }
+  .gp-steps li { display: grid; grid-template-columns: 4.4rem 4.6rem 1fr; gap: .4rem; padding: .35rem 0; border-top: 1px solid var(--border); align-items: baseline; }
+  .gp-steps li:last-child { border-bottom: 1px solid var(--border); }
+  .gp-when { font-family: var(--font-display); font-weight: 700; font-size: .8rem; letter-spacing: .04em; white-space: nowrap; }
+  .gp-role { font-family: var(--font-display); font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+  .gp-step-renew { font-weight: 600; }
+  .gp-watchout { margin: .6rem 0 0; font-size: .9rem; line-height: 1.45; padding: .45rem .6rem; border-left: 3px solid #000; background: var(--bg-soft, #f4f4f4); }
+  @media (max-width: 640px) { .gp-steps li { grid-template-columns: 4.6rem 1fr; row-gap: .1rem; } .gp-step-t { grid-column: 2; } }
+  .gp .gp-focus ol > li > button { padding-top: .5rem; padding-bottom: .5rem; }
+  .gp .gp-focus .gp-rule { font-size: .76rem; line-height: 1.45; }
+  /* v10b: detail hierarchy */
+  @media (min-width: 641px) { .gp .gp-detail .gp-detail-top { grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); } }
+  .gp .gp-verdict { margin: .9rem 0 .2rem; }
+  .gp .gp-verdict-tag { font-family: var(--font-display); font-size: 1.35rem; letter-spacing: .05em; text-transform: uppercase; padding: .3rem .6rem; display: inline-block; line-height: 1.1; }
+  .gp .gp-verdict-line { margin: .35rem 0 0; font-size: .95rem; line-height: 1.4; }
+  .gp .gp-ranks { display: block; margin: .5rem 0 0; padding: 0; font-size: .8rem; color: var(--text-muted); }
+  .gp .gp-why { padding-left: 1rem; font-size: .86rem; line-height: 1.4; }
+  .gp .gp-why li + li { margin-top: .15rem; }
+  .gp .gp-steps { margin: 0; padding: 0; list-style: none; }
+  .gp .gp-detail .gp-steps li { display: grid; grid-template-columns: 4.9rem 4.3rem minmax(0,1fr); column-gap: .4rem; padding: .32rem 0; font-size: .84rem; }
+  .gp .gp-detail .gp-steps .gp-when, .gp .gp-detail .gp-steps .gp-role { width: auto; min-width: 0; }
+  .gp .gp-why-d { margin-bottom: .8rem; }
+  .gp .gp-when { font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .gp .gp-role { font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
+  .gp .gp-step-renew { color: var(--text-muted); }
+  .gp .gp-watchout { margin: 0 0 .75rem; padding: .45rem .7rem; border-left: 3px solid #000; background: #f3efe2; font-size: .86rem; }
+  .gp .gp-watchout strong { font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; margin-right: .4rem; }
+  .gp .gp-scoredet { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: .6rem; }
+  .gp .gp-scoredet > summary { cursor: pointer; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .gp .gp-scoredet[open] > summary { margin-bottom: .6rem; }
+  .gp .gp-scoredet .gp-scores { margin-top: .6rem; }
+  @media (max-width: 640px) { .gp .gp-detail .gp-steps li { grid-template-columns: 5.6rem 1fr; } .gp .gp-verdict-tag { font-size: 1.15rem; } }
 </style>

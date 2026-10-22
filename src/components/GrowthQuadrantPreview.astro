@@ -2,6 +2,7 @@
 import { CLUSTERS, buildQuadrant, formatArr, formatScore, loadGrowthAccounts } from "../lib/growth-propensity";
 const { accounts } = await loadGrowthAccounts();
 const q = buildQuadrant(accounts);
+const rankOf = new Map([...q.dots].sort((a, b) => a.r.growth - b.r.growth).map((d, i) => [d.r.name, i + 1]));
 const built = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "America/Chicago" });
 const corner = { P1: "High growth, high spend", P2: "High growth, moderate spend", P3: "Moderate growth, high spend", P4: "Low growth, low spend" } as const;
 const pos = {
@@ -27,7 +28,7 @@ const pos = {
     <text class="gq-axis" x="16" y={q.plot.y + q.plot.h / 2} text-anchor="middle" transform={`rotate(-90 16 ${q.plot.y + q.plot.h / 2})`}>Growth potential</text>
     {q.dots.map((d) => (
       <g class="gq-pt" tabindex="0" role="button" aria-label={`${d.r.name}, ${d.r.quad}, score ${formatScore(d.r.growth)}, ${formatArr(d.r.arr)} ARR`}
-        data-name={d.r.name} data-score={formatScore(d.r.growth)} data-arr={formatArr(d.r.arr)} data-ind={d.r.indicator} data-quad={d.r.quad} data-watch={d.r.watch ? "1" : ""} data-wr={d.r.watchReason ?? ""}>
+        data-name={d.r.name} data-score={formatScore(d.r.growth)} data-rank={`#${rankOf.get(d.r.name)} of ${q.dots.length}`} data-arr={formatArr(d.r.arr)} data-ind={d.r.indicator} data-quad={d.r.quad} data-watch={d.r.watch ? "1" : ""} data-wr={d.r.watchReason ?? ""}>
         <circle class="gq-hit" cx={d.cx} cy={d.cy} r="11" />
         <circle class={`gq-dot gq-${d.r.quad}`} cx={d.cx} cy={d.cy} r="6" />
         {d.r.watch && <circle class="gq-watch" cx={d.cx} cy={d.cy} r="10" />}
@@ -43,7 +44,7 @@ const pos = {
   function show(g: Element) {
     if (!frame || !tip) return;
     const d = (g as HTMLElement).dataset;
-    tip.innerHTML = `<p class="gq-tip-top"><span class="gq-badge gq-${d.quad}">${d.quad}</span>${d.watch ? '<span class="gq-wtag">Watch</span>' : ""}</p><strong>${esc(d.name || "")}</strong><span>Score ${d.score}</span><span>${d.arr} ARR</span><em class="gq-head">${esc(d.ind || "")}</em>${d.watch && d.wr ? `<span class="gq-tip-wr">Watch: ${esc(d.wr)}</span>` : ""}<span class="gq-tip-hint">[ Open account → ]</span>`;
+    tip.innerHTML = `<p class="gq-tip-top"><span class="gq-badge gq-${d.quad}">${d.quad}</span>${d.watch ? '<span class="gq-wtag">Watch</span>' : ""}</p><strong>${esc(d.name || "")}</strong><span>Growth ${d.rank} <small class="gq-raw">(score ${d.score}, lower is better)</small></span><span>${d.arr} ARR</span><em class="gq-head">${esc(d.ind || "")}</em>${d.watch && d.wr ? `<span class="gq-tip-wr">Watch: ${esc(d.wr)}</span>` : ""}<span class="gq-tip-hint">[ Open account → ]</span>`;
     tip.hidden = false;
     const f = frame.getBoundingClientRect(), r = g.getBoundingClientRect();
     const cx = r.left + r.width / 2 - f.left, cy = r.top - f.top;
@@ -114,4 +115,5 @@ const pos = {
   .gq-tip :global(.gq-tip-hint) { margin-top: .35rem; font-size: .72rem; color: #666; }
   .gq-tip :global(.gq-head) { display: block; font-family: var(--font-display); font-style: normal; font-weight: 700; font-size: .9rem; line-height: 1.3; margin-top: .35rem; color: #000; }
   .gq-tip :global(.gq-tip-hint) { display: block; margin-top: .5rem; font-family: var(--font-display); font-weight: 700; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: #000; text-decoration: underline; text-underline-offset: 3px; }
+  .gq-tip :global(.gq-raw) { color: #666; font-size: .72rem; }
 </style>

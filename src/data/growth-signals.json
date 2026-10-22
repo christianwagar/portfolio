@@ -4,19 +4,22 @@
    "field": "nrr",
    "score": 1,
    "text": "NRR 130%, attach rate 85%",
-   "headline": "Spend up 30%; attach rate at 85%"
+   "headline": "Spend up 30%; attach rate at 85%",
+   "weak": "13 account-team touches"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 1,
    "text": "9 events attended, webinar NPS 95",
-   "headline": "9 events attended show real engagement; webinar NPS hits 95"
+   "headline": "9 events attended show real engagement; webinar NPS hits 95",
+   "weak": "no named advocate"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, 14 CSQLs",
-   "headline": "Premium success plan in place; 14 CSQLs"
+   "headline": "Premium success plan in place; 14 CSQLs",
+   "weak": "cases resolved in 4.3 days"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -28,7 +31,8 @@
    "field": "key_stakeholder_alignment",
    "score": 1,
    "text": "Stakeholder alignment strong, sentiment positive",
-   "headline": "Stakeholder alignment strong; sentiment strong"
+   "headline": "Stakeholder alignment strong; sentiment strong",
+   "weak": "11.9 years as a customer"
   }
  },
  "Bose": {
@@ -36,19 +40,22 @@
    "field": "pct_opps_closed_won",
    "score": 3,
    "text": "Win rate 44%, 22 account-team touches",
-   "headline": "Win rate at 44%; 22 account-team touches"
+   "headline": "Win rate at 44%; 22 account-team touches",
+   "weak": "attach rate 27%"
   },
   "mkt": {
    "field": "advocate_champion",
    "score": 1,
    "text": "Named advocate",
-   "headline": "Named advocate in the account"
+   "headline": "Named advocate in the account",
+   "weak": "0 events attended"
   },
   "post": {
    "field": "csql_win_rate",
    "score": 1,
    "text": "CSQL win rate 60%",
-   "headline": "CSQL win rate hits 60%"
+   "headline": "CSQL win rate hits 60%",
+   "weak": "no premium success plan"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -60,7 +67,8 @@
    "field": "customer_sentiment",
    "score": 1,
    "text": "Sentiment positive",
-   "headline": "Sentiment strong"
+   "headline": "Sentiment strong",
+   "weak": "stakeholder alignment weak"
   }
  },
  "Coca-Cola": {
@@ -68,19 +76,22 @@
    "field": "nrr",
    "score": 1,
    "text": "NRR 131%, attach rate 86%",
-   "headline": "Spend up 31%; attach rate at 86%"
+   "headline": "Spend up 31%; attach rate at 86%",
+   "weak": "win rate 37%"
   },
   "mkt": {
    "field": "webinar_nps",
    "score": 1,
    "text": "Webinar NPS 79, 12 newsletter opens",
-   "headline": "Webinar NPS hits 79; 12 newsletter opens"
+   "headline": "Webinar NPS hits 79; 12 newsletter opens",
+   "weak": "3 events attended"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, 13 CSQLs",
-   "headline": "Premium success plan in place; 13 CSQLs"
+   "headline": "Premium success plan in place; 13 CSQLs",
+   "weak": "adoption goals not met"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -92,7 +103,8 @@
    "field": "key_stakeholder_alignment",
    "score": 1,
    "text": "Stakeholder alignment strong, 10-K signal: growth",
-   "headline": "Renewal in 28 days, stakeholders aligned"
+   "headline": "Renewal in 28 days, stakeholders aligned",
+   "weak": "0.5 years as a customer"
   }
  },
  "PlayStation": {
@@ -100,19 +112,22 @@
    "field": "attach_rate",
    "score": 4,
    "text": "Attach rate 50%, win rate 38%",
-   "headline": "Attach rate at 50%; win rate at 38%"
+   "headline": "Attach rate at 50%; win rate at 38%",
+   "weak": "NRR 96%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 6,
    "text": "2 events attended",
-   "headline": "2 events attended"
+   "headline": "2 events attended",
+   "weak": "0 newsletter opens"
   },
   "post": {
    "field": "csqls_generated",
    "score": 3,
    "text": "7 CSQLs",
-   "headline": "7 CSQLs from the success team"
+   "headline": "7 CSQLs from the success team",
+   "weak": "CSM pulse red"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -124,7 +139,8 @@
    "field": "years_as_customer",
    "score": 7,
    "text": "2.8 years as a customer",
-   "headline": "2.8-year customer"
+   "headline": "2.8-year customer",
+   "weak": "stakeholder alignment none"
   }
  },
  "iPhone": {
@@ -132,19 +148,22 @@
    "field": "nrr",
    "score": 3,
    "text": "NRR 118%, 28 account-team touches",
-   "headline": "Spend up 18%; 28 account-team touches"
+   "headline": "Spend up 18%; 28 account-team touches",
+   "weak": "attach rate 0%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 1,
    "text": "8 events attended, webinar NPS 82",
-   "headline": "8 events attended show real engagement; webinar NPS hits 82"
+   "headline": "8 events attended show real engagement; webinar NPS hits 82",
+   "weak": "no named advocate"
   },
   "post": {
    "field": "csm_pulse_rag",
    "score": 1,
    "text": "CSM pulse green",
-   "headline": "CSM pulse green"
+   "headline": "CSM pulse green",
+   "weak": "cases resolved in 14.2 days"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -156,7 +175,8 @@
    "field": "key_stakeholder_alignment",
    "score": 1,
    "text": "Stakeholder alignment strong, sentiment positive",
-   "headline": "Renewal in 26 days, stakeholders aligned"
+   "headline": "Renewal in 26 days, stakeholders aligned",
+   "weak": "5.6 years as a customer"
   }
  },
  "Nike": {
@@ -164,19 +184,22 @@
    "field": "pct_opps_closed_won",
    "score": 1,
    "text": "Win rate 62%",
-   "headline": "Win rate hits 62%"
+   "headline": "Win rate hits 62%",
+   "weak": "NRR 109%"
   },
   "mkt": {
    "field": "webinar_nps",
    "score": 1,
    "text": "Webinar NPS 95, 14 newsletter opens",
-   "headline": "Webinar NPS hits 95; 14 newsletter opens"
+   "headline": "Webinar NPS hits 95; 14 newsletter opens",
+   "weak": "no named advocate"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, CSM pulse green",
-   "headline": "Premium success plan in place; CSM pulse green"
+   "headline": "Premium success plan in place; CSM pulse green",
+   "weak": "1 CSQLs"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -188,7 +211,8 @@
    "field": "key_stakeholder_alignment",
    "score": 1,
    "text": "Stakeholder alignment strong",
-   "headline": "Stakeholder alignment strong"
+   "headline": "Stakeholder alignment strong",
+   "weak": "sentiment negative"
   }
  },
  "Liquid Death": {
@@ -196,19 +220,22 @@
    "field": "pct_opps_closed_won",
    "score": 4,
    "text": "Win rate 36%",
-   "headline": "Win rate at 36%"
+   "headline": "Win rate at 36%",
+   "weak": "NRR 84%"
   },
   "mkt": {
    "field": "webinar_nps",
    "score": 2,
    "text": "Webinar NPS 68",
-   "headline": "Webinar NPS at 68"
+   "headline": "Webinar NPS at 68",
+   "weak": "0 newsletter opens"
   },
   "post": {
    "field": "csqls_generated",
    "score": 4,
    "text": "5 CSQLs, CSQL win rate 37%",
-   "headline": "5 CSQLs from the success team; CSQL win rate at 37%"
+   "headline": "5 CSQLs from the success team; CSQL win rate at 37%",
+   "weak": "CSM pulse red"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -220,7 +247,8 @@
    "field": "tenk_signal",
    "score": 2,
    "text": "10-K signal: hiring",
-   "headline": "10-K signal hiring"
+   "headline": "10-K signal hiring",
+   "weak": "stakeholder alignment none"
   }
  },
  "Chewy": {
@@ -228,19 +256,22 @@
    "field": "account_team_activity_count",
    "score": 1,
    "text": "44 account-team touches",
-   "headline": "44 account-team touches keep deals moving"
+   "headline": "44 account-team touches keep deals moving",
+   "weak": "NRR 120%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 2,
    "text": "10 newsletter opens",
-   "headline": "10 newsletter opens keep the brand top of mind"
+   "headline": "10 newsletter opens keep the brand top of mind",
+   "weak": "no named advocate"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, adoption goals met",
-   "headline": "Premium success plan in place; adoption goals met"
+   "headline": "Premium success plan in place; adoption goals met",
+   "weak": "CSQL win rate 10%"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -252,7 +283,8 @@
    "field": "tenk_signal",
    "score": 1,
    "text": "10-K signal: growth",
-   "headline": "10-K signal growth"
+   "headline": "10-K signal growth",
+   "weak": "4.6 years as a customer"
   }
  },
  "Spotify": {
@@ -260,19 +292,22 @@
    "field": "account_team_activity_count",
    "score": 5,
    "text": "11 account-team touches",
-   "headline": "11 account-team touches"
+   "headline": "11 account-team touches",
+   "weak": "attach rate 0%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 5,
    "text": "3 events attended",
-   "headline": "3 events attended"
+   "headline": "3 events attended",
+   "weak": "0 newsletter opens"
   },
   "post": {
    "field": "avg_days_to_resolve",
    "score": 3,
    "text": "Cases resolved in 2.5 days",
-   "headline": "Cases closed in 2.5 days"
+   "headline": "Cases closed in 2.5 days",
+   "weak": "0 CSQLs"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -284,7 +319,8 @@
    "field": "customer_sentiment",
    "score": 4,
    "text": "Sentiment neutral",
-   "headline": "Renewal in 72 days, sentiment neutral"
+   "headline": "Renewal in 72 days, sentiment neutral",
+   "weak": "10-K signal: firing"
   }
  },
  "Peloton": {
@@ -292,19 +328,22 @@
    "field": "attach_rate",
    "score": 3,
    "text": "Attach rate 59%, 21 account-team touches",
-   "headline": "Attach rate at 59%; 21 account-team touches"
+   "headline": "Attach rate at 59%; 21 account-team touches",
+   "weak": "win rate 3%"
   },
   "mkt": {
    "field": "advocate_champion",
    "score": 1,
    "text": "Named advocate",
-   "headline": "Named advocate in the account"
+   "headline": "Named advocate in the account",
+   "weak": "no published success story"
   },
   "post": {
    "field": "sla_breaches",
    "score": 1,
    "text": "0 SLA breaches",
-   "headline": "Zero SLA breaches"
+   "headline": "Zero SLA breaches",
+   "weak": "0 CSQLs"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -316,7 +355,8 @@
    "field": "tenk_signal",
    "score": 1,
    "text": "10-K signal: growth",
-   "headline": "Renewal in 86 days, 10-K signal growth"
+   "headline": "Renewal in 86 days, 10-K signal growth",
+   "weak": "sentiment neutral"
   }
  },
  "Patagonia": {
@@ -324,19 +364,22 @@
    "field": "pct_opps_closed_won",
    "score": 1,
    "text": "Win rate 72%",
-   "headline": "Win rate hits 72%"
+   "headline": "Win rate hits 72%",
+   "weak": "NRR 110%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 1,
    "text": "9 events attended, named advocate",
-   "headline": "9 events attended show real engagement; named advocate"
+   "headline": "9 events attended show real engagement; named advocate",
+   "weak": "webinar NPS 54"
   },
   "post": {
    "field": "csqls_generated",
    "score": 1,
    "text": "10 CSQLs, adoption goals met",
-   "headline": "10 CSQLs from the success team; adoption goals met"
+   "headline": "10 CSQLs from the success team; adoption goals met",
+   "weak": "no premium success plan"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -348,7 +391,8 @@
    "field": "years_as_customer",
    "score": 1,
    "text": "20 years as a customer, 10-K signal: growth",
-   "headline": "20-year customer; 10-K signal growth"
+   "headline": "20-year customer; 10-K signal growth",
+   "weak": "stakeholder alignment weak"
   }
  },
  "Starbucks": {
@@ -356,19 +400,22 @@
    "field": "pct_opps_closed_won",
    "score": 1,
    "text": "Win rate 66%",
-   "headline": "Win rate hits 66%"
+   "headline": "Win rate hits 66%",
+   "weak": "NRR 90%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 2,
    "text": "6 events attended",
-   "headline": "6 events attended show real engagement"
+   "headline": "6 events attended show real engagement",
+   "weak": "0 newsletter opens"
   },
   "post": {
    "field": "csqls_generated",
    "score": 3,
    "text": "6 CSQLs",
-   "headline": "6 CSQLs from the success team"
+   "headline": "6 CSQLs from the success team",
+   "weak": "CSM pulse red"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -380,7 +427,8 @@
    "field": "customer_sentiment",
    "score": 4,
    "text": "Sentiment neutral",
-   "headline": "Sentiment neutral"
+   "headline": "Sentiment neutral",
+   "weak": "stakeholder alignment none"
   }
  },
  "Netflix": {
@@ -388,19 +436,22 @@
    "field": "attach_rate",
    "score": 1,
    "text": "Attach rate 95%, 42 account-team touches",
-   "headline": "Attach rate at 95%; 42 account-team touches"
+   "headline": "Attach rate at 95%; 42 account-team touches",
+   "weak": "NRR 95%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 1,
    "text": "8 events attended",
-   "headline": "8 events attended show real engagement"
+   "headline": "8 events attended show real engagement",
+   "weak": "webinar NPS -56"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, 10 CSQLs",
-   "headline": "Premium success plan in place; 10 CSQLs"
+   "headline": "Premium success plan in place; 10 CSQLs",
+   "weak": "CSQL win rate 19%"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -412,7 +463,8 @@
    "field": "tenk_signal",
    "score": 1,
    "text": "10-K signal: growth, sentiment positive",
-   "headline": "10-K signal growth; sentiment strong"
+   "headline": "10-K signal growth; sentiment strong",
+   "weak": "0.5 years as a customer"
   }
  },
  "Airbnb": {
@@ -420,19 +472,22 @@
    "field": "nrr",
    "score": 1,
    "text": "NRR 130%, win rate 75%",
-   "headline": "Spend up 30%; win rate hits 75%"
+   "headline": "Spend up 30%; win rate hits 75%",
+   "weak": "10 account-team touches"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 1,
    "text": "8 events attended, 14 newsletter opens",
-   "headline": "8 events attended show real engagement; 14 newsletter opens"
+   "headline": "8 events attended show real engagement; 14 newsletter opens",
+   "weak": "webinar NPS 30"
   },
   "post": {
    "field": "csql_win_rate",
    "score": 1,
    "text": "CSQL win rate 67%, adoption goals met",
-   "headline": "CSQL win rate hits 67%; adoption goals met"
+   "headline": "CSQL win rate hits 67%; adoption goals met",
+   "weak": "no premium success plan"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -444,7 +499,8 @@
    "field": "key_stakeholder_alignment",
    "score": 1,
    "text": "Stakeholder alignment strong, sentiment positive",
-   "headline": "Stakeholder alignment strong; sentiment strong"
+   "headline": "Stakeholder alignment strong; sentiment strong",
+   "weak": "10-K signal: flat"
   }
  },
  "Slack": {
@@ -452,19 +508,22 @@
    "field": "pct_opps_closed_won",
    "score": 1,
    "text": "Win rate 64%",
-   "headline": "Win rate hits 64%"
+   "headline": "Win rate hits 64%",
+   "weak": "5 account-team touches"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 5,
    "text": "3 newsletter opens",
-   "headline": "3 newsletter opens"
+   "headline": "3 newsletter opens",
+   "weak": "1 events attended"
   },
   "post": {
    "field": "csqls_generated",
    "score": 6,
    "text": "2 CSQLs, cases resolved in 8.4 days",
-   "headline": "2 CSQLs from the success team; cases closed in 8.4 days"
+   "headline": "2 CSQLs from the success team; cases closed in 8.4 days",
+   "weak": "CSQL win rate 0%"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -476,7 +535,8 @@
    "field": "key_stakeholder_alignment",
    "score": 3,
    "text": "Stakeholder alignment partial",
-   "headline": "Stakeholder alignment partial"
+   "headline": "Stakeholder alignment partial",
+   "weak": "10-K signal: firing"
   }
  },
  "Shopify": {
@@ -484,19 +544,22 @@
    "field": "account_team_activity_count",
    "score": 1,
    "text": "48 account-team touches",
-   "headline": "48 account-team touches keep deals moving"
+   "headline": "48 account-team touches keep deals moving",
+   "weak": "attach rate 23%"
   },
   "mkt": {
    "field": "webinar_nps",
    "score": 1,
    "text": "Webinar NPS 95, published success story",
-   "headline": "Webinar NPS hits 95; public success story"
+   "headline": "Webinar NPS hits 95; public success story",
+   "weak": "no named advocate"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, adoption goals met",
-   "headline": "Premium success plan in place; adoption goals met"
+   "headline": "Premium success plan in place; adoption goals met",
+   "weak": "CSM pulse amber"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -508,7 +571,8 @@
    "field": "tenk_signal",
    "score": 2,
    "text": "10-K signal: hiring",
-   "headline": "10-K signal hiring"
+   "headline": "10-K signal hiring",
+   "weak": "stakeholder alignment none"
   }
  },
  "Salesforce": {
@@ -516,19 +580,22 @@
    "field": "nrr",
    "score": 5,
    "text": "NRR 100%",
-   "headline": "NRR holds at 100%"
+   "headline": "NRR holds at 100%",
+   "weak": "attach rate 0%"
   },
   "mkt": {
    "field": "webinar_nps",
    "score": 5,
    "text": "Webinar NPS 3",
-   "headline": "Webinar NPS at 3"
+   "headline": "Webinar NPS at 3",
+   "weak": "0 events attended"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan",
-   "headline": "Premium success plan in place"
+   "headline": "Premium success plan in place",
+   "weak": "CSM pulse red"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -540,7 +607,8 @@
    "field": "key_stakeholder_alignment",
    "score": 6,
    "text": "Stakeholder alignment weak",
-   "headline": "Stakeholder alignment weak"
+   "headline": "Stakeholder alignment weak",
+   "weak": "0.5 years as a customer"
   }
  },
  "Zoom": {
@@ -548,19 +616,22 @@
    "field": "nrr",
    "score": 2,
    "text": "NRR 123%",
-   "headline": "Spend up 23%"
+   "headline": "Spend up 23%",
+   "weak": "attach rate 5%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 2,
    "text": "7 events attended",
-   "headline": "7 events attended show real engagement"
+   "headline": "7 events attended show real engagement",
+   "weak": "webinar NPS -54"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, 10 CSQLs",
-   "headline": "Premium success plan in place; 10 CSQLs"
+   "headline": "Premium success plan in place; 10 CSQLs",
+   "weak": "adoption goals not met"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -572,7 +643,8 @@
    "field": "customer_sentiment",
    "score": 1,
    "text": "Sentiment positive",
-   "headline": "Sentiment strong"
+   "headline": "Sentiment strong",
+   "weak": "stakeholder alignment none"
   }
  },
  "Delta": {
@@ -580,19 +652,22 @@
    "field": "nrr",
    "score": 1,
    "text": "NRR 138%, attach rate 93%",
-   "headline": "Spend up 38%; attach rate at 93%"
+   "headline": "Spend up 38%; attach rate at 93%",
+   "weak": "win rate 33%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 1,
    "text": "14 newsletter opens, named advocate",
-   "headline": "14 newsletter opens keep the brand top of mind"
+   "headline": "14 newsletter opens keep the brand top of mind",
+   "weak": "4 events attended"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, 12 CSQLs",
-   "headline": "Premium success plan in place; 12 CSQLs"
+   "headline": "Premium success plan in place; 12 CSQLs",
+   "weak": "CSM pulse red"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -604,7 +679,8 @@
    "field": "years_as_customer",
    "score": 1,
    "text": "20 years as a customer, 10-K signal: growth",
-   "headline": "Renewal in 74 days, 20-year customer"
+   "headline": "Renewal in 74 days, 20-year customer",
+   "weak": "stakeholder alignment weak"
   }
  },
  "Lego": {
@@ -612,19 +688,22 @@
    "field": "account_team_activity_count",
    "score": 3,
    "text": "24 account-team touches",
-   "headline": "24 account-team touches keep deals moving"
+   "headline": "24 account-team touches keep deals moving",
+   "weak": "attach rate 0%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 5,
    "text": "3 newsletter opens",
-   "headline": "3 newsletter opens"
+   "headline": "3 newsletter opens",
+   "weak": "webinar NPS -27"
   },
   "post": {
    "field": "csm_pulse_rag",
    "score": 1,
    "text": "CSM pulse green",
-   "headline": "CSM pulse green"
+   "headline": "CSM pulse green",
+   "weak": "0 CSQLs"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -636,7 +715,8 @@
    "field": "customer_sentiment",
    "score": 4,
    "text": "Sentiment neutral",
-   "headline": "Sentiment neutral"
+   "headline": "Sentiment neutral",
+   "weak": "stakeholder alignment none"
   }
  },
  "Yeti": {
@@ -644,19 +724,22 @@
    "field": "nrr",
    "score": 1,
    "text": "NRR 141%, 43 account-team touches",
-   "headline": "Spend up 41%; 43 account-team touches"
+   "headline": "Spend up 41%; 43 account-team touches",
+   "weak": "attach rate 11%"
   },
   "mkt": {
    "field": "advocate_champion",
    "score": 1,
    "text": "Named advocate",
-   "headline": "Named advocate in the account"
+   "headline": "Named advocate in the account",
+   "weak": "no published success story"
   },
   "post": {
    "field": "adoption_achieved",
    "score": 1,
    "text": "Adoption goals met, CSM pulse green",
-   "headline": "Adoption goals met; CSM pulse green"
+   "headline": "Adoption goals met; CSM pulse green",
+   "weak": "CSQL win rate 2%"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -668,7 +751,8 @@
    "field": "key_stakeholder_alignment",
    "score": 1,
    "text": "Stakeholder alignment strong, 20 years as a customer",
-   "headline": "Stakeholder alignment strong; 20 years in"
+   "headline": "Stakeholder alignment strong; 20 years in",
+   "weak": "sentiment neutral"
   }
  },
  "Sonos": {
@@ -676,19 +760,22 @@
    "field": "nrr",
    "score": 4,
    "text": "NRR 106%",
-   "headline": "Spend up 6%"
+   "headline": "Spend up 6%",
+   "weak": "attach rate 4%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 2,
    "text": "7 events attended",
-   "headline": "7 events attended show real engagement"
+   "headline": "7 events attended show real engagement",
+   "weak": "webinar NPS -52"
   },
   "post": {
    "field": "avg_days_to_resolve",
    "score": 6,
    "text": "Cases resolved in 7 days",
-   "headline": "Cases closed in 7 days"
+   "headline": "Cases closed in 7 days",
+   "weak": "CSQL win rate 4%"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -700,7 +787,8 @@
    "field": "customer_sentiment",
    "score": 1,
    "text": "Sentiment positive",
-   "headline": "Sentiment strong"
+   "headline": "Sentiment strong",
+   "weak": "stakeholder alignment none"
   }
  },
  "Red Bull": {
@@ -708,19 +796,22 @@
    "field": "nrr",
    "score": 3,
    "text": "NRR 120%",
-   "headline": "Spend up 20%"
+   "headline": "Spend up 20%",
+   "weak": "attach rate 0%"
   },
   "mkt": {
    "field": "webinar_nps",
    "score": 1,
    "text": "Webinar NPS 70, published success story",
-   "headline": "Webinar NPS hits 70; public success story"
+   "headline": "Webinar NPS hits 70; public success story",
+   "weak": "0 newsletter opens"
   },
   "post": {
    "field": "adoption_achieved",
    "score": 1,
    "text": "Adoption goals met, value realized",
-   "headline": "Adoption goals met; value realized"
+   "headline": "Adoption goals met; value realized",
+   "weak": "no premium success plan"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -732,7 +823,8 @@
    "field": "key_stakeholder_alignment",
    "score": 3,
    "text": "Stakeholder alignment partial",
-   "headline": "Stakeholder alignment partial"
+   "headline": "Stakeholder alignment partial",
+   "weak": "10-K signal: firing"
   }
  },
  "Disney": {
@@ -740,19 +832,22 @@
    "field": "attach_rate",
    "score": 1,
    "text": "Attach rate 95%",
-   "headline": "Attach rate at 95%"
+   "headline": "Attach rate at 95%",
+   "weak": "win rate 45%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 1,
    "text": "14 newsletter opens, named advocate",
-   "headline": "14 newsletter opens keep the brand top of mind"
+   "headline": "14 newsletter opens keep the brand top of mind",
+   "weak": "webinar NPS -27"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, 11 CSQLs",
-   "headline": "Premium success plan in place; 11 CSQLs"
+   "headline": "Premium success plan in place; 11 CSQLs",
+   "weak": "3 SLA breaches"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -764,7 +859,8 @@
    "field": "years_as_customer",
    "score": 1,
    "text": "20 years as a customer, sentiment positive",
-   "headline": "20-year customer; sentiment strong"
+   "headline": "20-year customer; sentiment strong",
+   "weak": "stakeholder alignment partial"
   }
  },
  "Tesla": {
@@ -772,19 +868,22 @@
    "field": "pct_opps_closed_won",
    "score": 1,
    "text": "Win rate 64%",
-   "headline": "Win rate hits 64%"
+   "headline": "Win rate hits 64%",
+   "weak": "NRR 84%"
   },
   "mkt": {
    "field": "webinar_nps",
    "score": 3,
    "text": "Webinar NPS 36",
-   "headline": "Webinar NPS at 36"
+   "headline": "Webinar NPS at 36",
+   "weak": "0 newsletter opens"
   },
   "post": {
    "field": "csm_pulse_rag",
    "score": 1,
    "text": "CSM pulse green, 0 SLA breaches",
-   "headline": "CSM pulse green; zero SLA breaches"
+   "headline": "CSM pulse green; zero SLA breaches",
+   "weak": "0 CSQLs"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -796,7 +895,8 @@
    "field": "years_as_customer",
    "score": 4,
    "text": "9.6 years as a customer, sentiment neutral",
-   "headline": "9.6-year customer; sentiment neutral"
+   "headline": "9.6-year customer; sentiment neutral",
+   "weak": "stakeholder alignment none"
   }
  },
  "Adidas": {
@@ -804,19 +904,22 @@
    "field": "account_team_activity_count",
    "score": 2,
    "text": "35 account-team touches",
-   "headline": "35 account-team touches keep deals moving"
+   "headline": "35 account-team touches keep deals moving",
+   "weak": "attach rate 43%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 1,
    "text": "13 newsletter opens, published success story",
-   "headline": "13 newsletter opens keep the brand top of mind"
+   "headline": "13 newsletter opens keep the brand top of mind",
+   "weak": "no named advocate"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, adoption goals met",
-   "headline": "Premium success plan in place; adoption goals met"
+   "headline": "Premium success plan in place; adoption goals met",
+   "weak": "0 CSQLs"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -828,7 +931,8 @@
    "field": "years_as_customer",
    "score": 1,
    "text": "20 years as a customer",
-   "headline": "20-year customer"
+   "headline": "20-year customer",
+   "weak": "10-K signal: firing"
   }
  },
  "GoPro": {
@@ -842,13 +946,15 @@
    "field": "event_attendance_count",
    "score": 1,
    "text": "9 events attended, webinar NPS 92",
-   "headline": "9 events attended show real engagement; webinar NPS hits 92"
+   "headline": "9 events attended show real engagement; webinar NPS hits 92",
+   "weak": "no published success story"
   },
   "post": {
    "field": "csqls_generated",
    "score": 1,
    "text": "12 CSQLs, adoption goals met",
-   "headline": "12 CSQLs from the success team; adoption goals met"
+   "headline": "12 CSQLs from the success team; adoption goals met",
+   "weak": "no premium success plan"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -860,7 +966,8 @@
    "field": "years_as_customer",
    "score": 1,
    "text": "20 years as a customer",
-   "headline": "20-year customer"
+   "headline": "20-year customer",
+   "weak": "sentiment neutral"
   }
  },
  "Oatly": {
@@ -868,19 +975,22 @@
    "field": "nrr",
    "score": 3,
    "text": "NRR 112%",
-   "headline": "Spend up 12%"
+   "headline": "Spend up 12%",
+   "weak": "attach rate 1%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 1,
    "text": "14 newsletter opens",
-   "headline": "14 newsletter opens keep the brand top of mind"
+   "headline": "14 newsletter opens keep the brand top of mind",
+   "weak": "webinar NPS -51"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan",
-   "headline": "Premium success plan in place"
+   "headline": "Premium success plan in place",
+   "weak": "CSQL win rate 0%"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -892,7 +1002,8 @@
    "field": "tenk_signal",
    "score": 1,
    "text": "10-K signal: growth",
-   "headline": "10-K signal growth"
+   "headline": "10-K signal growth",
+   "weak": "stakeholder alignment none"
   }
  },
  "Allbirds": {
@@ -900,19 +1011,22 @@
    "field": "account_team_activity_count",
    "score": 1,
    "text": "44 account-team touches",
-   "headline": "44 account-team touches keep deals moving"
+   "headline": "44 account-team touches keep deals moving",
+   "weak": "attach rate 0%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 1,
    "text": "8 events attended, webinar NPS 95",
-   "headline": "8 events attended show real engagement; webinar NPS hits 95"
+   "headline": "8 events attended show real engagement; webinar NPS hits 95",
+   "weak": "no named advocate"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, CSQL win rate 61%",
-   "headline": "Premium success plan in place; CSQL win rate hits 61%"
+   "headline": "Premium success plan in place; CSQL win rate hits 61%",
+   "weak": "cases resolved in 12.4 days"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -924,7 +1038,8 @@
    "field": "customer_sentiment",
    "score": 1,
    "text": "Sentiment positive",
-   "headline": "Sentiment strong"
+   "headline": "Sentiment strong",
+   "weak": "2.5 years as a customer"
   }
  },
  "Warby Parker": {
@@ -932,19 +1047,22 @@
    "field": "nrr",
    "score": 5,
    "text": "NRR 105%, attach rate 34%",
-   "headline": "Spend up 5%; attach rate at 34%"
+   "headline": "Spend up 5%; attach rate at 34%",
+   "weak": "0 account-team touches"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 6,
    "text": "2 events attended",
-   "headline": "2 events attended"
+   "headline": "2 events attended",
+   "weak": "0 newsletter opens"
   },
   "post": {
    "field": "csql_win_rate",
    "score": 6,
    "text": "CSQL win rate 22%, 4 SLA breaches",
-   "headline": "CSQL win rate at 22%; 4 SLA breaches"
+   "headline": "CSQL win rate at 22%; 4 SLA breaches",
+   "weak": "CSM pulse red"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -956,7 +1074,8 @@
    "field": "years_as_customer",
    "score": 2,
    "text": "15.5 years as a customer",
-   "headline": "15.5-year customer"
+   "headline": "15.5-year customer",
+   "weak": "stakeholder alignment none"
   }
  },
  "Dropbox": {
@@ -964,19 +1083,22 @@
    "field": "nrr",
    "score": 3,
    "text": "NRR 120%, 25 account-team touches",
-   "headline": "Spend up 20%; 25 account-team touches"
+   "headline": "Spend up 20%; 25 account-team touches",
+   "weak": "win rate 23%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 2,
    "text": "11 newsletter opens",
-   "headline": "11 newsletter opens keep the brand top of mind"
+   "headline": "11 newsletter opens keep the brand top of mind",
+   "weak": "no named advocate"
   },
   "post": {
    "field": "adoption_achieved",
    "score": 1,
    "text": "Adoption goals met, 0 SLA breaches",
-   "headline": "Adoption goals met; zero SLA breaches"
+   "headline": "Adoption goals met; zero SLA breaches",
+   "weak": "CSM pulse red"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -988,7 +1110,8 @@
    "field": "tenk_signal",
    "score": 1,
    "text": "10-K signal: growth",
-   "headline": "10-K signal growth"
+   "headline": "10-K signal growth",
+   "weak": "sentiment negative"
   }
  },
  "Atlassian": {
@@ -996,7 +1119,8 @@
    "field": "nrr",
    "score": 1,
    "text": "NRR 137%, attach rate 90%",
-   "headline": "Spend up 37%; attach rate at 90%"
+   "headline": "Spend up 37%; attach rate at 90%",
+   "weak": "21 account-team touches"
   },
   "mkt": {
    "field": "event_attendance_count",
@@ -1008,7 +1132,8 @@
    "field": "csqls_generated",
    "score": 1,
    "text": "14 CSQLs, adoption goals met",
-   "headline": "14 CSQLs from the success team; adoption goals met"
+   "headline": "14 CSQLs from the success team; adoption goals met",
+   "weak": "CSQL win rate 4%"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -1020,7 +1145,8 @@
    "field": "years_as_customer",
    "score": 1,
    "text": "20 years as a customer, 10-K signal: growth",
-   "headline": "20-year customer; 10-K signal growth"
+   "headline": "20-year customer; 10-K signal growth",
+   "weak": "sentiment neutral"
   }
  },
  "HubSpot": {
@@ -1028,19 +1154,22 @@
    "field": "nrr",
    "score": 1,
    "text": "NRR 134%, 44 account-team touches",
-   "headline": "Spend up 34%; 44 account-team touches"
+   "headline": "Spend up 34%; 44 account-team touches",
+   "weak": "attach rate 7%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 1,
    "text": "13 newsletter opens",
-   "headline": "13 newsletter opens keep the brand top of mind"
+   "headline": "13 newsletter opens keep the brand top of mind",
+   "weak": "0 events attended"
   },
   "post": {
    "field": "csqls_generated",
    "score": 2,
    "text": "9 CSQLs",
-   "headline": "9 CSQLs from the success team"
+   "headline": "9 CSQLs from the success team",
+   "weak": "CSM pulse red"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -1052,7 +1181,8 @@
    "field": "years_as_customer",
    "score": 1,
    "text": "20 years as a customer",
-   "headline": "20-year customer"
+   "headline": "20-year customer",
+   "weak": "stakeholder alignment none"
   }
  },
  "Figma": {
@@ -1060,19 +1190,22 @@
    "field": "account_team_activity_count",
    "score": 2,
    "text": "38 account-team touches",
-   "headline": "38 account-team touches keep deals moving"
+   "headline": "38 account-team touches keep deals moving",
+   "weak": "win rate 12%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 1,
    "text": "9 events attended, named advocate",
-   "headline": "9 events attended show real engagement; named advocate"
+   "headline": "9 events attended show real engagement; named advocate",
+   "weak": "7 newsletter opens"
   },
   "post": {
    "field": "csql_win_rate",
    "score": 1,
    "text": "CSQL win rate 79%, adoption goals met",
-   "headline": "CSQL win rate hits 79%; adoption goals met"
+   "headline": "CSQL win rate hits 79%; adoption goals met",
+   "weak": "no premium success plan"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -1084,7 +1217,8 @@
    "field": "key_stakeholder_alignment",
    "score": 1,
    "text": "Stakeholder alignment strong",
-   "headline": "Renewal in 44 days, stakeholders aligned"
+   "headline": "Renewal in 44 days, stakeholders aligned",
+   "weak": "10-K signal: firing"
   }
  },
  "Stripe": {
@@ -1092,19 +1226,22 @@
    "field": "nrr",
    "score": 1,
    "text": "NRR 136%, win rate 72%",
-   "headline": "Spend up 36%; win rate hits 72%"
+   "headline": "Spend up 36%; win rate hits 72%",
+   "weak": "attach rate 75%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 1,
    "text": "14 newsletter opens, named advocate",
-   "headline": "14 newsletter opens keep the brand top of mind"
+   "headline": "14 newsletter opens keep the brand top of mind",
+   "weak": "webinar NPS -44"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, 10 CSQLs",
-   "headline": "Premium success plan in place; 10 CSQLs"
+   "headline": "Premium success plan in place; 10 CSQLs",
+   "weak": "CSQL win rate 33%"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -1124,19 +1261,22 @@
    "field": "attach_rate",
    "score": 1,
    "text": "Attach rate 92%",
-   "headline": "Attach rate at 92%"
+   "headline": "Attach rate at 92%",
+   "weak": "win rate 8%"
   },
   "mkt": {
    "field": "webinar_nps",
    "score": 1,
    "text": "Webinar NPS 75",
-   "headline": "Webinar NPS hits 75"
+   "headline": "Webinar NPS hits 75",
+   "weak": "0 newsletter opens"
   },
   "post": {
    "field": "adoption_achieved",
    "score": 1,
    "text": "Adoption goals met",
-   "headline": "Adoption goals met"
+   "headline": "Adoption goals met",
+   "weak": "CSM pulse red"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -1148,7 +1288,8 @@
    "field": "years_as_customer",
    "score": 3,
    "text": "12.8 years as a customer",
-   "headline": "12.8-year customer"
+   "headline": "12.8-year customer",
+   "weak": "stakeholder alignment none"
   }
  },
  "Canva": {
@@ -1156,19 +1297,22 @@
    "field": "pct_opps_closed_won",
    "score": 1,
    "text": "Win rate 73%, 50 account-team touches",
-   "headline": "Win rate hits 73%; 50 account-team touches"
+   "headline": "Win rate hits 73%; 50 account-team touches",
+   "weak": "NRR 122%"
   },
   "mkt": {
    "field": "event_attendance_count",
    "score": 1,
    "text": "9 events attended, webinar NPS 80",
-   "headline": "9 events attended show real engagement; webinar NPS hits 80"
+   "headline": "9 events attended show real engagement; webinar NPS hits 80",
+   "weak": "no published success story"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, 11 CSQLs",
-   "headline": "Premium success plan in place; 11 CSQLs"
+   "headline": "Premium success plan in place; 11 CSQLs",
+   "weak": "value not yet realized"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -1180,7 +1324,8 @@
    "field": "key_stakeholder_alignment",
    "score": 1,
    "text": "Stakeholder alignment strong",
-   "headline": "Renewal in 30 days, stakeholders aligned"
+   "headline": "Renewal in 30 days, stakeholders aligned",
+   "weak": "10-K signal: flat"
   }
  },
  "Mailchimp": {
@@ -1188,19 +1333,22 @@
    "field": "attach_rate",
    "score": 3,
    "text": "Attach rate 56%",
-   "headline": "Attach rate at 56%"
+   "headline": "Attach rate at 56%",
+   "weak": "win rate 18%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 5,
    "text": "3 newsletter opens",
-   "headline": "3 newsletter opens"
+   "headline": "3 newsletter opens",
+   "weak": "0 events attended"
   },
   "post": {
    "field": "adoption_achieved",
    "score": 1,
    "text": "Adoption goals met",
-   "headline": "Adoption goals met"
+   "headline": "Adoption goals met",
+   "weak": "CSQL win rate 6%"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -1212,7 +1360,8 @@
    "field": "years_as_customer",
    "score": 7,
    "text": "1.7 years as a customer",
-   "headline": "1.7-year customer"
+   "headline": "1.7-year customer",
+   "weak": "stakeholder alignment none"
   }
  },
  "Glossier": {
@@ -1220,19 +1369,22 @@
    "field": "nrr",
    "score": 1,
    "text": "NRR 136%",
-   "headline": "Spend up 36%"
+   "headline": "Spend up 36%",
+   "weak": "attach rate 42%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 3,
    "text": "7 newsletter opens",
-   "headline": "7 newsletter opens"
+   "headline": "7 newsletter opens",
+   "weak": "no named advocate"
   },
   "post": {
    "field": "premium_success_plan",
    "score": 1,
    "text": "Premium success plan, CSQL win rate 69%",
-   "headline": "Premium success plan in place; CSQL win rate hits 69%"
+   "headline": "Premium success plan in place; CSQL win rate hits 69%",
+   "weak": "cases resolved in 5.2 days"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -1244,7 +1396,8 @@
    "field": "years_as_customer",
    "score": 1,
    "text": "20 years as a customer, 10-K signal: growth",
-   "headline": "20-year customer; 10-K signal growth"
+   "headline": "20-year customer; 10-K signal growth",
+   "weak": "stakeholder alignment none"
   }
  },
  "Lululemon": {
@@ -1252,19 +1405,22 @@
    "field": "pct_opps_closed_won",
    "score": 1,
    "text": "Win rate 70%, 40 account-team touches",
-   "headline": "Win rate hits 70%; 40 account-team touches"
+   "headline": "Win rate hits 70%; 40 account-team touches",
+   "weak": "NRR 109%"
   },
   "mkt": {
    "field": "newsletter_opens",
    "score": 1,
    "text": "14 newsletter opens, named advocate",
-   "headline": "14 newsletter opens keep the brand top of mind"
+   "headline": "14 newsletter opens keep the brand top of mind",
+   "weak": "webinar NPS 47"
   },
   "post": {
    "field": "csqls_generated",
    "score": 1,
    "text": "13 CSQLs, CSQL win rate 70%",
-   "headline": "13 CSQLs from the success team; CSQL win rate hits 70%"
+   "headline": "13 CSQLs from the success team; CSQL win rate hits 70%",
+   "weak": "no premium success plan"
   },
   "prod": {
    "field": "feature_requests_count",
@@ -1276,7 +1432,8 @@
    "field": "years_as_customer",
    "score": 1,
    "text": "20 years as a customer, sentiment positive",
-   "headline": "20-year customer; sentiment strong"
+   "headline": "20-year customer; sentiment strong",
+   "weak": "stakeholder alignment partial"
   }
  }
 }
