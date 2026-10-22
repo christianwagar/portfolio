@@ -470,22 +470,22 @@ function halfLog(v: number, lo: number, mid: number, hi: number, log: boolean): 
   return hi === mid ? 0.5 : 0.5 + 0.5 * ((f(v) - f(mid)) / (f(hi) - f(mid)));
 }
 
-export function buildQuadrant(accounts: Account[]) {
+export function buildQuadrant(accounts: Account[], size: { width: number; height: number; left?: number; bottom?: number } = { width: 720, height: 500 }) {
   const { rows, medArr, medGrowth } = quadrantAccounts(accounts);
-  const width = 720, height = 600;
-  const plot = { x: 64, y: 20, w: width - 64 - 16, h: height - 20 - 56 };
+  const { width, height } = size, L = size.left ?? 70, Bm = size.bottom ?? 58;
+  const plot = { x: L, y: 12, w: width - L - 12, h: height - 12 - Bm };
   const inset = 18;
   const arrs = rows.map((r) => r.arr), gs = rows.map((r) => r.growth);
   const aMin = Math.min(...arrs), aMax = Math.max(...arrs);
   const gMin = Math.min(...gs), gMax = Math.max(...gs);
   const xs = (v: number) => plot.x + inset + halfLog(v, aMin, medArr, aMax, true) * (plot.w - 2 * inset);
   // golf: lowest (best) growth at the top
-  const yin = 34; // room for corner quadrant labels
+  const yin = 30; // room for corner quadrant labels
   const ys = (v: number) => plot.y + yin + halfLog(v, gMin, medGrowth, gMax, false) * (plot.h - 2 * yin);
   const midX = plot.x + plot.w / 2, midY = plot.y + plot.h / 2;
   const pts = rows.map((r) => ({ r, cx: xs(r.arr), cy: ys(r.growth) }));
   // collision nudge: keep dots 14px apart, never across a median line or out of the plot
-  const minD = 14;
+  const minD = width < 500 ? 15 : 19;
   for (let it = 0; it < 80; it++) {
     let moved = false;
     for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
@@ -580,14 +580,33 @@ export function accountPlan(account: Account, all: Account[]): AccountPlan {
     : VERDICT[account.cluster];
 
   const why: string[] = [];
-  const cap = (t: string) => t[0].toUpperCase() + t.slice(1);
+  const lc = (t: string) => t[0].toLowerCase() + t.slice(1);
+  const STRONG_SO: Record<ScoreKey, string> = {
+    gtm: "the deal motion is already moving",
+    mkt: "they're engaged, a warm opening",
+    post: "they're getting value from what they own",
+    prod: "they want more from the product",
+    dd: "the relationships are in place",
+  };
+  const GAP_SO: Record<ScoreKey, string> = {
+    gtm: "no clear next deal yet",
+    mkt: "they're not paying attention to us",
+    post: "prove value before pitching more",
+    prod: "little signal on what they need next",
+    dd: "the buying group is thin",
+  };
+  const clusterSo: Record<Cluster, string> = { P1: " for expansion", P2: " for a first add-on", P3: " to protect the renewal", P4: " worth keeping warm" };
   const best = (sig[strongest.key]?.headline ?? "").split(";")[0].trim();
-  why.push(`Strength: ${BUCKET_PLAIN[strongest.key]}${best ? ` (${best[0].toLowerCase() + best.slice(1)})` : ""}`);
+  const STRONG_W: Record<ScoreKey, string> = { gtm: "deals still moving, build the fix on it", mkt: "still engaged, use it to find the problem", post: "still getting value, build the fix on it", prod: "they want more, build the fix on it", dd: "relationships hold, build the fix on it" };
+  const strongSo = watch ? STRONG_W[strongest.key] : `${STRONG_SO[strongest.key]}${strongest.key === "mkt" ? clusterSo[account.cluster] : ""}`;
+  why.push(`Strength: ${BUCKET_PLAIN[strongest.key]}.${best ? ` ${best[0].toUpperCase() + best.slice(1)};` : ""} ${best ? strongSo : strongSo[0].toUpperCase() + strongSo.slice(1)}.`);
   const weakTxt = sig[weakest.key]?.weak;
-  why.push(`Gap: ${BUCKET_PLAIN[weakest.key]}${weakTxt ? ` (${weakTxt})` : ""}`);
-  if (account.nrr < 100) why.push(`Spend shrinking: ${formatNrr(account.nrr)} NRR`);
-  else if (account.nrr >= 110) why.push(`Spend growing: ${formatNrr(account.nrr)} NRR`);
-  void cap;
+  const GAP_W: Record<ScoreKey, string> = { gtm: "no next deal, fix this first", mkt: "they've tuned out, fix this first", post: "value not landing, fix this first", prod: "no signal on needs, fix this first", dd: "thin buying group, fix this first" };
+  const gapSo = watch ? GAP_W[weakest.key] : GAP_SO[weakest.key];
+  why.push(`Gap: ${BUCKET_PLAIN[weakest.key]}.${weakTxt ? ` ${weakTxt[0].toUpperCase() + weakTxt.slice(1)};` : ""} ${weakTxt ? gapSo : gapSo[0].toUpperCase() + gapSo.slice(1)}.`);
+  if (account.nrr < 100) why.push(`Spend shrinking: ${formatNrr(account.nrr)} NRR; they're buying less each year${watch ? ", so find out why now" : ""}.`);
+  else if (account.nrr >= 110) why.push(`Spend growing: ${formatNrr(account.nrr)} NRR; they already buy more each year.`);
+  void lc;
 
   const r = Math.max(1, Math.round(account.renewal));
   // three checkpoints before renewal; pulled in proportionally when renewal is close
