@@ -1,0 +1,1282 @@
+{
+ "Apple": {
+  "gtm": {
+   "field": "nrr",
+   "score": 1,
+   "text": "NRR 130%, attach rate 85%",
+   "headline": "Spend up 30%; attach rate at 85%"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 1,
+   "text": "9 events attended, webinar NPS 95",
+   "headline": "9 events attended show real engagement; webinar NPS hits 95"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, 14 CSQLs",
+   "headline": "Premium success plan in place; 14 CSQLs"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 2,
+   "text": "13 feature requests",
+   "headline": "13 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 1,
+   "text": "Stakeholder alignment strong, sentiment positive",
+   "headline": "Stakeholder alignment strong; sentiment strong"
+  }
+ },
+ "Bose": {
+  "gtm": {
+   "field": "pct_opps_closed_won",
+   "score": 3,
+   "text": "Win rate 44%, 22 account-team touches",
+   "headline": "Win rate at 44%; 22 account-team touches"
+  },
+  "mkt": {
+   "field": "advocate_champion",
+   "score": 1,
+   "text": "Named advocate",
+   "headline": "Named advocate in the account"
+  },
+  "post": {
+   "field": "csql_win_rate",
+   "score": 1,
+   "text": "CSQL win rate 60%",
+   "headline": "CSQL win rate hits 60%"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 1,
+   "text": "16 feature requests",
+   "headline": "16 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "customer_sentiment",
+   "score": 1,
+   "text": "Sentiment positive",
+   "headline": "Sentiment strong"
+  }
+ },
+ "Coca-Cola": {
+  "gtm": {
+   "field": "nrr",
+   "score": 1,
+   "text": "NRR 131%, attach rate 86%",
+   "headline": "Spend up 31%; attach rate at 86%"
+  },
+  "mkt": {
+   "field": "webinar_nps",
+   "score": 1,
+   "text": "Webinar NPS 79, 12 newsletter opens",
+   "headline": "Webinar NPS hits 79; 12 newsletter opens"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, 13 CSQLs",
+   "headline": "Premium success plan in place; 13 CSQLs"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 2,
+   "text": "10 feature requests",
+   "headline": "10 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 1,
+   "text": "Stakeholder alignment strong, 10-K signal: growth",
+   "headline": "Renewal in 28 days, stakeholders aligned"
+  }
+ },
+ "PlayStation": {
+  "gtm": {
+   "field": "attach_rate",
+   "score": 4,
+   "text": "Attach rate 50%, win rate 38%",
+   "headline": "Attach rate at 50%; win rate at 38%"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 6,
+   "text": "2 events attended",
+   "headline": "2 events attended"
+  },
+  "post": {
+   "field": "csqls_generated",
+   "score": 3,
+   "text": "7 CSQLs",
+   "headline": "7 CSQLs from the success team"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 4,
+   "text": "5 feature requests",
+   "headline": "5 feature requests on file"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 7,
+   "text": "2.8 years as a customer",
+   "headline": "2.8-year customer"
+  }
+ },
+ "iPhone": {
+  "gtm": {
+   "field": "nrr",
+   "score": 3,
+   "text": "NRR 118%, 28 account-team touches",
+   "headline": "Spend up 18%; 28 account-team touches"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 1,
+   "text": "8 events attended, webinar NPS 82",
+   "headline": "8 events attended show real engagement; webinar NPS hits 82"
+  },
+  "post": {
+   "field": "csm_pulse_rag",
+   "score": 1,
+   "text": "CSM pulse green",
+   "headline": "CSM pulse green"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 2,
+   "text": "14 feature requests",
+   "headline": "14 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 1,
+   "text": "Stakeholder alignment strong, sentiment positive",
+   "headline": "Renewal in 26 days, stakeholders aligned"
+  }
+ },
+ "Nike": {
+  "gtm": {
+   "field": "pct_opps_closed_won",
+   "score": 1,
+   "text": "Win rate 62%",
+   "headline": "Win rate hits 62%"
+  },
+  "mkt": {
+   "field": "webinar_nps",
+   "score": 1,
+   "text": "Webinar NPS 95, 14 newsletter opens",
+   "headline": "Webinar NPS hits 95; 14 newsletter opens"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, CSM pulse green",
+   "headline": "Premium success plan in place; CSM pulse green"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 2,
+   "text": "11 feature requests",
+   "headline": "11 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 1,
+   "text": "Stakeholder alignment strong",
+   "headline": "Stakeholder alignment strong"
+  }
+ },
+ "Liquid Death": {
+  "gtm": {
+   "field": "pct_opps_closed_won",
+   "score": 4,
+   "text": "Win rate 36%",
+   "headline": "Win rate at 36%"
+  },
+  "mkt": {
+   "field": "webinar_nps",
+   "score": 2,
+   "text": "Webinar NPS 68",
+   "headline": "Webinar NPS at 68"
+  },
+  "post": {
+   "field": "csqls_generated",
+   "score": 4,
+   "text": "5 CSQLs, CSQL win rate 37%",
+   "headline": "5 CSQLs from the success team; CSQL win rate at 37%"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 3,
+   "text": "8 feature requests",
+   "headline": "8 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "tenk_signal",
+   "score": 2,
+   "text": "10-K signal: hiring",
+   "headline": "10-K signal hiring"
+  }
+ },
+ "Chewy": {
+  "gtm": {
+   "field": "account_team_activity_count",
+   "score": 1,
+   "text": "44 account-team touches",
+   "headline": "44 account-team touches keep deals moving"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 2,
+   "text": "10 newsletter opens",
+   "headline": "10 newsletter opens keep the brand top of mind"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, adoption goals met",
+   "headline": "Premium success plan in place; adoption goals met"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 4,
+   "text": "5 feature requests",
+   "headline": "5 feature requests on file"
+  },
+  "dd": {
+   "field": "tenk_signal",
+   "score": 1,
+   "text": "10-K signal: growth",
+   "headline": "10-K signal growth"
+  }
+ },
+ "Spotify": {
+  "gtm": {
+   "field": "account_team_activity_count",
+   "score": 5,
+   "text": "11 account-team touches",
+   "headline": "11 account-team touches"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 5,
+   "text": "3 events attended",
+   "headline": "3 events attended"
+  },
+  "post": {
+   "field": "avg_days_to_resolve",
+   "score": 3,
+   "text": "Cases resolved in 2.5 days",
+   "headline": "Cases closed in 2.5 days"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 8,
+   "text": "0 feature requests",
+   "headline": "No open feature requests"
+  },
+  "dd": {
+   "field": "customer_sentiment",
+   "score": 4,
+   "text": "Sentiment neutral",
+   "headline": "Renewal in 72 days, sentiment neutral"
+  }
+ },
+ "Peloton": {
+  "gtm": {
+   "field": "attach_rate",
+   "score": 3,
+   "text": "Attach rate 59%, 21 account-team touches",
+   "headline": "Attach rate at 59%; 21 account-team touches"
+  },
+  "mkt": {
+   "field": "advocate_champion",
+   "score": 1,
+   "text": "Named advocate",
+   "headline": "Named advocate in the account"
+  },
+  "post": {
+   "field": "sla_breaches",
+   "score": 1,
+   "text": "0 SLA breaches",
+   "headline": "Zero SLA breaches"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 7,
+   "text": "1 feature requests",
+   "headline": "1 feature request on file"
+  },
+  "dd": {
+   "field": "tenk_signal",
+   "score": 1,
+   "text": "10-K signal: growth",
+   "headline": "Renewal in 86 days, 10-K signal growth"
+  }
+ },
+ "Patagonia": {
+  "gtm": {
+   "field": "pct_opps_closed_won",
+   "score": 1,
+   "text": "Win rate 72%",
+   "headline": "Win rate hits 72%"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 1,
+   "text": "9 events attended, named advocate",
+   "headline": "9 events attended show real engagement; named advocate"
+  },
+  "post": {
+   "field": "csqls_generated",
+   "score": 1,
+   "text": "10 CSQLs, adoption goals met",
+   "headline": "10 CSQLs from the success team; adoption goals met"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 1,
+   "text": "19 feature requests",
+   "headline": "19 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 1,
+   "text": "20 years as a customer, 10-K signal: growth",
+   "headline": "20-year customer; 10-K signal growth"
+  }
+ },
+ "Starbucks": {
+  "gtm": {
+   "field": "pct_opps_closed_won",
+   "score": 1,
+   "text": "Win rate 66%",
+   "headline": "Win rate hits 66%"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 2,
+   "text": "6 events attended",
+   "headline": "6 events attended show real engagement"
+  },
+  "post": {
+   "field": "csqls_generated",
+   "score": 3,
+   "text": "6 CSQLs",
+   "headline": "6 CSQLs from the success team"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 4,
+   "text": "5 feature requests",
+   "headline": "5 feature requests on file"
+  },
+  "dd": {
+   "field": "customer_sentiment",
+   "score": 4,
+   "text": "Sentiment neutral",
+   "headline": "Sentiment neutral"
+  }
+ },
+ "Netflix": {
+  "gtm": {
+   "field": "attach_rate",
+   "score": 1,
+   "text": "Attach rate 95%, 42 account-team touches",
+   "headline": "Attach rate at 95%; 42 account-team touches"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 1,
+   "text": "8 events attended",
+   "headline": "8 events attended show real engagement"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, 10 CSQLs",
+   "headline": "Premium success plan in place; 10 CSQLs"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 8,
+   "text": "0 feature requests",
+   "headline": "No open feature requests"
+  },
+  "dd": {
+   "field": "tenk_signal",
+   "score": 1,
+   "text": "10-K signal: growth, sentiment positive",
+   "headline": "10-K signal growth; sentiment strong"
+  }
+ },
+ "Airbnb": {
+  "gtm": {
+   "field": "nrr",
+   "score": 1,
+   "text": "NRR 130%, win rate 75%",
+   "headline": "Spend up 30%; win rate hits 75%"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 1,
+   "text": "8 events attended, 14 newsletter opens",
+   "headline": "8 events attended show real engagement; 14 newsletter opens"
+  },
+  "post": {
+   "field": "csql_win_rate",
+   "score": 1,
+   "text": "CSQL win rate 67%, adoption goals met",
+   "headline": "CSQL win rate hits 67%; adoption goals met"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 1,
+   "text": "18 feature requests",
+   "headline": "18 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 1,
+   "text": "Stakeholder alignment strong, sentiment positive",
+   "headline": "Stakeholder alignment strong; sentiment strong"
+  }
+ },
+ "Slack": {
+  "gtm": {
+   "field": "pct_opps_closed_won",
+   "score": 1,
+   "text": "Win rate 64%",
+   "headline": "Win rate hits 64%"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 5,
+   "text": "3 newsletter opens",
+   "headline": "3 newsletter opens"
+  },
+  "post": {
+   "field": "csqls_generated",
+   "score": 6,
+   "text": "2 CSQLs, cases resolved in 8.4 days",
+   "headline": "2 CSQLs from the success team; cases closed in 8.4 days"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 5,
+   "text": "3 feature requests",
+   "headline": "3 feature requests on file"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 3,
+   "text": "Stakeholder alignment partial",
+   "headline": "Stakeholder alignment partial"
+  }
+ },
+ "Shopify": {
+  "gtm": {
+   "field": "account_team_activity_count",
+   "score": 1,
+   "text": "48 account-team touches",
+   "headline": "48 account-team touches keep deals moving"
+  },
+  "mkt": {
+   "field": "webinar_nps",
+   "score": 1,
+   "text": "Webinar NPS 95, published success story",
+   "headline": "Webinar NPS hits 95; public success story"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, adoption goals met",
+   "headline": "Premium success plan in place; adoption goals met"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 2,
+   "text": "14 feature requests",
+   "headline": "14 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "tenk_signal",
+   "score": 2,
+   "text": "10-K signal: hiring",
+   "headline": "10-K signal hiring"
+  }
+ },
+ "Salesforce": {
+  "gtm": {
+   "field": "nrr",
+   "score": 5,
+   "text": "NRR 100%",
+   "headline": "NRR holds at 100%"
+  },
+  "mkt": {
+   "field": "webinar_nps",
+   "score": 5,
+   "text": "Webinar NPS 3",
+   "headline": "Webinar NPS at 3"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan",
+   "headline": "Premium success plan in place"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 8,
+   "text": "0 feature requests",
+   "headline": "No open feature requests"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 6,
+   "text": "Stakeholder alignment weak",
+   "headline": "Stakeholder alignment weak"
+  }
+ },
+ "Zoom": {
+  "gtm": {
+   "field": "nrr",
+   "score": 2,
+   "text": "NRR 123%",
+   "headline": "Spend up 23%"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 2,
+   "text": "7 events attended",
+   "headline": "7 events attended show real engagement"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, 10 CSQLs",
+   "headline": "Premium success plan in place; 10 CSQLs"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 3,
+   "text": "9 feature requests",
+   "headline": "9 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "customer_sentiment",
+   "score": 1,
+   "text": "Sentiment positive",
+   "headline": "Sentiment strong"
+  }
+ },
+ "Delta": {
+  "gtm": {
+   "field": "nrr",
+   "score": 1,
+   "text": "NRR 138%, attach rate 93%",
+   "headline": "Spend up 38%; attach rate at 93%"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 1,
+   "text": "14 newsletter opens, named advocate",
+   "headline": "14 newsletter opens keep the brand top of mind"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, 12 CSQLs",
+   "headline": "Premium success plan in place; 12 CSQLs"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 2,
+   "text": "13 feature requests",
+   "headline": "13 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 1,
+   "text": "20 years as a customer, 10-K signal: growth",
+   "headline": "Renewal in 74 days, 20-year customer"
+  }
+ },
+ "Lego": {
+  "gtm": {
+   "field": "account_team_activity_count",
+   "score": 3,
+   "text": "24 account-team touches",
+   "headline": "24 account-team touches keep deals moving"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 5,
+   "text": "3 newsletter opens",
+   "headline": "3 newsletter opens"
+  },
+  "post": {
+   "field": "csm_pulse_rag",
+   "score": 1,
+   "text": "CSM pulse green",
+   "headline": "CSM pulse green"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 3,
+   "text": "7 feature requests",
+   "headline": "7 feature requests on file"
+  },
+  "dd": {
+   "field": "customer_sentiment",
+   "score": 4,
+   "text": "Sentiment neutral",
+   "headline": "Sentiment neutral"
+  }
+ },
+ "Yeti": {
+  "gtm": {
+   "field": "nrr",
+   "score": 1,
+   "text": "NRR 141%, 43 account-team touches",
+   "headline": "Spend up 41%; 43 account-team touches"
+  },
+  "mkt": {
+   "field": "advocate_champion",
+   "score": 1,
+   "text": "Named advocate",
+   "headline": "Named advocate in the account"
+  },
+  "post": {
+   "field": "adoption_achieved",
+   "score": 1,
+   "text": "Adoption goals met, CSM pulse green",
+   "headline": "Adoption goals met; CSM pulse green"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 8,
+   "text": "0 feature requests",
+   "headline": "No open feature requests"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 1,
+   "text": "Stakeholder alignment strong, 20 years as a customer",
+   "headline": "Stakeholder alignment strong; 20 years in"
+  }
+ },
+ "Sonos": {
+  "gtm": {
+   "field": "nrr",
+   "score": 4,
+   "text": "NRR 106%",
+   "headline": "Spend up 6%"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 2,
+   "text": "7 events attended",
+   "headline": "7 events attended show real engagement"
+  },
+  "post": {
+   "field": "avg_days_to_resolve",
+   "score": 6,
+   "text": "Cases resolved in 7 days",
+   "headline": "Cases closed in 7 days"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 8,
+   "text": "0 feature requests",
+   "headline": "No open feature requests"
+  },
+  "dd": {
+   "field": "customer_sentiment",
+   "score": 1,
+   "text": "Sentiment positive",
+   "headline": "Sentiment strong"
+  }
+ },
+ "Red Bull": {
+  "gtm": {
+   "field": "nrr",
+   "score": 3,
+   "text": "NRR 120%",
+   "headline": "Spend up 20%"
+  },
+  "mkt": {
+   "field": "webinar_nps",
+   "score": 1,
+   "text": "Webinar NPS 70, published success story",
+   "headline": "Webinar NPS hits 70; public success story"
+  },
+  "post": {
+   "field": "adoption_achieved",
+   "score": 1,
+   "text": "Adoption goals met, value realized",
+   "headline": "Adoption goals met; value realized"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 4,
+   "text": "6 feature requests",
+   "headline": "6 feature requests on file"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 3,
+   "text": "Stakeholder alignment partial",
+   "headline": "Stakeholder alignment partial"
+  }
+ },
+ "Disney": {
+  "gtm": {
+   "field": "attach_rate",
+   "score": 1,
+   "text": "Attach rate 95%",
+   "headline": "Attach rate at 95%"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 1,
+   "text": "14 newsletter opens, named advocate",
+   "headline": "14 newsletter opens keep the brand top of mind"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, 11 CSQLs",
+   "headline": "Premium success plan in place; 11 CSQLs"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 1,
+   "text": "19 feature requests",
+   "headline": "19 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 1,
+   "text": "20 years as a customer, sentiment positive",
+   "headline": "20-year customer; sentiment strong"
+  }
+ },
+ "Tesla": {
+  "gtm": {
+   "field": "pct_opps_closed_won",
+   "score": 1,
+   "text": "Win rate 64%",
+   "headline": "Win rate hits 64%"
+  },
+  "mkt": {
+   "field": "webinar_nps",
+   "score": 3,
+   "text": "Webinar NPS 36",
+   "headline": "Webinar NPS at 36"
+  },
+  "post": {
+   "field": "csm_pulse_rag",
+   "score": 1,
+   "text": "CSM pulse green, 0 SLA breaches",
+   "headline": "CSM pulse green; zero SLA breaches"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 5,
+   "text": "3 feature requests",
+   "headline": "3 feature requests on file"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 4,
+   "text": "9.6 years as a customer, sentiment neutral",
+   "headline": "9.6-year customer; sentiment neutral"
+  }
+ },
+ "Adidas": {
+  "gtm": {
+   "field": "account_team_activity_count",
+   "score": 2,
+   "text": "35 account-team touches",
+   "headline": "35 account-team touches keep deals moving"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 1,
+   "text": "13 newsletter opens, published success story",
+   "headline": "13 newsletter opens keep the brand top of mind"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, adoption goals met",
+   "headline": "Premium success plan in place; adoption goals met"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 6,
+   "text": "2 feature requests",
+   "headline": "2 feature requests on file"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 1,
+   "text": "20 years as a customer",
+   "headline": "20-year customer"
+  }
+ },
+ "GoPro": {
+  "gtm": {
+   "field": "nrr",
+   "score": 1,
+   "text": "NRR 134%, attach rate 80%",
+   "headline": "Spend up 34%; attach rate at 80%"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 1,
+   "text": "9 events attended, webinar NPS 92",
+   "headline": "9 events attended show real engagement; webinar NPS hits 92"
+  },
+  "post": {
+   "field": "csqls_generated",
+   "score": 1,
+   "text": "12 CSQLs, adoption goals met",
+   "headline": "12 CSQLs from the success team; adoption goals met"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 1,
+   "text": "15 feature requests",
+   "headline": "15 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 1,
+   "text": "20 years as a customer",
+   "headline": "20-year customer"
+  }
+ },
+ "Oatly": {
+  "gtm": {
+   "field": "nrr",
+   "score": 3,
+   "text": "NRR 112%",
+   "headline": "Spend up 12%"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 1,
+   "text": "14 newsletter opens",
+   "headline": "14 newsletter opens keep the brand top of mind"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan",
+   "headline": "Premium success plan in place"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 3,
+   "text": "8 feature requests",
+   "headline": "8 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "tenk_signal",
+   "score": 1,
+   "text": "10-K signal: growth",
+   "headline": "10-K signal growth"
+  }
+ },
+ "Allbirds": {
+  "gtm": {
+   "field": "account_team_activity_count",
+   "score": 1,
+   "text": "44 account-team touches",
+   "headline": "44 account-team touches keep deals moving"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 1,
+   "text": "8 events attended, webinar NPS 95",
+   "headline": "8 events attended show real engagement; webinar NPS hits 95"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, CSQL win rate 61%",
+   "headline": "Premium success plan in place; CSQL win rate hits 61%"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 1,
+   "text": "18 feature requests",
+   "headline": "18 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "customer_sentiment",
+   "score": 1,
+   "text": "Sentiment positive",
+   "headline": "Sentiment strong"
+  }
+ },
+ "Warby Parker": {
+  "gtm": {
+   "field": "nrr",
+   "score": 5,
+   "text": "NRR 105%, attach rate 34%",
+   "headline": "Spend up 5%; attach rate at 34%"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 6,
+   "text": "2 events attended",
+   "headline": "2 events attended"
+  },
+  "post": {
+   "field": "csql_win_rate",
+   "score": 6,
+   "text": "CSQL win rate 22%, 4 SLA breaches",
+   "headline": "CSQL win rate at 22%; 4 SLA breaches"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 5,
+   "text": "3 feature requests",
+   "headline": "3 feature requests on file"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 2,
+   "text": "15.5 years as a customer",
+   "headline": "15.5-year customer"
+  }
+ },
+ "Dropbox": {
+  "gtm": {
+   "field": "nrr",
+   "score": 3,
+   "text": "NRR 120%, 25 account-team touches",
+   "headline": "Spend up 20%; 25 account-team touches"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 2,
+   "text": "11 newsletter opens",
+   "headline": "11 newsletter opens keep the brand top of mind"
+  },
+  "post": {
+   "field": "adoption_achieved",
+   "score": 1,
+   "text": "Adoption goals met, 0 SLA breaches",
+   "headline": "Adoption goals met; zero SLA breaches"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 4,
+   "text": "5 feature requests",
+   "headline": "5 feature requests on file"
+  },
+  "dd": {
+   "field": "tenk_signal",
+   "score": 1,
+   "text": "10-K signal: growth",
+   "headline": "10-K signal growth"
+  }
+ },
+ "Atlassian": {
+  "gtm": {
+   "field": "nrr",
+   "score": 1,
+   "text": "NRR 137%, attach rate 90%",
+   "headline": "Spend up 37%; attach rate at 90%"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 1,
+   "text": "8 events attended, webinar NPS 89",
+   "headline": "8 events attended show real engagement; webinar NPS hits 89"
+  },
+  "post": {
+   "field": "csqls_generated",
+   "score": 1,
+   "text": "14 CSQLs, adoption goals met",
+   "headline": "14 CSQLs from the success team; adoption goals met"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 1,
+   "text": "18 feature requests",
+   "headline": "18 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 1,
+   "text": "20 years as a customer, 10-K signal: growth",
+   "headline": "20-year customer; 10-K signal growth"
+  }
+ },
+ "HubSpot": {
+  "gtm": {
+   "field": "nrr",
+   "score": 1,
+   "text": "NRR 134%, 44 account-team touches",
+   "headline": "Spend up 34%; 44 account-team touches"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 1,
+   "text": "13 newsletter opens",
+   "headline": "13 newsletter opens keep the brand top of mind"
+  },
+  "post": {
+   "field": "csqls_generated",
+   "score": 2,
+   "text": "9 CSQLs",
+   "headline": "9 CSQLs from the success team"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 2,
+   "text": "10 feature requests",
+   "headline": "10 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 1,
+   "text": "20 years as a customer",
+   "headline": "20-year customer"
+  }
+ },
+ "Figma": {
+  "gtm": {
+   "field": "account_team_activity_count",
+   "score": 2,
+   "text": "38 account-team touches",
+   "headline": "38 account-team touches keep deals moving"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 1,
+   "text": "9 events attended, named advocate",
+   "headline": "9 events attended show real engagement; named advocate"
+  },
+  "post": {
+   "field": "csql_win_rate",
+   "score": 1,
+   "text": "CSQL win rate 79%, adoption goals met",
+   "headline": "CSQL win rate hits 79%; adoption goals met"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 3,
+   "text": "9 feature requests",
+   "headline": "9 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 1,
+   "text": "Stakeholder alignment strong",
+   "headline": "Renewal in 44 days, stakeholders aligned"
+  }
+ },
+ "Stripe": {
+  "gtm": {
+   "field": "nrr",
+   "score": 1,
+   "text": "NRR 136%, win rate 72%",
+   "headline": "Spend up 36%; win rate hits 72%"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 1,
+   "text": "14 newsletter opens, named advocate",
+   "headline": "14 newsletter opens keep the brand top of mind"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, 10 CSQLs",
+   "headline": "Premium success plan in place; 10 CSQLs"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 2,
+   "text": "13 feature requests",
+   "headline": "13 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 1,
+   "text": "Stakeholder alignment strong, 20 years as a customer",
+   "headline": "Stakeholder alignment strong; 20 years in"
+  }
+ },
+ "Notion": {
+  "gtm": {
+   "field": "attach_rate",
+   "score": 1,
+   "text": "Attach rate 92%",
+   "headline": "Attach rate at 92%"
+  },
+  "mkt": {
+   "field": "webinar_nps",
+   "score": 1,
+   "text": "Webinar NPS 75",
+   "headline": "Webinar NPS hits 75"
+  },
+  "post": {
+   "field": "adoption_achieved",
+   "score": 1,
+   "text": "Adoption goals met",
+   "headline": "Adoption goals met"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 4,
+   "text": "6 feature requests",
+   "headline": "6 feature requests on file"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 3,
+   "text": "12.8 years as a customer",
+   "headline": "12.8-year customer"
+  }
+ },
+ "Canva": {
+  "gtm": {
+   "field": "pct_opps_closed_won",
+   "score": 1,
+   "text": "Win rate 73%, 50 account-team touches",
+   "headline": "Win rate hits 73%; 50 account-team touches"
+  },
+  "mkt": {
+   "field": "event_attendance_count",
+   "score": 1,
+   "text": "9 events attended, webinar NPS 80",
+   "headline": "9 events attended show real engagement; webinar NPS hits 80"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, 11 CSQLs",
+   "headline": "Premium success plan in place; 11 CSQLs"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 6,
+   "text": "2 feature requests",
+   "headline": "2 feature requests on file"
+  },
+  "dd": {
+   "field": "key_stakeholder_alignment",
+   "score": 1,
+   "text": "Stakeholder alignment strong",
+   "headline": "Renewal in 30 days, stakeholders aligned"
+  }
+ },
+ "Mailchimp": {
+  "gtm": {
+   "field": "attach_rate",
+   "score": 3,
+   "text": "Attach rate 56%",
+   "headline": "Attach rate at 56%"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 5,
+   "text": "3 newsletter opens",
+   "headline": "3 newsletter opens"
+  },
+  "post": {
+   "field": "adoption_achieved",
+   "score": 1,
+   "text": "Adoption goals met",
+   "headline": "Adoption goals met"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 6,
+   "text": "2 feature requests",
+   "headline": "2 feature requests on file"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 7,
+   "text": "1.7 years as a customer",
+   "headline": "1.7-year customer"
+  }
+ },
+ "Glossier": {
+  "gtm": {
+   "field": "nrr",
+   "score": 1,
+   "text": "NRR 136%",
+   "headline": "Spend up 36%"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 3,
+   "text": "7 newsletter opens",
+   "headline": "7 newsletter opens"
+  },
+  "post": {
+   "field": "premium_success_plan",
+   "score": 1,
+   "text": "Premium success plan, CSQL win rate 69%",
+   "headline": "Premium success plan in place; CSQL win rate hits 69%"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 2,
+   "text": "13 feature requests",
+   "headline": "13 feature requests signal expansion appetite"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 1,
+   "text": "20 years as a customer, 10-K signal: growth",
+   "headline": "20-year customer; 10-K signal growth"
+  }
+ },
+ "Lululemon": {
+  "gtm": {
+   "field": "pct_opps_closed_won",
+   "score": 1,
+   "text": "Win rate 70%, 40 account-team touches",
+   "headline": "Win rate hits 70%; 40 account-team touches"
+  },
+  "mkt": {
+   "field": "newsletter_opens",
+   "score": 1,
+   "text": "14 newsletter opens, named advocate",
+   "headline": "14 newsletter opens keep the brand top of mind"
+  },
+  "post": {
+   "field": "csqls_generated",
+   "score": 1,
+   "text": "13 CSQLs, CSQL win rate 70%",
+   "headline": "13 CSQLs from the success team; CSQL win rate hits 70%"
+  },
+  "prod": {
+   "field": "feature_requests_count",
+   "score": 4,
+   "text": "6 feature requests",
+   "headline": "6 feature requests on file"
+  },
+  "dd": {
+   "field": "years_as_customer",
+   "score": 1,
+   "text": "20 years as a customer, sentiment positive",
+   "headline": "20-year customer; sentiment strong"
+  }
+ }
+}
