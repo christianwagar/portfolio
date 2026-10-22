@@ -3,6 +3,10 @@
 // client key. Never use a service_role key here.
 import { createClient } from "@supabase/supabase-js";
 import fallbackRows from "../data/growth-propensity.json";
+// Real field values behind each bucket (from the agps demo CSV via scripts/build-signals.py).
+import signalRows from "../data/growth-signals.json";
+type Signal = { field: string; score: number; text: string; headline?: string };
+const SIGNALS = signalRows as Record<string, Partial<Record<ScoreKey, Signal>>>;
 
 export const CLUSTERS = ["P1", "P2", "P3", "P4"] as const;
 export type Cluster = (typeof CLUSTERS)[number];
@@ -22,6 +26,8 @@ export type Account = {
   growth?: number;
   watch?: boolean;
   indicator?: string;
+  signal?: string;
+  signalField?: string;
   prevCluster?: Cluster;
   watchReason?: string;
 };
@@ -435,7 +441,14 @@ export function quadrantAccounts(accounts: Account[]): { rows: QuadAccount[]; me
     const scores: Record<ScoreKey, number> = { gtm: gtmEx, mkt: a.mkt, post: a.post, prod: a.prod, dd: a.dd };
     const rank: Record<ScoreKey, number> = { gtm: 0, post: 0.05, dd: 0.1, mkt: 0.4, prod: 0.9 }; // product last
     const top = (Object.keys(w) as ScoreKey[]).sort((x, y) => scores[x] + rank[x] - (scores[y] + rank[y]))[0];
-    return { ...a, gtmEx, growth: Math.round(growth * 1000) / 1000, indicator: INDICATOR[top](a), best: BEST[top](a) };
+    const sig = SIGNALS[a.name]?.[top];
+    // "Spend up X%" already states NRR, so show only the next real metric after it.
+    let txt = sig?.text;
+    if (txt && top === "gtm" && a.nrr >= 110 && txt.startsWith("NRR ")) txt = txt.replace(/^NRR \d+%(, )?/, "") || undefined;
+    const tail = txt ? ` · ${txt[0].toUpperCase()}${txt.slice(1)}` : "";
+    // v9: newspaper-style headline built from real fields (scripts/build-signals.py); fall back to the old phrase.
+    const head = sig?.headline;
+    return { ...a, gtmEx, growth: Math.round(growth * 1000) / 1000, indicator: head ?? INDICATOR[top](a) + tail, best: head ?? BEST[top](a) + tail, signal: sig?.text, signalField: sig?.field };
   });
   const medArr = median(base.map((a) => a.arr));
   const medGrowth = median(base.map((a) => a.growth));
@@ -444,7 +457,7 @@ export function quadrantAccounts(accounts: Account[]): { rows: QuadAccount[]; me
     const s = a.arr > medArr;
     const quad: Cluster = g ? (s ? "P1" : "P2") : s ? "P3" : "P4";
     const watch = a.nrr < WATCH.nrrBelow || a.growth > WATCH.growthWorseThan;
-    const indicator = quad === "P4" || watch ? `Best signal: ${a.best}` : a.indicator;
+    const indicator = watch && a.nrr < WATCH.nrrBelow ? `Watch: NRR slips to ${Math.floor(a.nrr)}%` : quad === "P4" || watch ? `Best signal: ${a.best}` : a.indicator;
     return { ...a, quad, watch, indicator, watchReason: watchReason(a) };
   });
   return { rows: rows.sort((a, b) => a.growth - b.growth), medArr, medGrowth };

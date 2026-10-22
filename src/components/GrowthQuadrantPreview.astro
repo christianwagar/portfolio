@@ -15,9 +15,12 @@ const pos = {
   <p class="gq-label" id="gq-title">Growth potential vs spend · median split · data as of {built}</p>
   <div class="gq-frame"><svg viewBox={`0 0 ${q.width} ${q.height}`} role="img" aria-label="Growth potential against ARR">
     <rect x={q.plot.x} y={q.plot.y} width={q.plot.w} height={q.plot.h} class="gq-plot" />
+    {(() => { const X = q.plot.x, Y = q.plot.y, R = q.plot.x + q.plot.w, B = q.plot.y + q.plot.h, mx = q.medianX, my = q.medianY;
+      const r = { P1: [mx, Y, R - mx, my - Y], P2: [X, Y, mx - X, my - Y], P3: [mx, my, R - mx, B - my], P4: [X, my, mx - X, B - my] } as const;
+      return CLUSTERS.map((c) => <rect class={`gq-tint gq-t${c}`} x={r[c][0]} y={r[c][1]} width={r[c][2]} height={r[c][3]} />); })()}
     <line class="gq-cross" x1={q.medianX} x2={q.medianX} y1={q.plot.y} y2={q.plot.y + q.plot.h} />
     <line class="gq-cross" y1={q.medianY} y2={q.medianY} x1={q.plot.x} x2={q.plot.x + q.plot.w} />
-    {CLUSTERS.map((c) => <text class="gq-ql" x={pos[c].x} y={pos[c].y} text-anchor={pos[c].a}>{c} · {corner[c]}</text>)}
+    {CLUSTERS.map((c) => <text class={`gq-ql gq-ql${c}`} x={pos[c].x} y={pos[c].y} text-anchor={pos[c].a}>{c} · {corner[c]}</text>)}
     {q.xTicks.map((t) => <text class="gq-tick" x={t.x} y={q.plot.y + q.plot.h + 16} text-anchor={t.a}>{t.label}</text>)}
     {q.yTicks.map((t) => <text class="gq-tick" x={q.plot.x - 8} y={t.y + 4} text-anchor="end">{t.label}</text>)}
     <text class="gq-axis" x={q.plot.x + q.plot.w / 2} y={q.height - 8} text-anchor="middle">Spend (ARR)</text>
@@ -40,7 +43,7 @@ const pos = {
   function show(g: Element) {
     if (!frame || !tip) return;
     const d = (g as HTMLElement).dataset;
-    tip.innerHTML = `<p class="gq-tip-top"><span class="gq-badge gq-${d.quad}">${d.quad}</span>${d.watch ? '<span class="gq-wtag">Watch</span>' : ""}</p><strong>${esc(d.name || "")}</strong><span>Score ${d.score}</span><span>${d.arr} ARR</span><em>${esc(d.ind || "")}</em>${d.watch && d.wr ? `<span class="gq-tip-wr">Watch: ${esc(d.wr)}</span>` : ""}<span class="gq-tip-hint">Click for account detail</span>`;
+    tip.innerHTML = `<p class="gq-tip-top"><span class="gq-badge gq-${d.quad}">${d.quad}</span>${d.watch ? '<span class="gq-wtag">Watch</span>' : ""}</p><strong>${esc(d.name || "")}</strong><span>Score ${d.score}</span><span>${d.arr} ARR</span><em class="gq-head">${esc(d.ind || "")}</em>${d.watch && d.wr ? `<span class="gq-tip-wr">Watch: ${esc(d.wr)}</span>` : ""}<span class="gq-tip-hint">[ Open account → ]</span>`;
     tip.hidden = false;
     const f = frame.getBoundingClientRect(), r = g.getBoundingClientRect();
     const cx = r.left + r.width / 2 - f.left, cy = r.top - f.top;
@@ -59,7 +62,7 @@ const pos = {
     g.addEventListener("mouseleave", hide);
     g.addEventListener("focus", () => show(g));
     g.addEventListener("blur", () => { pinned = null; hide(); });
-    g.addEventListener("click", (e) => { e.stopPropagation(); pinned = pinned === g ? null : g; show(g); select(g, false); });
+    g.addEventListener("click", (e) => { e.stopPropagation(); pinned = pinned === g ? null : g; show(g); select(g, true); });
     g.addEventListener("keydown", (e) => { const k = (e as KeyboardEvent).key; if (k === "Enter" || k === " ") { e.preventDefault(); select(g, true); } });
   });
   document.addEventListener("click", () => { pinned = null; hide(); });
@@ -78,7 +81,10 @@ const pos = {
   .gq-tick { font-size: 11px; fill: var(--text-muted); }
   .gq-axis { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; fill: var(--text); }
   .gq-dot { stroke: #000; stroke-width: 1; }
-  .gq-dot.gq-P1 { fill: #000; } .gq-dot.gq-P2 { fill: #3f3f3f; } .gq-dot.gq-P3 { fill: #737373; } .gq-dot.gq-P4 { fill: #fff; }
+  /* v8 cluster palette: sampled from the Buck Mason olive, golden yellow, and slate swatches. P4 stays white. */
+  .gq-dot.gq-P1 { fill: var(--c-p1, #897d5d); } .gq-dot.gq-P2 { fill: var(--c-p2, #d5ac50); } .gq-dot.gq-P3 { fill: var(--c-p3, #798ca5); } .gq-dot.gq-P4 { fill: #000; }
+  .gq-tint { stroke: none; } .gq-tP1 { fill: var(--c-p1-tint, #eeede8); } .gq-tP2 { fill: var(--c-p2-tint, #f9f3e6); } .gq-tP3 { fill: var(--c-p3-tint, #eceff2); } .gq-tP4 { fill: #fff; }
+  .gq-qlP1 { fill: var(--c-p1-ink, #554e3a); } .gq-qlP2 { fill: var(--c-p2-ink, #6a5628); } .gq-qlP3 { fill: var(--c-p3-ink, #4b5766); }
   .gq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border-strong); border: 1px solid var(--border-strong); }
   .gq-box { background: var(--bg); padding: 1rem 1.1rem; }
   .gq-box h3 { margin: 0 0 .25rem; display: flex; gap: .5rem; align-items: center; font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; }
@@ -87,8 +93,8 @@ const pos = {
   .gq-card { display: grid; padding: .55rem 0; border-top: 1px solid var(--border); font-size: .9rem; }
   .gq-card span { color: var(--text-muted); font-size: .85rem; }
   .gq-card em { font-style: normal; font-size: .85rem; }
-  :global(.gq-badge) { padding: .28rem .4rem; font-family: var(--font-display); font-size: .75rem; font-weight: 700; color: #fff; background: #000; }
-  .gq-tip :global(.gq-badge.gq-P2), .gq-badge.gq-P2 { background: #3f3f3f; } .gq-tip :global(.gq-badge.gq-P3), .gq-badge.gq-P3 { background: #737373; } .gq-tip :global(.gq-badge.gq-P4), .gq-badge.gq-P4 { background: #f2f2f2; color: #000; box-shadow: inset 0 0 0 1px #000; }
+  :global(.gq-badge) { padding: .28rem .4rem; font-family: var(--font-display); font-size: .75rem; font-weight: 700; color: #000; background: var(--c-p1, #897d5d); }
+  .gq-tip :global(.gq-badge.gq-P2), .gq-badge.gq-P2 { background: var(--c-p2, #d5ac50); } .gq-tip :global(.gq-badge.gq-P3), .gq-badge.gq-P3 { background: var(--c-p3, #798ca5); } .gq-tip :global(.gq-badge.gq-P4), .gq-badge.gq-P4 { background: #000; color: #fff; box-shadow: none; }
   @media (max-width: 640px) { .gq-grid { grid-template-columns: 1fr; } }
   .gq-watch { fill: none; stroke: #000; stroke-width: 1; stroke-dasharray: 2 2; }
   :global(.gq-wtag) { margin-left: .5rem; padding: .1rem .3rem; border: 1px solid #000; font-family: var(--font-display); font-size: .6rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; vertical-align: middle; }
@@ -106,4 +112,6 @@ const pos = {
   .gq svg.gq-key { display: inline-block; width: 1.1rem; height: 1.1rem; margin: 0 .2rem -.2rem 0; }
   .gq-tip :global(.gq-tip-wr) { margin-top: .3rem; font-weight: 600; }
   .gq-tip :global(.gq-tip-hint) { margin-top: .35rem; font-size: .72rem; color: #666; }
+  .gq-tip :global(.gq-head) { display: block; font-family: var(--font-display); font-style: normal; font-weight: 700; font-size: .9rem; line-height: 1.3; margin-top: .35rem; color: #000; }
+  .gq-tip :global(.gq-tip-hint) { display: block; margin-top: .5rem; font-family: var(--font-display); font-weight: 700; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: #000; text-decoration: underline; text-underline-offset: 3px; }
 </style>

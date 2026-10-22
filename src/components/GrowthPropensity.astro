@@ -58,12 +58,20 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     </dl>
   </section>
 
-  <div class="gp-row gp-r1">
-    <div class="gp-r1-left">
-      <p class="gp-disclaimer">
+  <div class="gp-row gp-r0">
+    <p class="gp-disclaimer">
         <strong>Demo data</strong>
         Brand names are labels only, and all metrics are invented. Apple, Bose, Coca-Cola, PlayStation, Nike, and the other names are not customers. None of these numbers describe the real companies.
       </p>
+    <div class="gp-how">
+          <p><strong>How to read it:</strong> up and to the right is where to expand. Hover, tap, or tab to a dot for the account card; click it to open the account below. Color is the cluster: <span class="gp-key-c gp-P1">P1</span> olive, <span class="gp-key-c gp-P2">P2</span> gold, <span class="gp-key-c gp-P3">P3</span> slate, <span class="gp-key-c gp-P4">P4</span> black.</p>
+          <p><svg class="gp-key" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#fff" stroke="#000" /><circle cx="12" cy="12" r="9.5" fill="none" stroke="#000" stroke-dasharray="2 2" /></svg> <span class="gq-wtag">Watch</span> Health guardrail, separate from the median split: NRR under {WATCH.nrrBelow}% or growth score worse than {WATCH.growthWorseThan.toFixed(1)}. Both thresholds are configurable.</p>
+        </div>
+  </div>
+
+  <div class="gp-row gp-r1">
+    <div class="gp-r1-left">
+
       <div class="gp-quads" role="list">
         {
           ["P2", "P1", "P4", "P3"].map((c) => {
@@ -73,7 +81,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                 <button type="button" class="gp-qitem" data-account={account.name} aria-current={account.name === featured ? "true" : undefined}>
                   <strong>{account.name}{account.watch && <span class="gq-wtag" title={account.watchReason}>Watch</span>}</strong>
                   <span>{formatScore(account.growth ?? account.overall)} growth · {formatArr(account.arr)}</span>
-                  <em>↑ {account.indicator}</em>
+                  <em class="gp-head">{account.indicator}</em>
                 </button>
               </li>
             );
@@ -99,10 +107,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     </div>
     <div class="gp-r1-right">
       <div class="gp-r1-chart"><GrowthQuadrantPreview /></div>
-        <div class="gp-how">
-          <p><strong>How to read it:</strong> up and to the right is where to expand. Hover, tap, or tab to a dot for the account card; click it to open the account below. Dot shade is the cluster, P1 darkest.</p>
-          <p><svg class="gp-key" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#fff" stroke="#000" /><circle cx="12" cy="12" r="9.5" fill="none" stroke="#000" stroke-dasharray="2 2" /></svg> <span class="gq-wtag">Watch</span> Health guardrail, separate from the median split: NRR under {WATCH.nrrBelow}% or growth score worse than {WATCH.growthWorseThan.toFixed(1)}. Both thresholds are configurable.</p>
-        </div>
+
     </div>
   </div>
 
@@ -129,6 +134,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                   <span class="gp-dot-sep" aria-hidden="true">·</span>
                   {formatArr(account.arr)} ARR
                 </span>
+                {account.indicator && <span class="gp-focus-head gp-head">{account.indicator}</span>}
               </button>
             </li>
           ))
@@ -156,6 +162,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
                   <span>{formatNrr(account.nrr)} NRR</span>
                   <span>{Math.round(account.renewal)} days to renewal</span>
                 </p>
+                {account.indicator && <p class="gp-detail-signal"><span>{account.indicator.startsWith("Watch:") ? "Watch" : "Best signal"}</span> <strong class="gp-head">{account.indicator.replace(/^(Best signal|Watch): /, "")}</strong></p>}
               </div>
               <div class="gp-blurbs">
                 <section>
@@ -427,10 +434,18 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
         else control.removeAttribute("aria-current");
       });
       if (!shouldScroll || !panel) return;
+      // v9: scroll the detail into view below the sticky nav, move focus there, flash it.
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      panel.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
+      const nav = document.querySelector<HTMLElement>(".nav");
+      const offset = (nav && getComputedStyle(nav).position !== "static" ? nav.getBoundingClientRect().height : 0) + 16;
+      const y = panel.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" });
       const heading = panel.querySelector<HTMLElement>("[data-detail]:not([hidden]) h2");
       heading?.focus({ preventScroll: true });
+      panel.classList.remove("gp-flash");
+      void panel.offsetWidth;
+      panel.classList.add("gp-flash");
+      window.setTimeout(() => panel.classList.remove("gp-flash"), 1600);
     }
 
     function applyFilter() {
@@ -480,7 +495,12 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     root.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      const control = target.closest<HTMLElement>("[data-account]");
+      let control = target.closest<HTMLElement>("[data-account]");
+      // v9: a click anywhere on a table row opens that account (except the override chip/controls).
+      if (!control) {
+        const tr = target.closest<HTMLElement>("tr[data-name]");
+        if (tr && !target.closest("button, a, input, select, .gp-ov-cell")) control = tr.querySelector<HTMLElement>("[data-account]");
+      }
       if (!control || !root.contains(control)) return;
       const name = control.getAttribute("data-account");
       if (name) showAccount(name, true);
@@ -1481,4 +1501,62 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
   .gp-r4 .gp-built, .gp-r4 .gp-soon { border: 0; border-top: 1px solid var(--border); padding: var(--s3) 0 0; background: none; }
   .gp-r4 { gap: 2.5rem 3rem; }
   .gp-soon article { padding: var(--s2) 0; }
+  /* v8: cluster palette (sampled pixels). Black text on every color passes WCAG AA:
+     olive 5.2:1, gold 9.9:1, slate 6.1:1. Ink shades are for text on the pale tints (6.4:1 or better). */
+  .gp { --c-p1: #897d5d; --c-p1-ink: #554e3a; --c-p1-tint: #eeede8;
+        --c-p2: #d5ac50; --c-p2-ink: #6a5628; --c-p2-tint: #f9f3e6;
+        --c-p3: #798ca5; --c-p3-ink: #4b5766; --c-p3-tint: #eceff2; }
+  .gp .gp-badge.gp-P1, .gp :global(.gp-badge.gp-P1), .gp-key-c.gp-P1 { background: var(--c-p1); color: #000; box-shadow: none; }
+  .gp .gp-badge.gp-P2, .gp :global(.gp-badge.gp-P2), .gp-key-c.gp-P2 { background: var(--c-p2); color: #000; box-shadow: none; }
+  .gp .gp-badge.gp-P3, .gp :global(.gp-badge.gp-P3), .gp-key-c.gp-P3 { background: var(--c-p3); color: #000; box-shadow: none; }
+  .gp .gp-badge.gp-P4, .gp :global(.gp-badge.gp-P4), .gp-key-c.gp-P4, .gp-tablebox .gp-table td.gp-ov-cell :global(.gp-ov.gp-P4) { background: #000; color: #fff !important; box-shadow: none; }
+  .gp-key-c { padding: .05rem .3rem; font-family: var(--font-display); font-weight: 700; font-size: .75rem; letter-spacing: .06em; }
+  /* cluster cards: pale tint header strip + colored top rule */
+  .gp-quads .gp-quad { border-top: 4px solid #000; }
+  .gp-quads .gp-quad[aria-label^="P1"] { border-top-color: var(--c-p1); background: linear-gradient(var(--c-p1-tint), var(--bg) 6rem); }
+  .gp-quads .gp-quad[aria-label^="P2"] { border-top-color: var(--c-p2); background: linear-gradient(var(--c-p2-tint), var(--bg) 6rem); }
+  .gp-quads .gp-quad[aria-label^="P3"] { border-top-color: var(--c-p3); background: linear-gradient(var(--c-p3-tint), var(--bg) 6rem); }
+  .gp-quads .gp-quad[aria-label^="P4"] { border-top-color: #000; }
+  .gp-quad[aria-label^="P1"] h3 { color: var(--c-p1-ink); } .gp-quad[aria-label^="P2"] h3 { color: var(--c-p2-ink); } .gp-quad[aria-label^="P3"] h3 { color: var(--c-p3-ink); }
+  /* table filter chips: colored when pressed */
+  .gp-chip[data-filter="P1"][aria-pressed="true"] { background: var(--c-p1); color: #000; border-color: var(--c-p1); }
+  .gp-chip[data-filter="P2"][aria-pressed="true"] { background: var(--c-p2); color: #000; border-color: var(--c-p2); }
+  .gp-chip[data-filter="P3"][aria-pressed="true"] { background: var(--c-p3); color: #000; border-color: var(--c-p3); }
+  /* focus card: left color bar by cluster */
+  .gp-focus-btn:has(.gp-P1) { box-shadow: inset 3px 0 0 var(--c-p1); }
+  .gp-focus-btn:has(.gp-P2) { box-shadow: inset 3px 0 0 var(--c-p2); }
+  .gp-focus-btn:has(.gp-P3) { box-shadow: inset 3px 0 0 var(--c-p3); }
+  .gp-focus-btn { padding-left: .75rem; }
+  /* drill-down best signal */
+  .gp-detail-signal { margin: .6rem 0 0; font-size: .9rem; line-height: 1.5; }
+  .gp-detail-signal span { display: block; font-family: var(--font-display); font-size: .6875rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
+  /* v8 row 0: demo notice left, how-to-read right */
+  .gp-r0 { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); margin-top: var(--s4); }
+  .gp-r0 .gp-disclaimer { margin: 0; padding: var(--s2) var(--pad); font-size: .85rem; line-height: 1.55; border: 1px solid var(--border); }
+  .gp-r0 + .gp-r1 { margin-top: var(--s3); }
+  @media (max-width: 900px) { .gp-r0 { grid-template-columns: 1fr; gap: var(--s2); } }
+  /* v8: override + cluster columns: fixed width, centered header and chips, one chip size */
+  .gp-tablebox .gp-table th.gp-ov-head, .gp-tablebox .gp-table td.gp-ov-cell { width: 4.75rem; min-width: 4.75rem; padding-left: .5rem; padding-right: .5rem; text-align: center; vertical-align: middle; }
+  .gp-tablebox .gp-table th.gp-c, .gp-tablebox .gp-table td.gp-c { width: 4rem; padding-left: .4rem; padding-right: .4rem; text-align: center; vertical-align: middle; }
+  .gp-tablebox .gp-table th.gp-c button { margin: 0 auto; }
+  .gp-tablebox .gp-table td { vertical-align: middle; }
+  .gp-tablebox .gp-table td.gp-c .gp-badge, .gp-tablebox .gp-table td.gp-ov-cell :global(.gp-ov) { display: flex; align-items: center; justify-content: center; box-sizing: border-box; width: 2.25rem; height: 1.375rem; margin: 0 auto; padding: 0; font-family: var(--font-display); font-weight: 700; font-size: .72rem; line-height: 1; letter-spacing: .06em; color: #000; }
+  @media (max-width: 640px) { .gp-tablebox .gp-table th.gp-ov-head, .gp-tablebox .gp-table td.gp-ov-cell { width: 3.25rem; min-width: 3.25rem; padding-left: .25rem; padding-right: .25rem; } .gp-tablebox .gp-table th.gp-c, .gp-tablebox .gp-table td.gp-c { width: 3rem; } }
+  /* v9: P4 classic 26-W black and white: white card, black rules */
+  .gp-quads .gp-quad[aria-label^="P4"] { background: #fff; border-top: 4px solid #000; }
+  .gp-quads .gp-quad[aria-label^="P4"] li + li, .gp-quads .gp-quad[aria-label^="P4"] header { border-color: #000; }
+  .gp-quad[aria-label^="P4"] h3 { color: #000; }
+  .gp-chip[data-filter="P4"][aria-pressed="true"] { background: #000; color: #fff; border-color: #000; }
+  .gp-focus-btn:has(.gp-P4) { box-shadow: inset 3px 0 0 #000; }
+  /* v9: headline-style best signal in the site's heading font */
+  .gp .gp-head { display: block; font-family: var(--font-display); font-style: normal; font-weight: 700; letter-spacing: -.005em; text-transform: none; color: var(--text); line-height: 1.3; }
+  .gp-qitem em.gp-head { font-size: .82rem; margin-top: .15rem; }
+  .gp .gp-focus-btn .gp-focus-head { grid-column: 1 / -1; font-size: .9rem; margin-top: .25rem; letter-spacing: 0; }
+  .gp-detail-signal strong.gp-head { font-size: 1.05rem; margin-top: .15rem; }
+  /* v9: flash the detail panel after a click scrolls to it */
+  .gp-detail { scroll-margin-top: 5rem; }
+  .gp-detail.gp-flash { animation: gp-flash 1.6s ease-out; }
+  @keyframes gp-flash { 0%, 30% { box-shadow: 0 0 0 3px #000, 6px 6px 0 #000; } 100% { box-shadow: 0 0 0 0 transparent; } }
+  @media (prefers-reduced-motion: reduce) { .gp-detail.gp-flash { animation: none; outline: 3px solid #000; } }
+  .gp-tablebox .gp-table tbody tr[data-name] { cursor: pointer; }
 </style>
