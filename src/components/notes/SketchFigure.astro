@@ -1,0 +1,13 @@
+---
+interface Props { src: string; alt: string; caption?: string }
+const { src, alt, caption = "Rough mockup, placeholder until the final visual." } = Astro.props;
+---
+<figure class="sketch-figure">
+  <img src={src} alt={alt} loading="lazy" />
+  <figcaption>{caption}</figcaption>
+</figure>
+<style>
+  .sketch-figure { max-width: 34rem; margin: 1.5rem 0 2rem; }
+  .sketch-figure img { display: block; width: 100%; height: auto; border: 1px solid #e5e5e5; }
+  .sketch-figure figcaption { margin-top: .5rem; color: #666; font-size: .8125rem; line-height: 1.4; }
+</style>
