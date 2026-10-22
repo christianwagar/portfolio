@@ -1,0 +1,24 @@
+---
+interface Props { src: string; alt: string; side?: "left" | "right"; caption?: string }
+const { src, alt, side = "left", caption = "Rough mockup, placeholder until the final visual." } = Astro.props;
+---
+<div class:list={["sketch-split", side === "right" && "sketch-split-right"]}>
+  <figure class="sketch-split-fig">
+    <img src={src} alt={alt} loading="lazy" />
+    <figcaption>{caption}</figcaption>
+  </figure>
+  <div class="sketch-split-copy"><slot /></div>
+</div>
+<style>
+  .sketch-split { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); grid-template-areas: "fig copy"; gap: 2rem; align-items: start; margin: 1rem 0 2rem; }
+  .sketch-split-right { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); grid-template-areas: "copy fig"; }
+  .sketch-split-fig { grid-area: fig; margin: 0; }
+  .sketch-split-copy { grid-area: copy; min-width: 0; }
+  .sketch-split-copy :global(p:first-child) { margin-top: 0; }
+  .sketch-split-copy :global(p:last-child) { margin-bottom: 0; }
+  .sketch-split-fig img { display: block; width: 100%; height: auto; border: 1px solid #e5e5e5; }
+  .sketch-split-fig figcaption { margin-top: .5rem; color: #666; font-size: .8125rem; line-height: 1.4; }
+  @media (max-width: 767px) {
+    .sketch-split, .sketch-split-right { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "fig"; gap: 1.25rem; }
+  }
+</style>

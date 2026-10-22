@@ -31,16 +31,6 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
 ---
 
 <div class="gp" id="growth-propensity">
-  <section class="gp-block">
-    <p class="gp-label">Method</p>
-    <h2>Lower score, higher priority</h2>
-    <p class="gp-prose">
-      Each signal gets a band score from 1 to 8, like a stroke in golf. The strokes roll into five buckets, the buckets roll into one overall score, and the lowest total gets the team's attention first. Missing data scores an 8, so a blind spot does not get a free pass.
-    </p>
-    <p class="gp-prose">
-      Clusters come from two questions: how likely is the account to grow, and how much does it spend? Growth potential is the A-GPS score with ARR taken out, so size never counts twice. Each axis is split at the median of the book, so the four groups rebalance every time the data changes and nobody ends up with everything in P1. Separately, a WATCH flag marks any account with NRR under 90 percent or a growth score worse than 6.0, wherever it lands.
-    </p>
-  </section>
 
   <div class="gp-row gp-r0">
     <p class="gp-disclaimer">
@@ -1509,6 +1499,8 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
   .gp-r0 { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); margin-top: var(--s4); }
   .gp-r0 .gp-disclaimer { margin: 0; padding: var(--s2) var(--pad); font-size: .85rem; line-height: 1.55; border: 1px solid var(--border); }
   .gp-r0 + .gp-r1 { margin-top: var(--s3); }
+  .gp { margin-top: 1.25rem; padding-top: 0; border-top: 0; }
+  .gp > .gp-r0:first-child { margin-top: 0; }
   @media (max-width: 900px) { .gp-r0 { grid-template-columns: 1fr; gap: var(--s2); } }
   /* v8: override + cluster columns: fixed width, centered header and chips, one chip size */
   .gp-tablebox .gp-table th.gp-ov-head, .gp-tablebox .gp-table td.gp-ov-cell { width: 4.75rem; min-width: 4.75rem; padding-left: .5rem; padding-right: .5rem; text-align: center; vertical-align: middle; }
