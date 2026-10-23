@@ -27,6 +27,12 @@ const featured = focus[0]?.name ?? accounts[0]?.name ?? "";
 const totalArr = sumArr(accounts);
 const plans = new Map(accounts.map((account) => [account.name, accountPlan(account, accounts)]));
 const seedFor = (name: string) => DEMO_OVERRIDES.find((o) => o.account === name);
+const SCORE_MAX = 8; // every field bands 1 (best) to 8 (worst); bucket = average, so buckets span 1–8
+const r2 = (v: unknown) => (typeof v === "number" ? Math.round(v * 100) / 100 : null);
+const bucketRank = (key: string, v: unknown) => {
+  const x = r2(v); if (x === null) return null;
+  return 1 + accounts.filter((a) => { const y = r2((a as any)[key]); return y !== null && y < x; }).length;
+};
 const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
 ---
@@ -157,15 +163,15 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
               </div>
             </div>
             <details class="gp-scoredet">
-              <summary>Score details</summary>
-              <p class="gp-raw">Growth score {plan.rawScore} · overall {formatScore(account.overall)} · lower is better, golf-style</p>
+              <summary>Score details <span class="gp-lib">Lower is better · scale 1 to {SCORE_MAX}</span></summary>
+              <p class="gp-raw">Growth score {plan.rawScore} · overall {formatScore(account.overall)}</p>
               {account.indicator && <p class="gp-detail-signal"><span>{account.indicator.startsWith("Watch:") ? "Watch" : "Best signal"}</span> <strong class="gp-head">{account.indicator.replace(/^(Best signal|Watch): /, "")}</strong></p>}
             <ol class="gp-scores">
               {SCORE_FIELDS.map((field) => (
                 <li>
                   <span class="gp-score-label">{field.label}</span>
-                  <span class="gp-score-num">{formatScore(account[field.key])}</span>
-                  <span class="gp-score-weight">{field.weight} weight</span>
+                  <span class="gp-score-num">{formatScore(account[field.key])}<span class="gp-score-max"> / {SCORE_MAX}</span></span>
+                  {bucketRank(field.key, account[field.key]) && <span class="gp-score-rank">#{bucketRank(field.key, account[field.key])} of {accounts.length}</span>}
                 </li>
               ))}
             </ol>
@@ -541,6 +547,8 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
       return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, "0")}-${String(n.getDate()).padStart(2, "0")}`;
     };
     const within90 = (date: string) => (Date.now() - new Date(`${date}T12:00:00`).getTime()) / 864e5 <= 90;
+    // Older user entries stored the note's first 60 chars as "reason"; drop it when it just repeats the note.
+    const reasonOf = (o: Ov) => (o.reason && !o.note.startsWith(o.reason) ? o.reason : "");
     const fmt = (date: string) => new Date(`${date}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
     function renderCells() {
@@ -550,7 +558,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
         const o = list.find((x) => x.account === name && within90(x.date));
         if (!o) { cell.innerHTML = ""; return; }
         const id = `ov-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
-        cell.innerHTML = `<button type="button" class="gp-ov gp-badge gp-${o.cluster}" aria-describedby="${id}">${o.cluster}<span class="gp-ov-tip" role="tooltip" id="${id}"><b>${fmt(o.date)} · Overridden to ${o.cluster} <i>${o.demo ? "Demo" : "Your entry"}</i></b><span>Reason: ${esc(o.reason)}</span><span>${esc(o.note)}</span></span></button>`;
+        cell.innerHTML = `<button type="button" class="gp-ov gp-badge gp-${o.cluster}" aria-describedby="${id}">${o.cluster}<span class="gp-ov-tip" role="tooltip" id="${id}"><b>${fmt(o.date)} · Overridden to ${o.cluster} <i>${o.demo ? "Demo" : "Your entry"}</i></b>${reasonOf(o) ? `<span>Reason: ${esc(reasonOf(o))}</span><span>${esc(o.note)}</span>` : `<span>Reason: ${esc(o.note)}</span>`}</span></button>`;
       });
     }
 
@@ -564,7 +572,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
       if (acctLabel) acctLabel.textContent = name;
       const items = all().filter((o) => o.account === name);
       tl.innerHTML = items.length
-        ? items.map((o) => `<li><p class="gp-ovtl-top"><span class="gp-badge gp-${o.cluster}">${o.cluster}</span><b>${fmt(o.date)}</b><i>${o.demo ? "Demo" : "Your entry · this browser"}</i></p><p>${o.reason ? `<strong>${esc(o.reason)}.</strong> ` : ""}${esc(o.note)}</p></li>`).join("")
+        ? items.map((o) => `<li><p class="gp-ovtl-top"><span class="gp-badge gp-${o.cluster}">${o.cluster}</span><b>${fmt(o.date)}</b><i>${o.demo ? "Demo" : "Your entry · this browser"}</i></p><p>${reasonOf(o) ? `<strong>${esc(reasonOf(o))}.</strong> ${esc(o.note)}` : `<strong>Reason:</strong> ${esc(o.note)}`}</p></li>`).join("")
         : `<li class="gp-ovtl-empty">No overrides on file for ${esc(name)}.</li>`;
     }
     if (form) {
@@ -580,7 +588,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
           account: String(f.get("account")),
           date: String(f.get("date")),
           cluster: String(f.get("cluster")),
-          reason: note.split(/[.!?\n]/)[0].slice(0, 60),
+          reason: "",
           note,
         };
         try {
@@ -1098,6 +1106,9 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
     text-transform: uppercase;
   }
 
+  .gp-lib { margin-left: .5rem; color: var(--text-muted); font-family: var(--font-display); font-size: .6875rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+  .gp-score-max { font-size: .9rem; font-weight: 600; color: var(--text-muted); letter-spacing: .02em; }
+  .gp-score-rank { display: block; margin: 0 0 .15rem; font-family: var(--font-body); font-size: .75rem; font-weight: 400; color: var(--text-muted); }
   .gp-score-num {
     display: block;
     margin: 0.25rem 0 0.15rem;
@@ -1326,7 +1337,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
   :global(.gp-ov) { position: relative; border: 0; cursor: help; }
   :global(.gp-ov:focus-visible) { outline: 2px solid #000; outline-offset: 2px; }
   :global(.gp-ov-tip) { display: none; }
-  :global(.gp-ovfloat) { position: fixed; z-index: 50; width: 17rem; padding: .7rem .85rem; background: #fff; color: #000; border: 1px solid #000; box-shadow: 4px 4px 0 #000; font-family: var(--font-body); font-size: .8rem; line-height: 1.45; text-align: left; letter-spacing: 0; text-transform: none; font-weight: 400; pointer-events: none; }
+  :global(.gp-ovfloat) { overflow-wrap: anywhere; position: fixed; z-index: 50; width: 17rem; padding: .7rem .85rem; background: #fff; color: #000; border: 1px solid #000; box-shadow: 4px 4px 0 #000; font-family: var(--font-body); font-size: .8rem; line-height: 1.45; text-align: left; letter-spacing: 0; text-transform: none; font-weight: 400; pointer-events: none; }
   :global(.gp-ovfloat b) { display: block; font-family: var(--font-display); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .3rem; }
   :global(.gp-ovfloat i) { font-style: normal; margin-left: .3rem; padding: 0 .25rem; border: 1px solid #000; font-size: .6rem; }
   :global(.gp-ovfloat span) { display: block; margin-top: .25rem; }
@@ -1349,7 +1360,7 @@ const sourceLabel = source === "Supabase" ? "Supabase" : "bundled JSON";
   .gp .gp-ovtl-head { margin-top: 1.25rem; font-size: .75rem; letter-spacing: .1em; }
   .gp-ovtl { list-style: none; margin: .5rem 0 0; padding: 0; }
   .gp-ovtl :global(li) { padding: .6rem .7rem; margin-top: .5rem; background: #111; color: #fff; font-size: .78rem; line-height: 1.45; }
-  .gp-ovtl :global(li p) { margin: 0; }
+  .gp-ovtl :global(li p) { margin: 0; overflow-wrap: anywhere; }
   .gp-ovtl :global(.gp-ovtl-top) { display: flex; gap: .45rem; align-items: center; margin-bottom: .3rem; }
   .gp-ovtl :global(.gp-ovtl-top i) { margin-left: auto; font-style: normal; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; opacity: .75; }
   .gp-ovtl :global(.gp-ovtl-empty) { background: none; color: var(--text-muted); border: 1px dashed var(--border); }
