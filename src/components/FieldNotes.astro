@@ -17,7 +17,7 @@ const notes = (await getCollection("notes"))
       {
         notes.map((note) => (
           <a href={`/notes/${note.id}`} class="note-item">
-            <div class="note-thumb">
+            <div class:list={["note-thumb", { "note-thumb-sketch": note.id === "account-growth-propensity" }]}>
               {note.data.image ? (
                 <img
                   src={note.data.image}
@@ -67,6 +67,14 @@ const notes = (await getCollection("notes"))
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
+  }
+
+  .note-thumb-sketch {
+    background: #fff;
+  }
+
+  .note-thumb-sketch img {
+    object-fit: contain;
   }
 
   .note-item h3 {
