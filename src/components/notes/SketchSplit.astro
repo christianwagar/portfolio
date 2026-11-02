@@ -1,0 +1,22 @@
+---
+interface Props { src: string; alt: string; side?: "left" | "right" }
+const { src, alt, side = "right" } = Astro.props;
+---
+<div class:list={["sketch-split", side === "left" && "sketch-split-left"]}>
+  <div class="sketch-split-copy"><slot /></div>
+  <figure class="sketch-split-fig">
+    <img src={src} alt={alt} loading="lazy" />
+  </figure>
+</div>
+<style>
+  .sketch-split { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr); grid-template-areas: "copy fig"; column-gap: clamp(2rem, 6vw, 5rem); align-items: start; margin: 1.5rem 0 3rem; }
+  .sketch-split-left { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr); grid-template-areas: "fig copy"; }
+  .sketch-split-fig { grid-area: fig; margin: 0; }
+  .sketch-split-copy { grid-area: copy; min-width: 0; }
+  .sketch-split-copy :global(p:first-child) { margin-top: 0; }
+  .sketch-split-copy :global(p:last-child) { margin-bottom: 0; }
+  .sketch-split-fig img { display: block; width: 100%; height: auto; }
+  @media (max-width: 767px) {
+    .sketch-split, .sketch-split-left { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "fig"; row-gap: 1.5rem; }
+  }
+</style>
